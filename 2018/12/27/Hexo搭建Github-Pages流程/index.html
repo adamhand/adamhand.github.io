@@ -86,10 +86,13 @@
 <meta property="og:site_name" content="Dethnote">
 <meta property="og:description" content="所需软件 Git（安装过程不再赘述） Node.js  安装Node.js首先，去该网站下载Node.js。安装过程参考这里。 安装成功之后，使用node -v命令可以显示版本号。 新建repository登录github的账号，新建repository，名称最好为账户名.github.io。如果想生成一个README.md文件的话，需要勾选需要勾选Initialize this reposito">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-27T13:24:50.593Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-1.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-2.PNG">
+<meta property="og:updated_time" content="2018-12-27T13:41:06.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo搭建Github Pages流程">
 <meta name="twitter:description" content="所需软件 Git（安装过程不再赘述） Node.js  安装Node.js首先，去该网站下载Node.js。安装过程参考这里。 安装成功之后，使用node -v命令可以显示版本号。 新建repository登录github的账号，新建repository，名称最好为账户名.github.io。如果想生成一个README.md文件的话，需要勾选需要勾选Initialize this reposito">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-1.PNG">
 
 
 
@@ -336,10 +339,10 @@
 <h1 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h1><p>首先，去<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">该网站</a>下载Node.js。安装过程参考<a href="http://www.runoob.com/nodejs/nodejs-install-setup.html" target="_blank" rel="noopener">这里</a>。</p>
 <p>安装成功之后，使用<code>node -v</code>命令可以显示版本号。</p>
 <h1 id="新建repository"><a href="#新建repository" class="headerlink" title="新建repository"></a>新建repository</h1><p>登录github的账号，新建repository，名称最好为<code>账户名.github.io</code>。如果想生成一个README.md文件的话，需要勾选<code>需要勾选Initialize this repository with a README</code>。如下图所示：</p>
-<center><br><img src=""><br></center>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-1.PNG"><br></center>
 
 <p>在建好的项目右侧有个settings按钮，如下图所示。点击它，向下拉到GitHub Pages，会看到那边有个网址，如果部署成功，能够通过外网来访问它。 </p>
-<center><br><img src=""><br></center>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-2.PNG"><br></center>
 
 <h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>这一步可以使用git bash来安装，如果出现卡顿的情况，可以使用cmd。命令如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
 <p>安装完成后，输入 hexo -v 出现一系列的版本号就是安装成功啦，就像下面这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ hexo -v</span><br><span class="line">hexo: 3.4.2</span><br><span class="line">hexo-cli: 1.0.4</span><br><span class="line">os: Windows_NT 6.1.7601 win32 x64</span><br><span class="line">http_parser: 2.7.0</span><br><span class="line">node: 8.9.1</span><br><span class="line">v8: 6.1.534.47</span><br><span class="line">uv: 1.15.0</span><br><span class="line">zlib: 1.2.11</span><br><span class="line">ares: 1.10.1-DEV</span><br><span class="line">modules: 57</span><br><span class="line">nghttp2: 1.25.0</span><br><span class="line">openssl: 1.0.2m</span><br><span class="line">icu: 59.1</span><br><span class="line">unicode: 9.0</span><br><span class="line">cldr: 31.0.1</span><br><span class="line">tz: 2017b</span><br></pre></td></tr></table></figure></p>
@@ -360,6 +363,11 @@
 <p>运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g #hexo generate+hexo deploy</span><br></pre></td></tr></table></figure></p>
 <p>命令进行远程部署。</p>
 <p>稍等一会儿部署成功候，访问地址：http://用户名.github.io，就会看到刚刚生成的文章。</p>
+<h1 id="主题设置"><a href="#主题设置" class="headerlink" title="主题设置"></a>主题设置</h1><p>参考<a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">这里</a>。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/jackyroc/p/7681938.html" target="_blank" rel="noopener">我是如何利用Github Pages搭建起我的博客，细数一路的坑</a></p>
+<p><a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">使用Hexo+Github一步步搭建属于自己的博客（基础）</a></p>
+<p><a href="https://www.jianshu.com/p/343934573342" target="_blank" rel="noopener">在windows下安装hexo</a></p>
+<p><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NEXT</a></p>
 
       
     </div>
@@ -506,7 +514,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#所需软件"><span class="nav-number">1.</span> <span class="nav-text">所需软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建repository"><span class="nav-number">3.</span> <span class="nav-text">新建repository</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Hexo"><span class="nav-number">4.</span> <span class="nav-text">安装Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">4.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化Hexo文件夹"><span class="nav-number">4.2.</span> <span class="nav-text">初始化Hexo文件夹</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#远程部署"><span class="nav-number">5.</span> <span class="nav-text">远程部署</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#所需软件"><span class="nav-number">1.</span> <span class="nav-text">所需软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#新建repository"><span class="nav-number">3.</span> <span class="nav-text">新建repository</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装Hexo"><span class="nav-number">4.</span> <span class="nav-text">安装Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">4.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化Hexo文件夹"><span class="nav-number">4.2.</span> <span class="nav-text">初始化Hexo文件夹</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#远程部署"><span class="nav-number">5.</span> <span class="nav-text">远程部署</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主题设置"><span class="nav-number">6.</span> <span class="nav-text">主题设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
