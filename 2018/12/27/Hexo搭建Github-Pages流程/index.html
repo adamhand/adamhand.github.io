@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-1.PNG">
 <meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/gitpages-2.PNG">
-<meta property="og:updated_time" content="2018-12-27T13:41:06.848Z">
+<meta property="og:updated_time" content="2018-12-27T14:18:20.820Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo搭建Github Pages流程">
 <meta name="twitter:description" content="所需软件 Git（安装过程不再赘述） Node.js  安装Node.js首先，去该网站下载Node.js。安装过程参考这里。 安装成功之后，使用node -v命令可以显示版本号。 新建repository登录github的账号，新建repository，名称最好为账户名.github.io。如果想生成一个README.md文件的话，需要勾选需要勾选Initialize this reposito">
@@ -363,7 +363,15 @@
 <p>运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g #hexo generate+hexo deploy</span><br></pre></td></tr></table></figure></p>
 <p>命令进行远程部署。</p>
 <p>稍等一会儿部署成功候，访问地址：http://用户名.github.io，就会看到刚刚生成的文章。</p>
-<h1 id="主题设置"><a href="#主题设置" class="headerlink" title="主题设置"></a>主题设置</h1><p>参考<a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">这里</a>。</p>
+<h1 id="主题设置"><a href="#主题设置" class="headerlink" title="主题设置"></a>主题设置</h1><p>主要参考<a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">这里</a>。</p>
+<p>这里说一下更改字体。如果想将字体改为<code>Monaco</code>，需要以下几步：</p>
+<ul>
+<li><p>下载MONACO.TTF，并放入<code>Hexo根目录\themes\next\source\fonts</code>下面，然后修改<code>Hexo根目录\themes\next\source\css\_custom\custom.styl</code>文件，<br>如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.font-face</span>&#123;</span><br><span class="line">    <span class="attribute">font-family</span>: Monaco;</span><br><span class="line">    <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">'../fonts/MONACO.TTF'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行<code>hexo clean</code>命令，清除已经生成的文件。然后再执行<code>hexo generate</code>重新生成文件。如果页面刷新后，新的样式没有生效，检查public/css/main.css中有没有加入新的CSS代码。如果生成了代码，代表已经成功。而且，<code>MONACO.TTF</code>文件会被拷贝到<code>Hexo根目录\public\fonts</code>。</p>
+</li>
+</ul>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/jackyroc/p/7681938.html" target="_blank" rel="noopener">我是如何利用Github Pages搭建起我的博客，细数一路的坑</a></p>
 <p><a href="https://www.cnblogs.com/fengxiongZz/p/7707219.html" target="_blank" rel="noopener">使用Hexo+Github一步步搭建属于自己的博客（基础）</a></p>
 <p><a href="https://www.jianshu.com/p/343934573342" target="_blank" rel="noopener">在windows下安装hexo</a></p>
