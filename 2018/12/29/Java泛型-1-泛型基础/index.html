@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="泛型简介泛型泛型，泛泛的类型。泛型就是一种不确定的类型。那么为什么要使用泛型？ 使用泛型的好处大概有两个：  类型安全。将运行时的异常转变为编译时的异常。 代码重用。泛型合并了同类型的处理代码，使得代码可以很好重用。  对于第一种好处，可以举个例子：1234567public static void main(String[] args) &amp;#123;    List list = new Arr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java泛型(1)--泛型基础">
+<meta property="og:url" content="http://yoursite.com/2018/12/29/Java泛型-1-泛型基础/index.html">
+<meta property="og:site_name" content="Dethnote">
+<meta property="og:description" content="泛型简介泛型泛型，泛泛的类型。泛型就是一种不确定的类型。那么为什么要使用泛型？ 使用泛型的好处大概有两个：  类型安全。将运行时的异常转变为编译时的异常。 代码重用。泛型合并了同类型的处理代码，使得代码可以很好重用。  对于第一种好处，可以举个例子：1234567public static void main(String[] args) &amp;#123;    List list = new Arr">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-29T07:23:18.744Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java泛型(1)--泛型基础">
+<meta name="twitter:description" content="泛型简介泛型泛型，泛泛的类型。泛型就是一种不确定的类型。那么为什么要使用泛型？ 使用泛型的好处大概有两个：  类型安全。将运行时的异常转变为编译时的异常。 代码重用。泛型合并了同类型的处理代码，使得代码可以很好重用。  对于第一种好处，可以举个例子：1234567public static void main(String[] args) &amp;#123;    List list = new Arr">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/29/Java泛型-1-泛型基础/">
+
+
+
+
+
+  <title>Java泛型(1)--泛型基础 | Dethnote</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dethnote</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/Java泛型-1-泛型基础/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java泛型(1)--泛型基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T15:22:05+08:00">
+                2018-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="泛型简介"><a href="#泛型简介" class="headerlink" title="泛型简介"></a>泛型简介</h2><p>泛型泛型，泛泛的类型。泛型就是一种不确定的类型。那么为什么要使用泛型？</p>
+<p>使用泛型的好处大概有两个：</p>
+<ul>
+<li>类型安全。将运行时的异常转变为编译时的异常。</li>
+<li>代码重用。泛型合并了同类型的处理代码，使得代码可以很好重用。</li>
+</ul>
+<p><strong>对于第一种好处</strong>，可以举个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="number">10</span>);</span><br><span class="line">    list.add(<span class="string">"adamhand"</span>);</span><br><span class="line"></span><br><span class="line">    String num = (String) list.get(<span class="number">0</span>);  <span class="comment">//1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码在编译时期不会出现任何问题，但是运行的时候在1处却会出现类型转换错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</span><br></pre></td></tr></table></figure></p>
+<p>而使用泛型可以避免这个错误，使得错误在编译时期就会被检查，如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="number">10</span>);   <span class="comment">//1</span></span><br><span class="line">    list.add(<span class="string">"adamhand"</span>);</span><br><span class="line"></span><br><span class="line">    String num = (String) list.get(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述代码在编译的时候，1处就会报错。</p>
+<p><strong>对于第二种好处</strong>，使用Object似乎也可以实现，比如下面的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stove</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">heat</span><span class="params">(Object food)</span></span>&#123;</span><br><span class="line">        System.out.println(food +<span class="string">"is done"</span>);</span><br><span class="line">        <span class="keyword">return</span> food;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Meat meat = <span class="keyword">new</span> Meat();</span><br><span class="line">        meat = (Meat) Stove.heat(meat);</span><br><span class="line"></span><br><span class="line">        Soup soup = <span class="keyword">new</span> Soup();</span><br><span class="line">        soup = (Soup) Stove.heat(soup);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>定义了一个微波炉的类，使用微波炉的加热方法对不同的食物进行加热。这种写法看似没问题，但是存在小瑕疵：如果客户端不知道加热的具体内容是什么，在取出的时候进行强制类型转换，可能会出现错误。</p>
+<p>而使用泛型可以解决这个问题，上面的代码可以改为如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stove</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">heat</span><span class="params">(T food)</span></span>&#123;</span><br><span class="line">        System.out.println(food +<span class="string">"is done"</span>);</span><br><span class="line">        <span class="keyword">return</span> food;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Meat meat = <span class="keyword">new</span> Meat();</span><br><span class="line">        meat = Stove.heat(meat);</span><br><span class="line"></span><br><span class="line">        Soup soup = <span class="keyword">new</span> Soup();</span><br><span class="line">        soup = Stove.heat(soup);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就可以免去强制类型转换了。</p>
+<h2 id="泛型类和泛型方法"><a href="#泛型类和泛型方法" class="headerlink" title="泛型类和泛型方法"></a>泛型类和泛型方法</h2><p>需要注意的是，定义泛型方法的时候，需要将泛型定义在返回值之前；且静态方法无法使用类上定义的泛型<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 泛型类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericTest</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getObject</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 泛型方法，将泛型定义现在返回值之前。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> w</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;W&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> &lt;W&gt; <span class="function"><span class="keyword">void</span> <span class="title">method</span><span class="params">(W w)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"method:"</span> + w);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当方法静态时，不能访问类上定义的泛型。如果静态方法使用泛型，</span></span><br><span class="line"><span class="comment">     * 只能将泛型定义在方法上。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> y</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;Y&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;Y&gt; <span class="function"><span class="keyword">void</span> <span class="title">staticMethod</span><span class="params">(Y y)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"staticmethod"</span> + y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="compareTo"><a href="#compareTo" class="headerlink" title="compareTo"></a>compareTo</h2><p>如果需要比较两个泛型数的大小，需要使用Compareable接口：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;M extends Comparable&lt;M&gt;&gt; <span class="function"><span class="keyword">int</span> <span class="title">countGreaterThan</span><span class="params">(M[] array, M elem)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(M e : array)&#123;</span><br><span class="line">        <span class="keyword">if</span>(e.compareTo(elem) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用方式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Integer[] array = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;;</span><br><span class="line">    GenericTest.countGreaterThan(array, <span class="number">3</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><p>在java中，数组是可以协变的，比如dog extends Animal，那么Animal[] 与dog[]是兼容的。而集合是不能协变的，也就是说<code>List&lt;Animal&gt;</code>不是<code>List&lt;dog&gt;</code>的父类，这时候就可以用到通配符了。</p>
+<p>主要有三种通配符的使用：</p>
+<ul>
+<li>无边界通配符：<code>List&lt;?&gt;</code></li>
+<li>上界通配符：<code>List&lt;? extends E&gt;</code></li>
+<li>下界通配符：<code>List&lt;? super E&gt;</code></li>
+</ul>
+<h3 id="通配符-与-T-的区别"><a href="#通配符-与-T-的区别" class="headerlink" title="通配符 与 T 的区别"></a>通配符 与 T 的区别</h3><p>T：表示一个确定的类型。作用于模板上，用于将数据类型进行参数化，不能用于实例化对象。<br>?：表示一个不确定的类型。在实例化对象的时候，不确定泛型参数的具体类型时，可以使用通配符进行对象定义。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt; T &gt; 等同于 &lt; T extends Object&gt;</span><br><span class="line">&lt; ? &gt; 等同于 &lt; ? extends Object&gt;</span><br></pre></td></tr></table></figure></p>
+<p>例一：定义泛型类，将key，value的数据类型进行&lt; K, V &gt;参数化，而不可以使用通配符。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Container</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> K key;</span><br><span class="line">    <span class="keyword">private</span> V value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Container</span><span class="params">(K k, V v)</span> </span>&#123;</span><br><span class="line">        key = k;</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例二：实例化泛型对象，我们不能够确定eList存储的数据类型是Integer还是Long，因此我们使用List&lt;? extends Number&gt;定义变量的类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? extends Number&gt; eList = <span class="keyword">null</span>;</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Long&gt;();</span><br></pre></td></tr></table></figure></p>
+<h3 id="无界通配符"><a href="#无界通配符" class="headerlink" title="无界通配符"></a>无界通配符</h3><p>等同于<code>&lt;? extends Object&gt;</code>。</p>
+<h3 id="上界类型通配符（-extends-E）"><a href="#上界类型通配符（-extends-E）" class="headerlink" title="上界类型通配符（? extends E）"></a>上界类型通配符（? extends E）</h3><p>为什么叫上界？</p>
+<p><code>？</code>表示E或者E的子类，那么E就是上限。E是父类，父类可接受子类。比如Object可以接收所有类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? extends Number&gt; eList = <span class="keyword">null</span>;</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">Number numObject = eList.get(<span class="number">0</span>);  <span class="comment">//语句1，正确</span></span><br><span class="line"></span><br><span class="line">Integer intObject = eList.get(<span class="number">0</span>);  <span class="comment">//语句2，错误</span></span><br><span class="line"></span><br><span class="line">eList.add(<span class="keyword">new</span> Integer(<span class="number">1</span>));  <span class="comment">//语句3，错误</span></span><br></pre></td></tr></table></figure></p>
+<p>语句1：List&lt;? extends Number&gt;eList存放Number及其子类的对象，语句1取出Number（或者Number子类）对象直接赋值给Number类型的变量是符合java规范的。 </p>
+<p>语句2：List&lt;? extends Number&gt;eList存放Number及其子类的对象，语句2取出Number（或者Number子类）对象直接赋值给Integer类型（Number子类）的变量是不符合java规范的。</p>
+<p>语句3：List&lt;? extends Number&gt;eList不能够确定实例化对象的具体类型，因此无法add具体对象至列表中，可能的实例化对象如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Long&gt;();</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Float&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>总结：上界类型通配符add方法受限，但可以获取列表中的各种类型的数据，并赋值给父类型（extends Number）的引用。<strong>也就是说，上界通配符允许取元素不允许存元素。</strong></p>
+<h3 id="下界类型通配符（-super-E）"><a href="#下界类型通配符（-super-E）" class="headerlink" title="下界类型通配符（? super E）"></a>下界类型通配符（? super E）</h3><p>为什么叫下界：</p>
+<p><code>？</code>表示E或者E的父类，那么E就是下限。E是子类，子类不可以接收父类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? <span class="keyword">super</span> Integer&gt; sList = <span class="keyword">null</span>;</span><br><span class="line">sList = <span class="keyword">new</span> ArrayList&lt;Number&gt;();</span><br><span class="line"></span><br><span class="line">Number numObj = sList.get(<span class="number">0</span>);  <span class="comment">//语句1，错误</span></span><br><span class="line"></span><br><span class="line">Integer intObj = sList.get(<span class="number">0</span>);  <span class="comment">//语句2，错误</span></span><br><span class="line"></span><br><span class="line">sList.add(<span class="keyword">new</span> Integer(<span class="number">1</span>));  <span class="comment">//语句3，正确</span></span><br></pre></td></tr></table></figure></p>
+<p>语句1：List&lt;? super Integer&gt; 无法确定sList中存放的对象的具体类型，因此sList.get获取的值存在不确定性，子类对象的引用无法赋值给兄弟类的引用，父类对象的引用无法赋值给子类的引用，因此语句错误。 </p>
+<p>语句2：同语句1。 </p>
+<p>语句3：子类对象的引用可以赋值给父类对象的引用，因此语句正确。 </p>
+<p><strong>总结：下界类型通配符get方法受限，但可以往列表中添加各种数据类型的对象。因此如果你想把对象写入一个数据结构里，使用 ? super 通配符。限定通配符总是包括自己。</strong></p>
+<hr>
+<p>参考：<br><a href="https://blog.csdn.net/claram/article/details/51943742" target="_blank" rel="noopener">Java泛型三：通配符详解extends super</a><br><a href="https://blog.csdn.net/yiifaa/article/details/73433623" target="_blank" rel="noopener">三句话总结JAVA泛型通配符（PECS）</a><br><a href="https://www.jianshu.com/p/95f349258afb" target="_blank" rel="noopener">JAVA泛型通配符T，E，K，V区别，T以及Class<t>，Class&lt;?&gt;的区别</t></a></p>
+<hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/29/Java代理/" rel="next" title="Java代理">
+                <i class="fa fa-chevron-left"></i> Java代理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">adamhand</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index-2.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型简介"><span class="nav-number">1.</span> <span class="nav-text">泛型简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型类和泛型方法"><span class="nav-number">2.</span> <span class="nav-text">泛型类和泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#compareTo"><span class="nav-number">3.</span> <span class="nav-text">compareTo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通配符"><span class="nav-number">4.</span> <span class="nav-text">通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符-与-T-的区别"><span class="nav-number">4.1.</span> <span class="nav-text">通配符 与 T 的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无界通配符"><span class="nav-number">4.2.</span> <span class="nav-text">无界通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上界类型通配符（-extends-E）"><span class="nav-number">4.3.</span> <span class="nav-text">上界类型通配符（? extends E）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下界类型通配符（-super-E）"><span class="nav-number">4.4.</span> <span class="nav-text">下界类型通配符（? super E）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">adamhand</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
