@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Netty系列(1)–初识Netty Netty是什么Netty 是一款异步的事件驱动的网络应用程序框架，支持快速地开发可维护的高性能的面向协议的服务器和客户端。  异步和同步同步（Sync）：所谓同步，就是发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作。 异步（Async）：异步与同步相对，当一个异步过程调用发出后，调用者在没有得到结果之前，就可以继续执行后续操作。当这">
+<meta name="description" content="Netty系列(1)–初识Netty Netty是什么Netty 是一款异步的事件驱动的网络应用程序框架，支持快速地开发可维护的高性能的面向协议的服务器和客户端。  异步和同步同步（Sync）：所谓同步，就是线程发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作，而是等待可以调用。当可以调用之后，线程自行进行调用。 异步（Async）：异步与同步相对，当一个异步过程调用发出后">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netty系列(1)--初识Netty">
 <meta property="og:url" content="http://yoursite.com/2018/12/29/Netty系列-1-初识Netty/index.html">
 <meta property="og:site_name" content="Dethnote">
-<meta property="og:description" content="Netty系列(1)–初识Netty Netty是什么Netty 是一款异步的事件驱动的网络应用程序框架，支持快速地开发可维护的高性能的面向协议的服务器和客户端。  异步和同步同步（Sync）：所谓同步，就是发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作。 异步（Async）：异步与同步相对，当一个异步过程调用发出后，调用者在没有得到结果之前，就可以继续执行后续操作。当这">
+<meta property="og:description" content="Netty系列(1)–初识Netty Netty是什么Netty 是一款异步的事件驱动的网络应用程序框架，支持快速地开发可维护的高性能的面向协议的服务器和客户端。  异步和同步同步（Sync）：所谓同步，就是线程发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作，而是等待可以调用。当可以调用之后，线程自行进行调用。 异步（Async）：异步与同步相对，当一个异步过程调用发出后">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/netty.jpg">
-<meta property="og:updated_time" content="2018-12-30T03:07:22.062Z">
+<meta property="og:updated_time" content="2018-12-30T07:41:09.822Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty系列(1)--初识Netty">
-<meta name="twitter:description" content="Netty系列(1)–初识Netty Netty是什么Netty 是一款异步的事件驱动的网络应用程序框架，支持快速地开发可维护的高性能的面向协议的服务器和客户端。  异步和同步同步（Sync）：所谓同步，就是发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作。 异步（Async）：异步与同步相对，当一个异步过程调用发出后，调用者在没有得到结果之前，就可以继续执行后续操作。当这">
+<meta name="twitter:description" content="Netty系列(1)–初识Netty Netty是什么Netty 是一款异步的事件驱动的网络应用程序框架，支持快速地开发可维护的高性能的面向协议的服务器和客户端。  异步和同步同步（Sync）：所谓同步，就是线程发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作，而是等待可以调用。当可以调用之后，线程自行进行调用。 异步（Async）：异步与同步相对，当一个异步过程调用发出后">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/netty.jpg">
 
 
@@ -355,9 +355,13 @@
       
         <h1 id="Netty系列-1-–初识Netty"><a href="#Netty系列-1-–初识Netty" class="headerlink" title="Netty系列(1)–初识Netty"></a>Netty系列(1)–初识Netty</h1><hr>
 <h1 id="Netty是什么"><a href="#Netty是什么" class="headerlink" title="Netty是什么"></a>Netty是什么</h1><p>Netty 是一款<strong>异步</strong>的<strong>事件驱动</strong>的<strong>网络应用程序框架</strong>，支持快速地开发可维护的高性能的面向协议的服务器和客户端。 </p>
-<h2 id="异步和同步"><a href="#异步和同步" class="headerlink" title="异步和同步"></a>异步和同步</h2><p><strong>同步（Sync）</strong>：所谓同步，就是发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作。</p>
-<p><strong>异步（Async）</strong>：异步与同步相对，当一个异步过程调用发出后，调用者在没有得到结果之前，就可以继续执行后续操作。当这个调用完成后，一般通过状态、通知和回调来通知调用者。对于异步调用，调用的返回并不受调用者控制。</p>
-<p>总结来说，同步和异步的区别：请求发出后，是否需要等待结果，才能继续执行其他操作。</p>
+<h2 id="异步和同步"><a href="#异步和同步" class="headerlink" title="异步和同步"></a>异步和同步</h2><p><strong>同步（Sync）</strong>：所谓同步，就是线程发出一个功能调用时，在没有得到结果之前，该调用就不返回或继续执行后续操作，而是等待可以调用。当可以调用之后，线程<strong>自行进行调用</strong>。</p>
+<p><strong>异步（Async）</strong>：异步与同步相对，当一个异步过程调用发出后，调用者在没有得到结果之前，就可以继续执行后续操作。当这个<strong>调用完成</strong>后，一般通过状态、通知和回调来通知调用者。对于异步调用，调用的返回并不受调用者控制。</p>
+<p>总结来说，同步和异步的区别大概有两个：</p>
+<ul>
+<li>请求发出后，是否<strong>可以返回</strong>执行其他操作。</li>
+<li>当可以进行调用时，<strong>同步情况是发起调用的线程自己去调用并得到结果，异步情况是内核将调用动作完成，将结果返回给调用线程</strong>。</li>
+</ul>
 <h2 id="事件驱动"><a href="#事件驱动" class="headerlink" title="事件驱动"></a>事件驱动</h2><p>一个典型的事件驱动的程序，就是一个死循环，并以一个线程的形式存在，这个死循环包括两个部分，第一个部分是按照一定的条件接收并选择一个要处理的事件，第二个部分就是事件的处理过程。程序的执行过程就是选择事件和处理事件，而当没有任何事件触发时，程序会因查询事件队列失败而进入睡眠状态，从而释放cpu。</p>
 <p>也就是说，事件驱动就是有事件就处理，没时间就等待。</p>
 <h1 id="BIO、NIO和AIO的区别"><a href="#BIO、NIO和AIO的区别" class="headerlink" title="BIO、NIO和AIO的区别"></a>BIO、NIO和AIO的区别</h1><h2 id="事件分离器"><a href="#事件分离器" class="headerlink" title="事件分离器"></a>事件分离器</h2><p>在IO读写时，把 IO请求 与 读写操作 分离调配进行，需要用到事件分离器。根据处理机制的不同，事件分离器又分为：同步的Reactor和异步的Proactor。</p>
