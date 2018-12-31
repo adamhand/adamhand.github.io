@@ -388,19 +388,19 @@
 <hr>
 <p>注意，如果启动的时候遇到<code>root@localhost&#39;s password:localhost:permission denied,please try again</code>问题，可能的原因有以下几个：</p>
 <ul>
-<li>root密码输入错误<br>可以通过该密码的方式：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo root</span><br></pre></td></tr></table></figure>
-</li>
+<li>root密码输入错误</li>
 </ul>
+<p>可以通过改密码的方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo root</span><br></pre></td></tr></table></figure></p>
 <p>然后输入两次新密码。</p>
 <ul>
-<li>防火墙的问题<br>需要将防火墙关闭：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw enable</span><br></pre></td></tr></table></figure>
-</li>
+<li>防火墙的问题</li>
 </ul>
+<p>需要将防火墙关闭：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ufw enable</span><br></pre></td></tr></table></figure></p>
 <p>可以通过<code>sudo ufw status</code>查看防火墙状态。</p>
 <ul>
-<li>root没有开启允许ssh的远程连接<br>首先要确认ssh已经安装成功：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server  #open ssh</span><br></pre></td></tr></table></figure>
-</li>
+<li>root没有开启允许ssh的远程连接</li>
 </ul>
+<p>首先要确认ssh已经安装成功：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server  #open ssh</span><br></pre></td></tr></table></figure></p>
 <p>辑配置文件，允许以 root 用户通过 ssh 登录：sudo vi /etc/ssh/sshd_config<br>找到：PermitRootLogin prohibit-password禁用(如果没有找到这一行，直接添加PermitRootLogin yes即可)<br>添加：PermitRootLogin yes<br>然后重启ssh服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service ssh restart</span><br></pre></td></tr></table></figure></p>
 <hr>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/u010366748/article/details/82843454" target="_blank" rel="noopener">Hadoop学习（1）Hadoop2.9.1完全分布式环境搭建和测试</a><br><a href="https://blog.csdn.net/y12345678904/article/details/80743333" target="_blank" rel="noopener">ubuntu16.04安装伪分布式Hadoop2.9.1</a><br><a href="https://www.cnblogs.com/hmy-blog/p/6500909.html" target="_blank" rel="noopener">问题root@localhost’s password:localhost:permission denied,please try again</a></p>
