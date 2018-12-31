@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 数组中重复元素问题1.1 Find All Duplicates in an Array   解法：采用“置相反数”的方法，每知道一个nums[i]，就将下标为nums[i]-1的元素置为相反数(因为数组中的数是从1开始的，不用担心数组越界；且数的最大值为n，即总能找到位置)；然后判断下标为nums[i]-1处的数是否小于零，是的话，就表明该数之前已经出现过一次(如果没有重复的数，以其中一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《剑指offer》题目小结(1)">
+<meta property="og:url" content="http://yoursite.com/2018/12/31/《剑指offer》题目小结-1/index.html">
+<meta property="og:site_name" content="Dethnote">
+<meta property="og:description" content="1. 数组中重复元素问题1.1 Find All Duplicates in an Array   解法：采用“置相反数”的方法，每知道一个nums[i]，就将下标为nums[i]-1的元素置为相反数(因为数组中的数是从1开始的，不用担心数组越界；且数的最大值为n，即总能找到位置)；然后判断下标为nums[i]-1处的数是否小于零，是的话，就表明该数之前已经出现过一次(如果没有重复的数，以其中一个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20all%20duplicates%20in%20an%20array.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20all%20duplicates%20in%20an%20array_2.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20in%20a%20matrix.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/replace%20space.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/print%20linkedlist.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/reBuildBinaryTree.PNG">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/reBuildLeftBTree.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/reBuildRightBTree.jpg">
+<meta property="og:updated_time" content="2018-12-31T14:36:58.274Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《剑指offer》题目小结(1)">
+<meta name="twitter:description" content="1. 数组中重复元素问题1.1 Find All Duplicates in an Array   解法：采用“置相反数”的方法，每知道一个nums[i]，就将下标为nums[i]-1的元素置为相反数(因为数组中的数是从1开始的，不用担心数组越界；且数的最大值为n，即总能找到位置)；然后判断下标为nums[i]-1处的数是否小于零，是的话，就表明该数之前已经出现过一次(如果没有重复的数，以其中一个">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20all%20duplicates%20in%20an%20array.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/31/《剑指offer》题目小结-1/">
+
+
+
+
+
+  <title>《剑指offer》题目小结(1) | Dethnote</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dethnote</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/《剑指offer》题目小结-1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《剑指offer》题目小结(1)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:28:48+08:00">
+                2018-12-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-数组中重复元素问题"><a href="#1-数组中重复元素问题" class="headerlink" title="1. 数组中重复元素问题"></a>1. 数组中重复元素问题</h1><h2 id="1-1-Find-All-Duplicates-in-an-Array"><a href="#1-1-Find-All-Duplicates-in-an-Array" class="headerlink" title="1.1 Find All Duplicates in an Array"></a>1.1 Find All Duplicates in an Array</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20all%20duplicates%20in%20an%20array.PNG"><br></center>
+
+<ul>
+<li>解法：采用“置相反数”的方法，每知道一个<code>nums[i]</code>，就将下标为<code>nums[i]-1</code>的元素置为相反数(因为数组中的数是从1开始的，不用担心数组越界；且数的最大值为n，即总能找到位置)；然后判断下标为<code>nums[i]-1</code>处的数是否小于零，是的话，就表明该数之前已经出现过一次(如果没有重复的数，以其中一个数为下标只能找到一个位置，且仅有一个)。<br>如果还是想不通的话，把给定数组中的数按照从小到大排序后，就比较好理解了。比如将给定的数组数组排序[1,2,2,3,3,4,7,8]。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">findDuplicates</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; ++i) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = Math.abs(nums[i])-<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (nums[index] &lt; <span class="number">0</span>)</span><br><span class="line">                res.add(Math.abs(index+<span class="number">1</span>));</span><br><span class="line">            nums[index] = -nums[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-数组中的重复数字"><a href="#1-2-数组中的重复数字" class="headerlink" title="1.2 数组中的重复数字"></a>1.2 数组中的重复数字</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20all%20duplicates%20in%20an%20array_2.PNG"><br></center>
+
+<ul>
+<li>解法：这个题目就不能按照上面的解法来了，因为数组中的最小元素为0，最大元素为n-1，按照上述方法会产生越界问题。可以使用HashMap。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">duplicate</span><span class="params">(<span class="keyword">int</span> numbers[],<span class="keyword">int</span> length,<span class="keyword">int</span> [] duplication)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span>(numbers==<span class="keyword">null</span> || length==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> flag;</span><br><span class="line">    &#125;</span><br><span class="line">    HashMap&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Integer, Integer&gt;();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> num: numbers)&#123;</span><br><span class="line">        <span class="keyword">if</span>(map.containsKey(num))&#123;</span><br><span class="line">            flag = <span class="keyword">true</span>;</span><br><span class="line">            duplication[<span class="number">0</span>] = num;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        map.put(num, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="2-二维数组中的查找"><a href="#2-二维数组中的查找" class="headerlink" title="2. 二维数组中的查找"></a>2. 二维数组中的查找</h1><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/find%20in%20a%20matrix.PNG"><br></center>
+
+<ul>
+<li>解法：从右上角开始查找。矩阵中的一个数，它左边的数都比它小，下边的数都比它大。因此，从右上角开始查找，就可以根据 target 和当前元素的大小关系来缩小查找区间。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">Find</span><span class="params">(<span class="keyword">int</span> target, <span class="keyword">int</span>[][] matrix)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (matrix == <span class="keyword">null</span> || matrix.length == <span class="number">0</span> || matrix[<span class="number">0</span>].length == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">int</span> rows = matrix.length, cols = matrix[<span class="number">0</span>].length;</span><br><span class="line">    <span class="keyword">int</span> r = <span class="number">0</span>, c = cols - <span class="number">1</span>; <span class="comment">// 从右上角开始</span></span><br><span class="line">    <span class="keyword">while</span> (r &lt;= rows - <span class="number">1</span> &amp;&amp; c &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (target == matrix[r][c])</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (target &gt; matrix[r][c])</span><br><span class="line">            r++;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            c--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="3-替换空格"><a href="#3-替换空格" class="headerlink" title="3. 替换空格"></a>3. 替换空格</h1><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/replace%20space.PNG"><br></center>
+
+<ul>
+<li>解法1：在字符串尾部填充任意字符，使得字符串的长度等于字符串替换之后的长度。因为一个空格要替换成三个字符（%20），因此当遍历到一个空格时，需要在尾部填充两个任意字符。<br>令 P1 指向字符串原来的末尾位置，P2 指向字符串现在的末尾位置。P1 和 P2从后向前遍历，当 P1 遍历到一个空格时，就需要令 P2 指向的位置依次填充 02%（注意是逆序的），否则就填充上 P1 指向字符的值。</li>
+</ul>
+<p>从后向前遍是为了在改变 P2 所指向的内容时，不会影响到 P1 遍历原来字符串的内容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">replaceSpace</span><span class="params">(StringBuffer str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> oldLen = str.length();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; oldLen; i++)</span><br><span class="line">        <span class="keyword">if</span> (str.charAt(i) == <span class="string">' '</span>)</span><br><span class="line">            str.append(<span class="string">"  "</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> P1 = oldLen - <span class="number">1</span>, P2 = str.length() - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (P1 &gt;= <span class="number">0</span> &amp;&amp; P2 &gt; P1) &#123;</span><br><span class="line">        <span class="keyword">char</span> c = str.charAt(P1--);</span><br><span class="line">        <span class="keyword">if</span> (c == <span class="string">' '</span>) &#123;</span><br><span class="line">            str.setCharAt(P2--, <span class="string">'0'</span>);</span><br><span class="line">            str.setCharAt(P2--, <span class="string">'2'</span>);</span><br><span class="line">            str.setCharAt(P2--, <span class="string">'%'</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            str.setCharAt(P2--, c);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法2：利用Java自己的函数<code>replace(start, end, string)</code>函数帮助我们替换字符串。我们只需要找到空格的位置即可。注意该函数在替换时包含start不包含end。例子如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">"1234"</span>);</span><br><span class="line">sb.replace(<span class="number">1</span>, <span class="number">3</span>, <span class="string">"nba"</span>);</span><br><span class="line">System.out.println(sb.toString());</span><br><span class="line"><span class="comment">//结果为:1nba4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">replaceSpace</span><span class="params">(StringBuffer str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length(); i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(str.charAt(i) == <span class="string">' '</span>)&#123;</span><br><span class="line">            str.replace(i, i+<span class="number">1</span>, <span class="string">"%20"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> str.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="4-从尾到头打印链表"><a href="#4-从尾到头打印链表" class="headerlink" title="4. 从尾到头打印链表"></a>4. 从尾到头打印链表</h1><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/print%20linkedlist.PNG"><br></center>
+
+<ul>
+<li><p>解法1：使用栈</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ArrayList&lt;Integer&gt; <span class="title">printListFromTailToHead</span><span class="params">(ListNode listNode)</span> </span>&#123;</span><br><span class="line">        Stack&lt;Integer&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span>(listNode != <span class="keyword">null</span>)&#123;</span><br><span class="line">            stack.add(listNode.val);</span><br><span class="line">            listNode = listNode.next;</span><br><span class="line">        &#125;</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span>(!stack.isEmpty())&#123;</span><br><span class="line">            list.add(stack.pop());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解法2：由于递归在本质上就是一个栈结构，所以理所当然想到递归。但是如果链表非常长，使用递归容易造成栈溢出，不是一个好方法。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ArrayList&lt;Integer&gt; <span class="title">printListFromTailToHead</span><span class="params">(ListNode listNode)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(listNode != <span class="keyword">null</span>)&#123;</span><br><span class="line">            list.addAll(printListFromTailToHead(listNode.next));</span><br><span class="line">            list.add(listNode.val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法3：由给定的链表逆序构建一个新的链表，则新链表的元素和给定链表的元素相反。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ArrayList&lt;Integer&gt; <span class="title">printListFromTailToHead</span><span class="params">(ListNode listNode)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//逆序构建链表</span></span><br><span class="line">        ListNode head = <span class="keyword">new</span> ListNode(-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">while</span>(listNode != <span class="keyword">null</span>)&#123;</span><br><span class="line">            ListNode memo = listNode.next;</span><br><span class="line">            listNode.next = head.next;</span><br><span class="line">            head.next = listNode;</span><br><span class="line">            listNode = memo;</span><br><span class="line">        &#125;</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        head = head.next;</span><br><span class="line">        <span class="keyword">while</span>(head != <span class="keyword">null</span>)&#123;</span><br><span class="line">            list.add(head.val);</span><br><span class="line">            head = head.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法4：使用<code>Collections.reverse()</code>。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ArrayList&lt;Integer&gt; <span class="title">printListFromTailToHead</span><span class="params">(ListNode listNode)</span> </span>&#123;</span><br><span class="line">        ArrayList&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span>(listNode != <span class="keyword">null</span>)&#123;</span><br><span class="line">            list.add(listNode.val);</span><br><span class="line">            listNode = listNode.next;</span><br><span class="line">        &#125;</span><br><span class="line">        Collections.reverse(list);</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="5-重建二叉树"><a href="#5-重建二叉树" class="headerlink" title="5. 重建二叉树"></a>5. 重建二叉树</h1><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/reBuildBinaryTree.PNG"><br></center>
+
+<ul>
+<li>解法1：使用递归。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;Integer, Integer&gt; inOrderNumsIndex = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">reConstructBinaryTree</span><span class="params">(<span class="keyword">int</span> [] pre,<span class="keyword">int</span> [] in)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; in.length; i++)&#123;</span><br><span class="line">            inOrderNumsIndex.put(in[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> reBuildBinaryTreeCore(pre, <span class="number">0</span>, pre.length-<span class="number">1</span>, <span class="number">0</span>, in.length-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> TreeNode <span class="title">reBuildBinaryTreeCore</span><span class="params">(<span class="keyword">int</span> preorder[], <span class="keyword">int</span> preStartIndex, <span class="keyword">int</span> preEndIndex, <span class="keyword">int</span> inStartIndex, <span class="keyword">int</span> inEndIndex)</span></span>&#123;</span><br><span class="line">        <span class="comment">//这种情况下说明左子树已经排完，返回继续排右子树。</span></span><br><span class="line">        <span class="keyword">if</span>(preStartIndex &gt; preEndIndex)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        TreeNode root = <span class="keyword">new</span> TreeNode(preorder[preStartIndex]);</span><br><span class="line">        <span class="keyword">int</span> rootIndex = inOrderNumsIndex.get(root.val);</span><br><span class="line">        <span class="keyword">int</span> leftTreeSize = rootIndex - inStartIndex;</span><br><span class="line">        root.left = reBuildBinaryTreeCore(preorder, preStartIndex+<span class="number">1</span>, preStartIndex+leftTreeSize, inStartIndex, inStartIndex+leftTreeSize-<span class="number">1</span>);</span><br><span class="line">        root.right = reBuildBinaryTreeCore(preorder, preStartIndex+leftTreeSize+<span class="number">1</span>, preEndIndex, inStartIndex+leftTreeSize+<span class="number">1</span>, inEndIndex);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法2：和解法一的思想一样，只是更清楚一些。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//存放中序遍历的值和索引</span></span><br><span class="line">    Map&lt;Integer, Integer&gt; inIndex = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeNode <span class="title">reConstructBinaryTree</span><span class="params">(<span class="keyword">int</span> [] pre,<span class="keyword">int</span> [] in)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pre.length &lt;= <span class="number">0</span> || in.length &lt;= <span class="number">0</span> || pre.length != in.length)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; in.length; i++)&#123;</span><br><span class="line">            inIndex.put(in[i], i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> len = pre.length;</span><br><span class="line">        <span class="keyword">return</span> constructorCore(pre, in, <span class="number">0</span>, len-<span class="number">1</span>, <span class="number">0</span>, len-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> TreeNode <span class="title">constructorCore</span><span class="params">(<span class="keyword">int</span>[] pre, <span class="keyword">int</span>[] in, <span class="keyword">int</span> preStart, <span class="keyword">int</span> preEnd, <span class="keyword">int</span> inStart, <span class="keyword">int</span> inEnd)</span></span>&#123;</span><br><span class="line">        TreeNode root = <span class="keyword">new</span> TreeNode(pre[preStart]);</span><br><span class="line">        root.left = <span class="keyword">null</span>;</span><br><span class="line">        root.right = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(preStart == preEnd)&#123;</span><br><span class="line">            <span class="keyword">if</span>(inStart == inEnd &amp;&amp; pre[preStart] == in[inStart])&#123;</span><br><span class="line">                <span class="keyword">return</span> root;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">//如果输入错误，前序遍历和中序遍历结果不一致，则返回错误</span></span><br><span class="line">                System.out.println(<span class="string">"wrong input"</span>);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> index = inIndex.get(pre[preStart]);</span><br><span class="line">        <span class="comment">//int index = inIndex.get(root.val);</span></span><br><span class="line">        <span class="keyword">int</span> leftLen = index - inStart;</span><br><span class="line">        <span class="keyword">if</span>(leftLen &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            root.left = constructorCore(pre, in, preStart+<span class="number">1</span>, preStart+leftLen, inStart, index-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(inEnd - index &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            root.right = constructorCore(pre, in, preStart+leftLen+<span class="number">1</span>, preEnd, index+<span class="number">1</span>, inEnd);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对解法2的理解：由于递归可以转换为栈，所以可以用栈来解释一下，画出如下的栈图。</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/reBuildLeftBTree.jpg"><br></center>
+
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/reBuildRightBTree.jpg"><br></center>
+
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%89%91%E6%8C%87%20offer%20%E9%A2%98%E8%A7%A3.md" target="_blank" rel="noopener">《剑指offer》题解</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/31/Hadoop单节点安装/" rel="next" title="Hadoop单节点安装">
+                <i class="fa fa-chevron-left"></i> Hadoop单节点安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">adamhand</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index-2.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-数组中重复元素问题"><span class="nav-number">1.</span> <span class="nav-text">1. 数组中重复元素问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Find-All-Duplicates-in-an-Array"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Find All Duplicates in an Array</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-数组中的重复数字"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 数组中的重复数字</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-二维数组中的查找"><span class="nav-number">2.</span> <span class="nav-text">2. 二维数组中的查找</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-替换空格"><span class="nav-number">3.</span> <span class="nav-text">3. 替换空格</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-从尾到头打印链表"><span class="nav-number">4.</span> <span class="nav-text">4. 从尾到头打印链表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-重建二叉树"><span class="nav-number">5.</span> <span class="nav-text">5. 重建二叉树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">adamhand</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
