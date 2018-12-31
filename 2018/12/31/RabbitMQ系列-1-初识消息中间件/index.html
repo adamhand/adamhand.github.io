@@ -79,17 +79,21 @@
 
 
 
-<meta name="description" content="一瞬间的恍惚 土坯房矮小简陋剥落的墙皮满是雨水的痕迹合不拢的木头门吱吱作响黄色的烛光把我的影子映在了墙上好大一颗头随着微风在轻轻摇晃墙角的缝隙里不知道有几只蛐蛐人一走近就停止了鸣唱听着轻音乐一瞬间我好像回到了小时候在小院儿里坐着板凳乘凉一边摇着蒲扇驱赶蚊子一边望着神话故事里的月亮">
+<meta name="description" content="RabbitMQ系列(1)–认识消息队列中间件 初识消息队列中间件消息(Message)是指在应用之间传递的数据。 消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是上下层之间的中间(纵向的“中间”)，一种是左右之间的中间（横向的“中间”）。 上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一瞬间的恍惚">
-<meta property="og:url" content="http://yoursite.com/2018/12/29/一瞬间的恍惚/index.html">
+<meta property="og:title" content="RabbitMQ系列(1)--初识消息中间件">
+<meta property="og:url" content="http://yoursite.com/2018/12/31/RabbitMQ系列-1-初识消息中间件/index.html">
 <meta property="og:site_name" content="Dethnote">
-<meta property="og:description" content="一瞬间的恍惚 土坯房矮小简陋剥落的墙皮满是雨水的痕迹合不拢的木头门吱吱作响黄色的烛光把我的影子映在了墙上好大一颗头随着微风在轻轻摇晃墙角的缝隙里不知道有几只蛐蛐人一走近就停止了鸣唱听着轻音乐一瞬间我好像回到了小时候在小院儿里坐着板凳乘凉一边摇着蒲扇驱赶蚊子一边望着神话故事里的月亮">
+<meta property="og:description" content="RabbitMQ系列(1)–认识消息队列中间件 初识消息队列中间件消息(Message)是指在应用之间传递的数据。 消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是上下层之间的中间(纵向的“中间”)，一种是左右之间的中间（横向的“中间”）。 上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-29T07:33:34.396Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-p2p.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-pub-sub.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/amqp.jpg">
+<meta property="og:updated_time" content="2018-12-31T14:13:01.627Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一瞬间的恍惚">
-<meta name="twitter:description" content="一瞬间的恍惚 土坯房矮小简陋剥落的墙皮满是雨水的痕迹合不拢的木头门吱吱作响黄色的烛光把我的影子映在了墙上好大一颗头随着微风在轻轻摇晃墙角的缝隙里不知道有几只蛐蛐人一走近就停止了鸣唱听着轻音乐一瞬间我好像回到了小时候在小院儿里坐着板凳乘凉一边摇着蒲扇驱赶蚊子一边望着神话故事里的月亮">
+<meta name="twitter:title" content="RabbitMQ系列(1)--初识消息中间件">
+<meta name="twitter:description" content="RabbitMQ系列(1)–认识消息队列中间件 初识消息队列中间件消息(Message)是指在应用之间传递的数据。 消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是上下层之间的中间(纵向的“中间”)，一种是左右之间的中间（横向的“中间”）。 上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-p2p.jpg">
 
 
 
@@ -119,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/29/一瞬间的恍惚/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/31/RabbitMQ系列-1-初识消息中间件/">
 
 
 
 
 
-  <title>一瞬间的恍惚 | Dethnote</title>
+  <title>RabbitMQ系列(1)--初识消息中间件 | Dethnote</title>
   
 
 
@@ -262,7 +266,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/一瞬间的恍惚/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/RabbitMQ系列-1-初识消息中间件/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="adamhand">
@@ -279,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一瞬间的恍惚</h1>
+          <h1 class="post-title" itemprop="name headline">RabbitMQ系列(1)--初识消息中间件</h1>
         
 
         <div class="post-meta">
@@ -291,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T15:30:52+08:00">
-                2018-12-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:10:22+08:00">
+                2018-12-31
               </time>
             
 
@@ -314,8 +318,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/诗/" itemprop="url" rel="index">
-                    <span itemprop="name">诗</span>
+                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">RabbitMQ</span>
                   </a>
                 </span>
 
@@ -351,8 +355,30 @@
       
 
       
-        <p><strong>一瞬间的恍惚</strong></p>
-<p>土坯房<br>矮小简陋<br>剥落的墙皮<br>满是雨水的痕迹<br>合不拢的木头门<br>吱吱作响<br>黄色的烛光<br>把我的影子映在了墙上<br>好大一颗头<br>随着微风在轻轻摇晃<br>墙角的缝隙里<br>不知道有几只蛐蛐<br>人一走近<br>就停止了鸣唱<br>听着轻音乐<br>一瞬间我好像回到了小时候<br>在小院儿里<br>坐着板凳乘凉<br>一边摇着蒲扇驱赶蚊子<br>一边望着神话故事里的月亮</p>
+        <h1 id="RabbitMQ系列-1-–认识消息队列中间件"><a href="#RabbitMQ系列-1-–认识消息队列中间件" class="headerlink" title="RabbitMQ系列(1)–认识消息队列中间件"></a>RabbitMQ系列(1)–认识消息队列中间件</h1><hr>
+<h1 id="初识消息队列中间件"><a href="#初识消息队列中间件" class="headerlink" title="初识消息队列中间件"></a>初识消息队列中间件</h1><p>消息(Message)是指在应用之间传递的数据。</p>
+<p>消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是<strong>上下层之间的中间(纵向的“中间”)</strong>，一种是<strong>左右之间的中间（横向的“中间”）</strong>。</p>
+<p>上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行了封装，为上层应用程序提供跨平台的数据交流。</p>
+<p>左右之间的中间是指，消息中间件常常被用于分布式环境中，它可以为两个分布式节点之间提供通信服务。</p>
+<h1 id="传递模式"><a href="#传递模式" class="headerlink" title="传递模式"></a>传递模式</h1><p>消息中间件一般有两种传递模式：<strong>点对点</strong>(P2P，Point to point)模式和<strong>发布/订阅</strong>(Pub/Sub)模式。</p>
+<h2 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h2><p>点对点模式是基于队列(queue)的，消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。队列的存在使得消息的异步传输成为可能。消息被消费以后，queue中不再存储，所以消息消费者不可能消费到已经被消费的消息。</p>
+<p>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
+<p>示意图如下图所示：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-p2p.jpg"><br></center>
+
+<h2 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布/订阅模式"></a>发布/订阅模式</h2><p>Pub/Sub发布订阅（广播）：使用topic作为通信载体。消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。和点对点方式不同，发布到topic的消息会被所有订阅者消费。</p>
+<p>示意图如下：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-pub-sub.jpg"><br></center>
+
+<h1 id="常用协议"><a href="#常用协议" class="headerlink" title="常用协议"></a>常用协议</h1><h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><p>AMQP即<strong>Advanced Message Queuing Protocol(高级队列消息协议)</strong>。AMQP协议定义了消息路由规则和方式。生产者将消息发送到Broker，Broker中的Exchange充当了路由器的角色，由它将消息路由到一个或者多个队列中。如果路由不到，或许会返回给生产者，获取会丢弃。</p>
+<p>多个消费者可以订阅同一个队列中的消息，这是队列中的消息会通过“轮询”的方式平均分配给每个消费者，而不是每个消费者都会消费所有消息。</p>
+<p>AMQP的模型如下所示：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/amqp.jpg"><br></center>
+
+<h2 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h2><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。点对点与发布订阅最初是由JMS定义的。</p>
+<p>严格来说，JMS不是一种消息队列协议，它是一种跨平台的API，换句话说，可以使用JMS API来连接支持AMQP、STOMP等协议的消息中间件产品，它的作用更像JDBC，我们可以使用JDBC API来连接具体的数据库产品。</p>
+<h1 id="常见消息中间件对比"><a href="#常见消息中间件对比" class="headerlink" title="常见消息中间件对比"></a>常见消息中间件对比</h1><p>待续。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《RabbitMQ实战指南》<br>《分布式消息中间件实战》<br><a href="https://blog.csdn.net/lizhitao/article/details/47723105" target="_blank" rel="noopener">消息队列中点对点与发布订阅区别</a><br><a href="https://blog.csdn.net/wqc19920906/article/details/82193316" target="_blank" rel="noopener">消息中间件（一）MQ详解及四大MQ比较</a><br><a href="https://blog.csdn.net/btt2013/article/details/80211599" target="_blank" rel="noopener">Java消息中间件(入门篇)</a></p>
 
       
     </div>
@@ -377,8 +403,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/29/Java泛型-2-泛型数组/" rel="next" title="Java泛型(2)--泛型数组">
-                <i class="fa fa-chevron-left"></i> Java泛型(2)--泛型数组
+              <a href="/2018/12/31/Java并发-3-从synchronized到锁优化/" rel="next" title="Java并发(3)--从synchronized到锁优化">
+                <i class="fa fa-chevron-left"></i> Java并发(3)--从synchronized到锁优化
               </a>
             
           </div>
@@ -386,10 +412,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/29/Netty系列-1-初识Netty/" rel="prev" title="Netty系列(1)--初识Netty">
-                Netty系列(1)--初识Netty <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -441,8 +463,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -493,6 +524,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ系列-1-–认识消息队列中间件"><span class="nav-number">1.</span> <span class="nav-text">RabbitMQ系列(1)–认识消息队列中间件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初识消息队列中间件"><span class="nav-number">2.</span> <span class="nav-text">初识消息队列中间件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#传递模式"><span class="nav-number">3.</span> <span class="nav-text">传递模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#点对点模式"><span class="nav-number">3.1.</span> <span class="nav-text">点对点模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布-订阅模式"><span class="nav-number">3.2.</span> <span class="nav-text">发布/订阅模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用协议"><span class="nav-number">4.</span> <span class="nav-text">常用协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AMQP"><span class="nav-number">4.1.</span> <span class="nav-text">AMQP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS"><span class="nav-number">4.2.</span> <span class="nav-text">JMS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常见消息中间件对比"><span class="nav-number">5.</span> <span class="nav-text">常见消息中间件对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

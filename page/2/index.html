@@ -259,6 +259,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/Java泛型-2-泛型数组/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/29/Java泛型-2-泛型数组/" itemprop="url">Java泛型(2)--泛型数组</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T15:25:45+08:00">
+                2018-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h1><p>今天在刷题时，遇到了需要使用泛型数组的场景。题目是<strong>按之字形打印二叉树</strong>。这道题目需要交替使用两个栈来解决，我的初始代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayDeque&lt;TreeNode&gt;[] stacks = <span class="keyword">new</span> ArrayDeque&lt;TreeNode&gt;[<span class="number">2</span>];    <span class="comment">//1</span></span><br><span class="line">stacks[<span class="number">0</span>] = <span class="keyword">new</span> ArrayDeque&lt;TreeNode&gt;();</span><br><span class="line">stacks[<span class="number">1</span>] = <span class="keyword">new</span> ArrayDeque&lt;TreeNode&gt;();</span><br></pre></td></tr></table></figure></p>
+<p>而在编译时，代码1报出了如下编译错误：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot create a generic array of ArrayDeque&lt;Integer&gt;</span><br></pre></td></tr></table></figure></p>
+<p>原来Java不支持泛型数组。</p>
+<h1 id="Java中的泛型做了什么"><a href="#Java中的泛型做了什么" class="headerlink" title="Java中的泛型做了什么"></a>Java中的泛型做了什么</h1><p>首先看一下Java中的泛型做了什么。看下面这段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        value = t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用javap命令反编译生成的GenTest类的class文件，可以得到下面的输出：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">javap -c -p GenTest</span><br><span class="line">Compiled from <span class="string">"GenTest.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span> <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span></span>&#123;</span><br><span class="line">java.lang.Object value;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">GenTest</span><span class="params">()</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   1:   invokespecial   #12; //Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   <span class="number">4</span>:   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> java.lang.<span class="function">Object <span class="title">getValue</span><span class="params">()</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   1:   getfield        #23; //Field value:Ljava/lang/Object;</span><br><span class="line">   <span class="number">4</span>:   areturn</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(java.lang.Object)</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   <span class="number">1</span>:   aload_1</span><br><span class="line">   2:   putfield        #23; //Field value:Ljava/lang/Object;</span><br><span class="line">   <span class="number">5</span>:   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们清楚的看到，<strong>泛型T在GenTest类中就是Object类型（java.lang.Object value;）。同样，get方法和set方法也都是将泛型T当作Object来处理的。</strong>如果我们规定泛型是Numeric类或者其子类，那么在这里泛型T就是被当作Numeric类来处理的。</p>
+<p>好，既然GenTest类中没有什么乾坤，那么我们继续看使用GenTest的时候又什么新东西：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UseGenTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String value = <span class="string">"value"</span>;</span><br><span class="line">        GenTest&lt;String&gt; test = <span class="keyword">new</span> GenTest&lt;String&gt;();</span><br><span class="line">        test.setValue(value);</span><br><span class="line">        String nv = test.getValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用javap命令反编译生成的GenTest类的class文件，可以得到下面的输出：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">javap -c -p UseGenTest</span><br><span class="line">Compiled from <span class="string">"UseGenTest.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UseGenTest</span> <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span></span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">UseGenTest</span><span class="params">()</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   1:   invokespecial   #8; //Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   <span class="number">4</span>:   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   0:   ldc     #16; //String value</span><br><span class="line">   <span class="number">2</span>:   astore_1</span><br><span class="line">   3:   new     #18; //class GenTest</span><br><span class="line">   <span class="number">6</span>:   dup</span><br><span class="line">   7:   invokespecial   #20; //Method GenTest."&lt;init&gt;":()V</span><br><span class="line">   <span class="number">10</span>:  astore_2</span><br><span class="line">   <span class="number">11</span>:  aload_2</span><br><span class="line">   <span class="number">12</span>:  aload_1</span><br><span class="line">   13:  invokevirtual   #21; //Method GenTest.setValue:(Ljava/lang/Object;)V</span><br><span class="line">   <span class="number">16</span>:  aload_2</span><br><span class="line">   17:  invokevirtual   #25; //Method GenTest.getValue:()Ljava/lang/Object;</span><br><span class="line">   20:  checkcast       #29; //class java/lang/String</span><br><span class="line">   <span class="number">23</span>:  astore_3</span><br><span class="line">   <span class="number">24</span>:  <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重点在17、20和23三处。17就是调用getValue方法。而20则是关键——类型检查。<strong>也就是说，在调用getValue方法之后，并没有直接把返回值赋值给nv，而是先检查了返回值是否是String类型</strong>，换句话说，“String nv = test.getValue();”被编译器变成了“String nv =(String)test.getValue();”。最后，如果检查无误，在23处才会赋值。也就是说，如果没有完成类型检查，则会报出类似ClassCastException，而代码将不会继续向下执行，这就有效的避免了错误的出现。</p>
+<p><strong>也就是说：在类的内部，泛型类型就是被基类型代替的（默认是Object类型），而对外，所有返回值类型为泛型类型的方法，在真正使用返回值之前，都是会经过类型转换的。</strong></p>
+<h1 id="为什么不支持泛型的数组？"><a href="#为什么不支持泛型的数组？" class="headerlink" title="为什么不支持泛型的数组？"></a>为什么不支持泛型的数组？</h1><p>根据上面的分析可以看出来，泛型其实是挺严谨的，说白了就是在“编译的时候通过增加强制类型转换的代码，来避免用户编写出可能引发ClassCastException的代码”。这其实也算是Java引入泛型的一个目的。</p>
+<p>但是，如果允许了泛型数组，那么编译器添加的强制类型转换的代码就会有可能是错误的。</p>
+<p>看下面的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面的代码使用了泛型的数组，是无法通过编译的</span></span><br><span class="line">GenTest&lt;String&gt; genArr[] = <span class="keyword">new</span> GenTest&lt;String&gt;[<span class="number">2</span>];</span><br><span class="line">Object[] test = genArr;</span><br><span class="line">GenTest&lt;StringBuffer&gt; strBuf = <span class="keyword">new</span> GenTest&lt;StringBuffer&gt;();</span><br><span class="line">strBuf.setValue(<span class="keyword">new</span> StringBuffer());</span><br><span class="line">test[<span class="number">0</span>] = strBuf;</span><br><span class="line">GenTest&lt;String&gt; ref = genArr[<span class="number">0</span>]; <span class="comment">//上面两行相当于使用数组移花接木，让Java编译器把GenTest&lt;StringBuffer&gt;当作了GenTest&lt;String&gt;</span></span><br><span class="line">String value = ref.getValue();<span class="comment">// 这里是重点！</span></span><br></pre></td></tr></table></figure></p>
+<p>上面的代码中，最后一行是重点。根据本文第一部分的介绍，“String value = ref.getValue()”会被替换成“String value =(String)ref.getValue()”。当然我们知道，ref实际上是指向一个存储着StringBuffer对象的GenTest对象。所以，编译器生成出来的代码是隐含着错误的，在运的时候就会抛出ClassCastException。</p>
+<p>但是，如果没有“String value = ref.getValue();”这行代码，那么程序可以说没有任何错误。这全都是Java中多态的功劳。我们来分析一下，对于上面代码中创建出来的GenTest对象，其实无论value引用实际指向的是什么对象，对于类中的代码来说都是没有任何影响的——因为在GenTest类中，这个对象仅仅会被当作是基类型的对象（在这里也就是Object的对象）来使用。所以，无论是String的对象，还是StringBuffer的对象，都不可能引发任何问题。举例来说，如果调用valued的hashcode方法，那么，如果value指向的是String的对象，实际执行的就是String类中的hashcode方法，如果是StringBuffer的对象，那么实际执行的就是StringBuffer类中的hashcode方法。</p>
+<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><h2 id="包装类实现泛型数组-编译无错，运行出错"><a href="#包装类实现泛型数组-编译无错，运行出错" class="headerlink" title="包装类实现泛型数组(编译无错，运行出错)"></a>包装类实现泛型数组(编译无错，运行出错)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericArray</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object[] values;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GenericArray</span><span class="params">(<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        values = <span class="keyword">new</span> Object[count];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T t,<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        values[position] = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T)values[position];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注意此句代码调用会出错</span></span><br><span class="line">    <span class="keyword">public</span> T[] getValues()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T[])values;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        GenericArray&lt;String&gt; generic=<span class="keyword">new</span> GenericArray(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        generic.setValue(<span class="string">"wenwei1"</span>, <span class="number">0</span>);</span><br><span class="line">        generic.setValue(<span class="string">"wenwei2"</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(generic.getValue(<span class="number">0</span>));</span><br><span class="line">        System.out.println(generic.getValue(<span class="number">1</span>));</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        String[]content = generic.getValues();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>分析：上面代码可以编译通过，而且我们使用GenericArray存储数据可以正常使用，但当我们调用其getValues则会出现强转类型错误（这种错误就是我们在概述中分析的编译器生成强转代码造成的）。 </p>
+<h2 id="使用反射"><a href="#使用反射" class="headerlink" title="使用反射"></a>使用反射</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericArray1</span> &lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T[] values;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GenericArray1</span><span class="params">(Class&lt;T&gt; type,<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        values= (T[])Array.newInstance(type, length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T t,<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        values[position] = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T)values[position];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T[] getValues()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> values;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        GenericArray1&lt;String&gt; generic=<span class="keyword">new</span> GenericArray1&lt;String&gt;(String.class,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        generic.setValue(<span class="string">"wenwei1"</span>, <span class="number">0</span>);</span><br><span class="line">        generic.setValue(<span class="string">"wenwei2"</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(generic.getValue(<span class="number">0</span>));</span><br><span class="line">        System.out.println(generic.getValue(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        String[]content = generic.getValues();</span><br><span class="line">        System.out.println(content[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>分析：上面代码可以编译通过，我们使用GenericArray存储数据可以正常使用，而且调用其getValues也不会出现强转类型错误，这种方式比较推荐（因为我们调用Array.newInstance()生成的数组是String[]类型的数组）。</p>
+<h2 id="使用通配符"><a href="#使用通配符" class="headerlink" title="使用通配符"></a>使用通配符</h2><p>The Java™ Tutorials: Generics给出的解决方案如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;?&gt;[] lsa = <span class="keyword">new</span> List&lt;?&gt;[<span class="number">10</span>];                <span class="comment">//1</span></span><br><span class="line">Object[] oa = lsa;</span><br><span class="line">List&lt;Integer&gt; li = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">li.add(<span class="keyword">new</span> Integer(<span class="number">3</span>));</span><br><span class="line"></span><br><span class="line">oa[<span class="number">1</span>] = li;</span><br><span class="line"></span><br><span class="line">Integer s = (Integer) lsa[<span class="number">1</span>].get(<span class="number">0</span>)            <span class="comment">//2</span></span><br></pre></td></tr></table></figure></p>
+<p>在第1处，用?取代了确定的参数类型。根据通配符的定义以及Java类型擦除的保留上界原则，在2处lsa[1].get(0)取出的将会是Object，所以需要程序员做一次显式的类型转换。假如说程序员要将2处取出的值强转为String，就会出错。所以，这种做法相当于把风险把控交给了程序员。</p>
+<p>补充说明：对于泛型数组，最简单的我们可以利用容器List来模拟实现！</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Java为什么不允许泛型数组？</p>
+<p>先看为什么要用泛型。泛型的引入就是为了避免类型的不一致，假如声明一个List<pair>类型的list，那么在写出语句list.add(5)的时候，编译就会出错，因为类型不匹配，所以<strong>泛型可以将类型不匹配的错误扼杀在编译阶段。</strong></pair></p>
+<p>但是泛型数组就不行了，如果允许创建泛型数组，将能在数组p里存放任何类的对象，并且能够通过编译，因为在编译阶段p被认为是一个Object[ ]，也就是p里面可以放一个int，也可以放一个Pair，这样就<strong>绕过了编译器对泛型的检查</strong>。但是取出的时候就有可能将一个int类型的赋值给Pair类型。为了避免这种错误的出现，Java不支持直接创建泛型数组。</p>
+<p>所以最初的问题可以解决如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayDeque&lt;Integer&gt;[] stacks = (ArrayDeque&lt;Integer&gt;[]) Array.newInstance(ArrayDeque.class, <span class="number">2</span>);</span><br></pre></td></tr></table></figure></p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>后来无意中发现如果将最初的问题写为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayDeque&lt;TreeNode&gt;[] stacks = <span class="keyword">new</span> ArrayDeque[<span class="number">2</span>];</span><br></pre></td></tr></table></figure></p>
+<p>即后面的ArrayDeque后面不加泛型限定，可以正常使用。但是好像这种写法不太规范。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/scutwang/articles/3735219.html" target="_blank" rel="noopener">分析一下为什么JAVA不支持泛型类型的数组</a><br><a href="https://blog.csdn.net/qq_22494029/article/details/79386607" target="_blank" rel="noopener">java泛型与数组</a><br><a href="https://blog.csdn.net/yi_Afly/article/details/52058708" target="_blank" rel="noopener">Java泛型的实现：“禁止”泛型数组</a><br><a href="https://blog.csdn.net/aabbwoshishei/article/details/50163261" target="_blank" rel="noopener">Java为什么不能创建泛型数组？</a><br><a href="https://www.cnblogs.com/ixenos/p/5648519.html" target="_blank" rel="noopener">Java 泛型 泛型数组</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/Java泛型-1-泛型基础/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1170,7 +1342,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1180,8 +1352,8 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-1.html">
-                  <span class="site-state-item-count">4</span>
+                <a href="/categories/index-3.html">
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
