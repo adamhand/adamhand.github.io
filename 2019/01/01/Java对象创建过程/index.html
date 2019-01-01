@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：   启动JVM；    将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区；    执行main方法。JVM会将main方法加载到栈中，从第一行开始执行；    执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Ch">
+<meta name="description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：  1 启动JVM； 2 将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区； 3 执行main方法。JVM会将main方法加载到栈中，从第一行开始执行； 4 执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Chil">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java对象创建过程">
 <meta property="og:url" content="http://yoursite.com/2019/01/01/Java对象创建过程/index.html">
 <meta property="og:site_name" content="Dethnote">
-<meta property="og:description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：   启动JVM；    将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区；    执行main方法。JVM会将main方法加载到栈中，从第一行开始执行；    执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Ch">
+<meta property="og:description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：  1 启动JVM； 2 将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区； 3 执行main方法。JVM会将main方法加载到栈中，从第一行开始执行； 4 执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Chil">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-01T02:36:15.671Z">
+<meta property="og:updated_time" content="2019-01-01T02:38:24.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java对象创建过程">
-<meta name="twitter:description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：   启动JVM；    将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区；    执行main方法。JVM会将main方法加载到栈中，从第一行开始执行；    执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Ch">
+<meta name="twitter:description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：  1 启动JVM； 2 将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区； 3 执行main方法。JVM会将main方法加载到栈中，从第一行开始执行； 4 执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Chil">
 
 
 
@@ -353,59 +353,31 @@
       
         <h1 id="对象创建的过程"><a href="#对象创建的过程" class="headerlink" title="对象创建的过程"></a>对象创建的过程</h1><p>在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：</p>
 <ul>
-<li><ol>
-<li>启动<code>JVM</code>；</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>将主函数所在的<code>Test.class</code>文件加载进入方法区中，加载过程静态内容要加载进入静态区；</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>执行<code>main</code>方法。<code>JVM</code>会将<code>main</code>方法加载到栈中，从第一行开始执行；</li>
-</ol>
-</li>
-<li><ol start="4">
-<li>执行<code>new Child()</code>。<code>JVM</code>会在方法区中查找是否有<code>Child</code>文件，如果没有就加载<code>Child.class</code>文件(从哪里加载呢？参见类加载过程)；如果<code>Child</code>有直接父类，首先查找父类是否存在方法区中，如果不在要先加载父类；<br><code>Child.class</code>和<code>Parent.class</code>中的所有的非静态内容会加载到非静态的区域中，而静态的内容会加载到静态区中。静态内容（静态变量，静态代码块，静态方法）按照书写顺序加载；</li>
-</ol>
-</li>
+<li>1 启动<code>JVM</code>；</li>
+<li>2 将主函数所在的<code>Test.class</code>文件加载进入方法区中，加载过程静态内容要加载进入静态区；</li>
+<li>3 执行<code>main</code>方法。<code>JVM</code>会将<code>main</code>方法加载到栈中，从第一行开始执行；</li>
+<li>4 执行<code>new Child()</code>。<code>JVM</code>会在方法区中查找是否有<code>Child</code>文件，如果没有就加载<code>Child.class</code>文件(从哪里加载呢？参见类加载过程)；如果<code>Child</code>有直接父类，首先查找父类是否存在方法区中，如果不在要先加载父类；<br><code>Child.class</code>和<code>Parent.class</code>中的所有的非静态内容会加载到非静态的区域中，而静态的内容会加载到静态区中。静态内容（静态变量，静态代码块，静态方法）按照书写顺序加载；</li>
 </ul>
 <p><em>说明：类的加载只会执行一次。下次再创建对象时，可以直接在方法区中获取<code>class</code>信息。</em></p>
 <ul>
-<li><ol start="5">
-<li>开始给静态区中的所有静态的成员变量默认初始化。默认初始化完成之后，给所有的静态成员变量显示初始化；</li>
-</ol>
-</li>
-<li><ol start="6">
-<li>所有静态成员变量显示初始化完成之后，开始执行静态的代码块。先执行父类的静态代码块，再执行子类的静态代码块；</li>
-</ol>
-</li>
+<li>5 开始给静态区中的所有静态的成员变量默认初始化。默认初始化完成之后，给所有的静态成员变量显示初始化；</li>
+<li>6 所有静态成员变量显示初始化完成之后，开始执行静态的代码块。先执行父类的静态代码块，再执行子类的静态代码块；</li>
 </ul>
 <p><em>说明：静态代码块是在类加载的时候执行的，类的加载只会执行一次所以静态代码块也只会执行一次；<br>非静态代码块和构造函数中的代码是在对象创建的时候执行的，因此对象创建(<code>new</code>)一次，它们就会执行一次。</em></p>
 <p>这时<code>Parent.class</code>文件 和 <code>Child.class</code>文件加载完成；</p>
 <ul>
-<li><ol start="7">
-<li>开始在堆中创建<code>Child</code>对象。给<code>Child</code>对象分配内存空间，其实就是分配内存地址；</li>
-</ol>
-</li>
-<li><ol start="8">
-<li>为对象的成员变量进行默认初始化；</li>
-</ol>
-</li>
-<li><ol start="9">
-<li><p>调用对象的构造方法，执行<strong>隐式三步</strong>：</p>
+<li>7 开始在堆中创建<code>Child</code>对象。给<code>Child</code>对象分配内存空间，其实就是分配内存地址；</li>
+<li>8 为对象的成员变量进行默认初始化；</li>
+<li><p>9 调用对象的构造方法，执行<strong>隐式三步</strong>：</p>
 <ul>
 <li>(1)隐式<code>super()</code>，首先需要执行父类的构造函数，对父类进行构造函数初始化；</li>
 <li>(2)子类对象成员变量的显示初始化；</li>
-<li>(3)执行子类的构造代码块；</li>
-</ul>
+<li><p>(3)执行子类的构造代码块；</p>
 <p>接着才会执行子类构造代码块的剩余代码。<br>在第(1)步中，父类构造函数初始化的时候也有隐式三步，因为父类继承自超类<code>Object</code>。</p>
 </li>
-</ol>
+</ul>
 </li>
-<li><ol start="10">
-<li>将地址赋值给引用变量，对象初始化结束。</li>
-</ol>
+<li><p>10 将地址赋值给引用变量，对象初始化结束。</p>
 </li>
 </ul>
 <p>下面是一个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> NewAObject;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> staticNum = <span class="number">101</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Parent静态代码块：staticNum="</span>+staticNum);</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"Parent普通代码块：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Parent()&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        System.out.println(<span class="string">"Parent构造函数：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">        show();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Parent show函数：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> staticNum = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Child静态代码块：staticNum="</span>+staticNum);</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"Child普通代码块：num+"</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Child()&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="comment">//通过super初始化父类内容时，子类的成员并未显式初始化，而是父类初始化完毕时候才会进行显示初始化。</span></span><br><span class="line">        System.out.println(<span class="string">"Child构造函数：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Child show函数：num="</span>+ num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewAObject</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Child child = <span class="keyword">new</span> Child();</span><br><span class="line">        child.show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
