@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Dethnote">
 <meta property="og:description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：  1 启动JVM； 2 将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区； 3 执行main方法。JVM会将main方法加载到栈中，从第一行开始执行； 4 执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Chil">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-01T02:38:24.969Z">
+<meta property="og:updated_time" content="2019-01-01T02:41:47.960Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java对象创建过程">
 <meta name="twitter:description" content="对象创建的过程在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：  1 启动JVM； 2 将主函数所在的Test.class文件加载进入方法区中，加载过程静态内容要加载进入静态区； 3 执行main方法。JVM会将main方法加载到栈中，从第一行开始执行； 4 执行new Child()。JVM会在方法区中查找是否有Child文件，如果没有就加载Chil">
@@ -393,7 +393,7 @@
 </ul>
 <hr>
 <p><strong>补充：为何java中static静态数据无法访问非static数据，但是反过来却可以</strong></p>
-<p>由上述过程可知，类在加载的时候会初始化static变量，但是没有对非static变量声明和初始化，如果我们在static方法中调用类非static变量的话，就极有可能出错，当然java是不允许的。所以在编译阶段，就会报错。</p>
+<p>由上述过程可知，类在加载的时候会初始化static变量，但是没有对非static变量声明和初始化，也就是说，对static变量的初始化是先于对非static变量的初始化的。如果我们在static方法中调用类非static变量的话，就极有可能出错，当然java是不允许的。所以在编译阶段，就会报错。</p>
 <hr>
 
       
