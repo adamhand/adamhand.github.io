@@ -259,6 +259,294 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java并发-4-阻塞队列/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/01/Java并发-4-阻塞队列/" itemprop="url">Java并发(4)--阻塞队列</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T21:35:19+08:00">
+                2019-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Java并发–阻塞队列"><a href="#Java并发–阻塞队列" class="headerlink" title="Java并发–阻塞队列"></a>Java并发–阻塞队列</h1><hr>
+<h1 id="什么是阻塞队列？"><a href="#什么是阻塞队列？" class="headerlink" title="什么是阻塞队列？"></a>什么是阻塞队列？</h1><p>阻塞队列（BlockingQueue）是一个支持两个附加操作的队列。这两个附加的操作是：<strong>在队列为空时，获取元素的线程会等待队列变为非空。当队列满时，存储元素的线程会等待队列可用。阻塞队列常用于生产者和消费者的场景，</strong>生产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。阻塞队列就是生产者存放元素的容器，而消费者也只从容器里拿元素。</p>
+<p>阻塞队列提供了四种处理方法:</p>
+<table>
+<thead>
+<tr>
+<th>方法\处理方式</th>
+<th>抛出异常</th>
+<th>返回特殊值</th>
+<th>一直阻塞</th>
+<th>超时退出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>插入方法</td>
+<td>add(e)</td>
+<td>offer(e)</td>
+<td>put(e)</td>
+<td>offer(e,time,unit)</td>
+</tr>
+<tr>
+<td>移除方法</td>
+<td>remove()</td>
+<td>poll()</td>
+<td>take()</td>
+<td>poll(time,unit)</td>
+</tr>
+<tr>
+<td>检查方法</td>
+<td>element()</td>
+<td>peek()</td>
+<td>不可用</td>
+<td>不可用</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>抛出异常：是指当阻塞队列满时候，再往队列里插入元素，会抛出<code>IllegalStateException(“Queue full”)</code>异常。当队列为空时，从队列里获取元素时会抛出<code>NoSuchElementException</code>异常 。</li>
+<li>返回特殊值：插入方法会返回是否成功，成功则返回<code>true</code>。移除方法，则是从队列里拿出一个元素，如果没有则返回<code>null</code>。</li>
+<li>一直阻塞：当阻塞队列满时，如果生产者线程往队列里<code>put</code>元素，队列会一直阻塞生产者线程，直到拿到数据，或者响应中断退出。当队列空时，消费者线程试图从队列里<code>take</code>元素，队列也会阻塞消费者线程，直到队列可用。</li>
+<li>超时退出：当阻塞队列满时，队列会阻塞生产者线程一段时间，如果超过一定的时间，生产者线程就会退出。</li>
+</ul>
+<h1 id="Java中的阻塞队列"><a href="#Java中的阻塞队列" class="headerlink" title="Java中的阻塞队列"></a>Java中的阻塞队列</h1><p>JDK7提供了7个阻塞队列。分别是:</p>
+<table>
+<thead>
+<tr>
+<th>队列</th>
+<th>有界性</th>
+<th>锁</th>
+<th>数据结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ArrayBlockingQueue</td>
+<td>有界</td>
+<td>加锁</td>
+<td>数组</td>
+</tr>
+<tr>
+<td>LinkedBlockingQueue</td>
+<td>有界</td>
+<td>加锁</td>
+<td>单链表</td>
+</tr>
+<tr>
+<td>PriorityBlockingQueue</td>
+<td>无界</td>
+<td>加锁</td>
+<td>堆</td>
+</tr>
+<tr>
+<td>DelayQueue</td>
+<td>无界</td>
+<td>加锁</td>
+<td>堆</td>
+</tr>
+<tr>
+<td>SynchronousQueue</td>
+<td>有界</td>
+<td>无锁(CAS)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>LinkedTransferQueue</td>
+<td>无界</td>
+<td>无锁(CAS)</td>
+<td>单链表</td>
+</tr>
+<tr>
+<td>LinkedBlockingDeque</td>
+<td>无界</td>
+<td>加锁</td>
+<td>双链表</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>ArrayBlockingQueue</strong>：是一个用数组实现的有界阻塞队列，此队列按照先进先出（FIFO）的原则对元素进行排序。支持公平锁和非公平锁。【注：每一个线程在获取锁的时候可能都会排队等待，如果在等待时间上，先获取锁的线程的请求一定先被满足，那么这个锁就是公平的。反之，这个锁就是不公平的。公平的获取锁，也就是当前等待时间最长的线程先获取锁】访问者的公平性是使用可重入锁实现的，<code>ReentrantLock</code>默认实现非公平锁，但是可以使用一个带参的构造函数实现公平锁。</li>
+<li><strong>LinkedBlockingQueue</strong>：一个由链表结构组成的有界队列，此队列的长度为Integer.MAX_VALUE。此队列按照先进先出的顺序进行排序。</li>
+<li><strong>PriorityBlockingQueue</strong>：一个支持线程优先级排序的无界队列，默认自然序进行排序，也可以自定义实现comparator的compare()方法来指定元素排序规则，不能保证同优先级元素的顺序。</li>
+<li><p><strong>DelayQueue</strong>:DelayQueue是一个支持延时获取元素的无界阻塞队列。队列使用PriorityQueue来实现。队列中的元素必须实现Delayed接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。我们可以将DelayQueue运用在以下应用场景：</p>
+<ul>
+<li>缓存系统的设计：可以用DelayQueue保存缓存元素的有效期，使用一个线程循环查询DelayQueue，一旦能从DelayQueue中获取元素时，表示缓存有效期到了。</li>
+<li>定时任务调度。使用DelayQueue保存当天将会执行的任务和执行时间，一旦从DelayQueue中获取到任务就开始执行，从比如TimerQueue就是使用DelayQueue实现的。<br>队列中的元素必须实现Delayed接口，实现CompareTo方法。比如让延时时间最长的放在队列的末尾。实现代码如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Delayed other)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (other == <span class="keyword">this</span>) <span class="comment">// compare zero ONLY if same object</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (other <span class="keyword">instanceof</span> ScheduledFutureTask) &#123;</span><br><span class="line">        ScheduledFutureTask x = (ScheduledFutureTask)other;</span><br><span class="line">        <span class="keyword">long</span> diff = time - x.time;</span><br><span class="line">        <span class="keyword">if</span> (diff &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (diff &gt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (sequenceNumber &lt; x.sequenceNumber)</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> d = (getDelay(TimeUnit.NANOSECONDS) -</span><br><span class="line">              other.getDelay(TimeUnit.NANOSECONDS));</span><br><span class="line">    <span class="keyword">return</span> (d == <span class="number">0</span>) ? <span class="number">0</span> : ((d &lt; <span class="number">0</span>) ? -<span class="number">1</span> : <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>SynchronousQueue</strong>：SynchronousQueue是一个不存储元素的阻塞队列。每一个put操作必须等待一个take操作，否则不能继续添加元素。SynchronousQueue可以看成是一个传球手，负责把生产者线程处理的数据直接传递给消费者线程。队列本身并不存储任何元素，非常适合于传递性场景,比如在一个线程中使用的数据，传递给另外一个线程使用，SynchronousQueue的吞吐量高于LinkedBlockingQueue 和 ArrayBlockingQueue。<br>SynchronousQueue 并没有使用锁来保证线程的安全，使用的是循环CAS方法。<br>SynchronousQueue有两种模式： </p>
+<ul>
+<li>公平模式<br>所谓公平就是遵循先来先服务的原则，因此其内部使用了一个FIFO队列 来实现其功能。 </li>
+<li>非公平模式<br>SynchronousQueue 中的非公平模式是默认的模式，其内部使用栈来实现其功能，也就是 后来的先服务。</li>
+</ul>
+</li>
+<li><strong>LinkedTransferQueue</strong>:LinkedTransferQueue 和SynchronousQueue 其实基本是差不多的，两者都是无锁带阻塞功能的队列，SynchronousQueue 通过内部类Transferer 来实现公平和非公平队列<br>在LinkedTransferQueue 中没有公平与非公平的区分，LinkedTransferQueue 实现了TransferQueue接口，该接口定义的是带阻塞操作的操作，相比SynchronousQueue 中的Transferer 功能更丰富。<br>LinkedTransferQueue是基于链表的FIFO无界阻塞队列，它是JDK1.7才添加的阻塞队列，有4种操作模式：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NOW   = <span class="number">0</span>; <span class="comment">// for untimed poll, tryTransfer</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ASYNC = <span class="number">1</span>; <span class="comment">// for offer, put, add</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SYNC  = <span class="number">2</span>; <span class="comment">// for transfer, take</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TIMED = <span class="number">3</span>; <span class="comment">// for timed poll, tryTransfer</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>① NOW ：在取数据的时候，如果没有数据，则直接返回，无需阻塞等待。<br>② ASYNC：入队的操作都不会阻塞，也就是说，入队后线程会立即返回，不需要等到消费者线程来取数据。<br>③ SYNC ：取数据的时候，如果没有数据，则会进行阻塞等待。<br>④ TIMED : 取数据的时候，如果没有数据，则会进行超时阻塞等待。</p>
+<ul>
+<li><strong>LinkedBlockingDeque</strong>：LinkedBlockingDeque是基于双向链表的双端有界阻塞队列，默认使用非公平ReentrantLock实现线程安全，默认队列最大长度都为Integer.MAX_VALUE；不允许null元素添加；双端队列可以用来实现 <strong>“窃取算法”</strong>（关于窃取算法，参考另一篇笔记——《Java并发之J.U.C》） ,两头都可以操作队列，相对于单端队列可以减少一半的竞争。 </li>
+</ul>
+<h1 id="阻塞队列的实现原理"><a href="#阻塞队列的实现原理" class="headerlink" title="阻塞队列的实现原理"></a>阻塞队列的实现原理</h1><p>由上面的分析可以看到，阻塞队列有两种：<strong>加锁</strong>和<strong>不加锁</strong>。</p>
+<p><strong>加锁的队列</strong>是使用ReentrantLock的Condition的await()和signal()方法来实现生产者和消费者之间通信的，当生产者往满的队列里添加元素时会阻塞住生产者，当消费者消费了一个队列中的元素后，会通知生产者当前队列可用。而await()方法调用的是LockSupport.park()方法，这个park方法调用的又是调用的unsafe.park()方法实现队列的阻塞的。</p>
+<p><strong>不加锁的队列</strong>使用的是<strong>CAS算法</strong>+<strong>LockSupport.park()/unpark()</strong>方法来实现的。</p>
+<p>下面以ArrayBlockingQueue为例看一下。通过查看JDK源码发现ArrayBlockingQueue使用了Condition来实现，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Condition notFull;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayBlockingQueue</span><span class="params">(<span class="keyword">int</span> capacity, <span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//省略其他代码</span></span><br><span class="line">    notEmpty = lock.newCondition();</span><br><span class="line">    notFull =  lock.newCondition();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    checkNotNull(e);</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (count == items.length)</span><br><span class="line">            notFull.await();</span><br><span class="line">        insert(e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">this</span>.lock;</span><br><span class="line">    lock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (count == <span class="number">0</span>)</span><br><span class="line">            notEmpty.await();</span><br><span class="line">        <span class="keyword">return</span> extract();</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(E x)</span> </span>&#123;</span><br><span class="line">    items[putIndex] = x;</span><br><span class="line">    putIndex = inc(putIndex);</span><br><span class="line">    ++count;</span><br><span class="line">    notEmpty.signal();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当往队列里插入一个元素时，如果队列不可用，阻塞生产者主要通过LockSupport.park(this);来实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Thread.interrupted())</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</span><br><span class="line">    Node node = addConditionWaiter();</span><br><span class="line">    <span class="keyword">int</span> savedState = fullyRelease(node);</span><br><span class="line">    <span class="keyword">int</span> interruptMode = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (!isOnSyncQueue(node)) &#123;</span><br><span class="line">        LockSupport.park(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">if</span> ((interruptMode = checkInterruptWhileWaiting(node)) != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (acquireQueued(node, savedState) &amp;&amp; interruptMode != THROW_IE)</span><br><span class="line">        interruptMode = REINTERRUPT;</span><br><span class="line">    <span class="keyword">if</span> (node.nextWaiter != <span class="keyword">null</span>) <span class="comment">// clean up if cancelled</span></span><br><span class="line">        unlinkCancelledWaiters();</span><br><span class="line">    <span class="keyword">if</span> (interruptMode != <span class="number">0</span>)</span><br><span class="line">        reportInterruptAfterWait(interruptMode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>继续进入源码，发现调用setBlocker先保存下将要阻塞的线程，然后调用unsafe.park阻塞当前线程。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">park</span><span class="params">(Object blocker)</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    setBlocker(t, blocker);</span><br><span class="line">    unsafe.park(<span class="keyword">false</span>, <span class="number">0L</span>);</span><br><span class="line">    setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>unsafe.park是个native方法，这个方法会阻塞当前线程，只有以下四种情况中的一种发生时，该方法才会返回。</p>
+<ul>
+<li>与park对应的unpark执行或已经执行时。注意：已经执行是指unpark先执行，然后再执行的park。</li>
+<li>线程被中断时。</li>
+<li>如果参数中的time不是零，等待了指定的毫秒数时。</li>
+<li>发生异常现象时。这些异常事先无法确定。</li>
+</ul>
+<p>继续看一下JVM是如何实现park方法的，park在不同的操作系统使用不同的方式实现，在linux下是使用的是系统方法pthread_cond_wait实现。实现代码在JVM源码路径src/os/linux/vm/os_linux.cpp里的 os::PlatformEvent::park方法，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> os::PlatformEvent::park() &#123;</span><br><span class="line"> 	 <span class="keyword">int</span> v ;</span><br><span class="line">     <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">	v = _Event ;</span><br><span class="line">     <span class="keyword">if</span> (Atomic::cmpxchg (v-<span class="number">1</span>, &amp;_Event, v) == v) <span class="keyword">break</span> ;</span><br><span class="line">     &#125;</span><br><span class="line">     guarantee (v &gt;= <span class="number">0</span>, <span class="string">"invariant"</span>) ;</span><br><span class="line">     <span class="keyword">if</span> (v == <span class="number">0</span>) &#123;</span><br><span class="line">     <span class="comment">// Do this the hard way by blocking ...</span></span><br><span class="line">     <span class="keyword">int</span> status = pthread_mutex_lock(_mutex);</span><br><span class="line">     assert_status(status == <span class="number">0</span>, status, <span class="string">"mutex_lock"</span>);</span><br><span class="line">     guarantee (_nParked == <span class="number">0</span>, <span class="string">"invariant"</span>) ;</span><br><span class="line">     ++ _nParked ;</span><br><span class="line">     <span class="keyword">while</span> (_Event &lt; <span class="number">0</span>) &#123;</span><br><span class="line">     status = pthread_cond_wait(_cond, _mutex);</span><br><span class="line">     <span class="comment">// for some reason, under 2.7 lwp_cond_wait() may return ETIME ...</span></span><br><span class="line">     <span class="comment">// Treat this the same as if the wait was interrupted</span></span><br><span class="line">     <span class="keyword">if</span> (status == ETIME) &#123; status = EINTR; &#125;</span><br><span class="line">     assert_status(status == <span class="number">0</span> || status == EINTR, status, <span class="string">"cond_wait"</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     -- _nParked ;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// In theory we could move the ST of 0 into _Event past the unlock(),</span></span><br><span class="line">     <span class="comment">// but then we'd need a MEMBAR after the ST.</span></span><br><span class="line">     _Event = <span class="number">0</span> ;</span><br><span class="line">     status = pthread_mutex_unlock(_mutex);</span><br><span class="line">     assert_status(status == <span class="number">0</span>, status, <span class="string">"mutex_unlock"</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     guarantee (_Event &gt;= <span class="number">0</span>, <span class="string">"invariant"</span>) ;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>pthread_cond_wait是一个多线程的条件变量函数，cond是condition的缩写，字面意思可以理解为线程在等待一个条件发生，这个条件是一个全局变量。这个方法接收两个参数，一个共享变量_cond，一个互斥量_mutex。而unpark方法在linux下是使用pthread_cond_signal实现的。park 在windows下则是使用WaitForSingleObject实现的。</p>
+<h1 id="补充：使用DelayQueue实现本地的延迟队列"><a href="#补充：使用DelayQueue实现本地的延迟队列" class="headerlink" title="补充：使用DelayQueue实现本地的延迟队列"></a>补充：使用DelayQueue实现本地的延迟队列</h1><h2 id="DelayQueue能做什么？"><a href="#DelayQueue能做什么？" class="headerlink" title="DelayQueue能做什么？"></a>DelayQueue能做什么？</h2><p>在我们的业务中通常会有一些需求是这样的： </p>
+<ul>
+<li>淘宝订单业务:<strong>下单之后如果三十分钟之内没有付款就自动取消订单</strong>。 </li>
+<li>饿了吗订餐通知:<strong>下单成功后60s之后给用户发送短信通知</strong>。</li>
+</ul>
+<p>那么这类业务我们可以总结出一个特点:需要延迟工作。由此的情况，就是我们的DelayQueue应用需求的产生。</p>
+<h2 id="应用举例"><a href="#应用举例" class="headerlink" title="应用举例"></a>应用举例</h2><p>我们在网咖或者网吧上网时会用到一个网吧综合系统，其中有一个主要功能就是给每一位网民计时，用户充值一定金额会有相应的上网时常，这里我们用DelayQueue模拟实现一下：用DelayQueue存储网民（Wangmin类），每一个考生都有自己的名字和完成试卷的时间，Wangba线程对DelayQueue进行监控，从队列中取出到时间的网民执行下机操作。</p>
+<h3 id="实现了Delayed接口的网民类，并实现CompareTo-方法"><a href="#实现了Delayed接口的网民类，并实现CompareTo-方法" class="headerlink" title="实现了Delayed接口的网民类，并实现CompareTo()方法"></a>实现了Delayed接口的网民类，并实现CompareTo()方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wangmin</span> <span class="keyword">implements</span> <span class="title">Delayed</span> </span>&#123;  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;  </span><br><span class="line">    <span class="comment">//身份证  </span></span><br><span class="line">    <span class="keyword">private</span> String id;  </span><br><span class="line">    <span class="comment">//截止时间  </span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> endTime;  </span><br><span class="line">    <span class="comment">//定义时间工具类</span></span><br><span class="line">    <span class="keyword">private</span> TimeUnit timeUnit = TimeUnit.SECONDS;</span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Wangmin</span><span class="params">(String name,String id,<span class="keyword">long</span> endTime)</span></span>&#123;  </span><br><span class="line">        <span class="keyword">this</span>.name=name;  </span><br><span class="line">        <span class="keyword">this</span>.id=id;  </span><br><span class="line">        <span class="keyword">this</span>.endTime = endTime;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getId</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.id;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    <span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 用来判断是否到了截止时间 </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getDelay</span><span class="params">(TimeUnit unit)</span> </span>&#123; </span><br><span class="line">        <span class="comment">//return unit.convert(endTime, TimeUnit.MILLISECONDS) - unit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);</span></span><br><span class="line">        <span class="keyword">return</span> endTime - System.currentTimeMillis();</span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 相互批较排序用 </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Delayed delayed)</span> </span>&#123;  </span><br><span class="line">        Wangmin w = (Wangmin)delayed;  </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.getDelay(<span class="keyword">this</span>.timeUnit) - w.getDelay(<span class="keyword">this</span>.timeUnit) &gt; <span class="number">0</span> ? <span class="number">1</span>:<span class="number">0</span>;  </span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实现网吧类"><a href="#实现网吧类" class="headerlink" title="实现网吧类"></a>实现网吧类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WangBa</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> DelayQueue&lt;Wangmin&gt; queue = <span class="keyword">new</span> DelayQueue&lt;Wangmin&gt;();  </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> yingye =<span class="keyword">true</span>;  </span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 上机 </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shangji</span><span class="params">(String name,String id,<span class="keyword">int</span> money)</span></span>&#123;  </span><br><span class="line">        Wangmin man = <span class="keyword">new</span> Wangmin(name, id, <span class="number">1000</span> * money + System.currentTimeMillis());  </span><br><span class="line">        System.out.println(<span class="string">"网名"</span>+man.getName()+<span class="string">" 身份证"</span>+man.getId()+<span class="string">"交钱"</span>+money+<span class="string">"块,开始上机..."</span>);  </span><br><span class="line">        <span class="keyword">this</span>.queue.add(man);  </span><br><span class="line">    &#125;  </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 下机</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">xiaji</span><span class="params">(Wangmin man)</span></span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"网名"</span>+man.getName()+<span class="string">" 身份证"</span>+man.getId()+<span class="string">"时间到下机..."</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">while</span>(yingye)&#123;  </span><br><span class="line">            <span class="keyword">try</span> &#123;  </span><br><span class="line">                Wangmin man = queue.take();  </span><br><span class="line">                xiaji(man);  </span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;  </span><br><span class="line">                e.printStackTrace();  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;  </span><br><span class="line">        <span class="keyword">try</span>&#123;  </span><br><span class="line">            System.out.println(<span class="string">"网吧开始营业"</span>);  </span><br><span class="line">            WangBa siyu = <span class="keyword">new</span> WangBa();  </span><br><span class="line">            Thread shangwang = <span class="keyword">new</span> Thread(siyu);  </span><br><span class="line">            shangwang.start();  </span><br><span class="line">              </span><br><span class="line">            siyu.shangji(<span class="string">"路人甲"</span>, <span class="string">"123"</span>, <span class="number">1</span>);  </span><br><span class="line">            siyu.shangji(<span class="string">"路人乙"</span>, <span class="string">"234"</span>, <span class="number">10</span>);  </span><br><span class="line">            siyu.shangji(<span class="string">"路人丙"</span>, <span class="string">"345"</span>, <span class="number">5</span>);  </span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">catch</span>(Exception e)&#123;  </span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;  </span><br><span class="line">  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://ifeve.com/java-blocking-queue/" target="_blank" rel="noopener">聊聊并发（七）——Java中的阻塞队列</a><br><a href="https://blog.csdn.net/u014634338/article/details/78915965" target="_blank" rel="noopener">Java 并发 — 阻塞队列总结</a><br><a href="https://blog.csdn.net/chenchaofuck1/article/details/51660119" target="_blank" rel="noopener">Java并发编程-阻塞队列(BlockingQueue)的实现原理</a><br><a href="https://blog.csdn.net/yanyan19880509/article/details/52562039" target="_blank" rel="noopener">java并发之SynchronousQueue实现原理</a><br><a href="https://blog.csdn.net/u011001723/article/details/51882887" target="_blank" rel="noopener">使用delayedQueue实现你本地的延迟队列</a><br><a href="https://www.jianshu.com/p/5b48180bafce" target="_blank" rel="noopener">DelayedQueue学习笔记</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java序列化/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1806,238 +2094,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/LeetCode笔记之数组-1/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/LeetCode笔记之数组-1/" itemprop="url">LeetCode笔记之数组(1)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:52:59+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="LeetCode笔记之数组-一"><a href="#LeetCode笔记之数组-一" class="headerlink" title="LeetCode笔记之数组(一)"></a>LeetCode笔记之数组(一)</h1><hr>
-<h1 id="1-Sum"><a href="#1-Sum" class="headerlink" title="1. Sum"></a>1. Sum</h1><h2 id="1-1-Two-Sum"><a href="#1-1-Two-Sum" class="headerlink" title="1.1 Two Sum"></a>1.1 Two Sum</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/TwoSum.PNG"><br></center>
-
-<ul>
-<li>解法1:最容易想到的方法就是两个for循环嵌套，但这显然不是最简单的方法。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public int[] twoSum(int[] nums, int target) &#123;</span><br><span class="line">        for(int i = 0; i &lt; nums.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            for(int j = i + 1; j &lt; nums.length; j++)</span><br><span class="line">            &#123;</span><br><span class="line">                if(nums[i] + nums[j] == target)</span><br><span class="line">                &#123;</span><br><span class="line">                    return new int[] &#123;i, j&#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        throw new IllegalArgumentException(&quot;No two sum solution&quot;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解法2:使用HashMap存储键值对信息，其中”值”就是题目中要返回的”位置”。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public int[] twoSum(int[] nums, int target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();</span><br><span class="line">    for(int i = 0; i &lt; nums.length; i++)&#123;</span><br><span class="line">        int component = target - nums[i];    //需要构造一个A+B=target的关系</span><br><span class="line">        if(!map.containsKey(component))&#123;</span><br><span class="line">            map.put(nums[i], i);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            return new int[] &#123;map.get(component), i&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    throw new IllegalArgumentException(&quot;no solution&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解法3:使用<strong><em>双指针</em></strong>。但是这种方法需要对数组进行排序，改变了原来的位置，而题目要求返回的是位置而不是数，所以这个方法并不适合与该题。如果题目要求返回的是数，可以用这种方法。<br>解法的思路如下：首先对输入的数组有小到大进行排序，然后用两个指针分别从数组头和数组尾开始遍历，如果两个数的和正好等于target就返回（因为题目表明如果有满足条件的数，只能有一组）；如果两数之和小于target，让左指针加一，反之右指针加一。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//这里要求返回位置而不是数，所以这种方法不能用，因为排了序，位置改变了</span><br><span class="line">public int[] twoSum(int[] nums, int target) &#123;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int lo = 0, hi = nums.length - 1;</span><br><span class="line">    while(lo &lt; hi)&#123;</span><br><span class="line">        if(nums[lo] + nums[hi] == target)&#123;</span><br><span class="line">            //return new int[]&#123;nums[lo], nums[hi]&#125;;</span><br><span class="line">            return new int[] &#123;lo, hi&#125;;</span><br><span class="line">        &#125;else if(nums[lo] + nums[hi] &lt; target)&#123;</span><br><span class="line">            while(lo &lt; hi &amp;&amp; nums[lo] == nums[lo+1]) lo++;  //如果有重复元素就跳过</span><br><span class="line">            lo++;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            while(lo &lt; hi &amp;&amp; nums[hi] == nums[hi-1]) hi--;</span><br><span class="line">            hi--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    throw new IllegalArgumentException(&quot;no solution&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="1-2-ThreeSum"><a href="#1-2-ThreeSum" class="headerlink" title="1.2 ThreeSum"></a>1.2 ThreeSum</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/ThreeSum.PNG"><br></center>
-
-<ul>
-<li>解法:和TwoSum的思想类似，利用双指针，首先固定一个数nums[i]，然后改变另外两个数nums[lo]和nums[hi]。这里需要注意的是，for循环的边界条件nums.length-2是怎么确定的，当i=nums.length-3时，lo=nums.length-2,hi=nums.length-1，三个数正好是数组最后面的三位数。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) &#123;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; res = new LinkedList&lt;&gt;();</span><br><span class="line">    for(int i = 0; i &lt; nums.length - 2; i++)&#123;</span><br><span class="line">        if(i == 0 || (i &gt; 0 &amp;&amp; nums[i] != nums[i-1]))&#123;</span><br><span class="line">            int lo = i+1, hi = nums.length-1, sum = 0-nums[i];</span><br><span class="line">            while(lo &lt; hi)&#123;</span><br><span class="line">                if(nums[lo] +nums[hi] == sum)&#123;</span><br><span class="line">                    res.add(Arrays.asList(nums[i], nums[lo], nums[hi]));</span><br><span class="line">                    while(lo &lt; hi &amp;&amp; nums[lo] == nums[lo+1]) lo++;  //题目要求，元素不能重复</span><br><span class="line">                    while(lo &lt; hi &amp;&amp; nums[hi] == nums[hi-1]) hi--;</span><br><span class="line">                    lo++;</span><br><span class="line">                    hi--;</span><br><span class="line">                &#125;else if(nums[lo] + nums[hi] &lt; sum)&#123;</span><br><span class="line">                    lo++;</span><br><span class="line">                &#125;else&#123;</span><br><span class="line">                    hi--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="1-3-ThreeSumClosest"><a href="#1-3-ThreeSumClosest" class="headerlink" title="1.3 ThreeSumClosest"></a>1.3 ThreeSumClosest</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/ThreeSumClosest.PNG"><br></center>
-
-<ul>
-<li>解法1:借鉴ThreeSum的思想。有一点需要理解，在数学上，绝对值表示”距离”，所以第11行的语句<br>ans = (Math.abs(target-sum) &gt; Math.abs(target-ans)) ? ans : sum;<br>意思是比较target到sum的距离和target到ans的距离，取小值。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public int threeSumClosest(int[] nums, int target) &#123;</span><br><span class="line">    int sum = 0;</span><br><span class="line">    //int ans = Integer.MAX_VALUE;</span><br><span class="line">    int ans = nums[0] + nums[1] + nums[nums.length-1];</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    for(int i = 0; i &lt; nums.length-2; i++)&#123;</span><br><span class="line">        int lo = i+1, hi = nums.length-1;</span><br><span class="line">        // sum = nums[i] + nums[lo] + nums[hi];</span><br><span class="line">        while(lo &lt; hi)&#123;</span><br><span class="line">            sum = nums[i] + nums[lo] + nums[hi];</span><br><span class="line">            ans = (Math.abs(target-sum) &gt; Math.abs(target-ans)) ? ans : sum;</span><br><span class="line">            if(sum == target)&#123;</span><br><span class="line">                return target;</span><br><span class="line">            &#125;else if(sum &lt; target)&#123;</span><br><span class="line">                while(lo &lt; hi &amp;&amp; nums[lo] == nums[lo+1]) lo++;</span><br><span class="line">                lo++;</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                while(lo &lt; hi &amp;&amp; nums[hi] == nums[hi-1]) hi--;</span><br><span class="line">                hi--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解法2:和解法1思想一样，但是简洁一些</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public int threeSumClosest(int[] num, int target) &#123;</span><br><span class="line">    int result = num[0] + num[1] + num[num.length - 1];</span><br><span class="line">    Arrays.sort(num);</span><br><span class="line">    for (int i = 0; i &lt; num.length - 2; i++) &#123;</span><br><span class="line">        int start = i + 1, end = num.length - 1;</span><br><span class="line">        while (start &lt; end) &#123;</span><br><span class="line">            int sum = num[i] + num[start] + num[end];</span><br><span class="line">            if (sum &gt; target) &#123;</span><br><span class="line">                end--;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                start++;</span><br><span class="line">            &#125;</span><br><span class="line">            if (Math.abs(sum - target) &lt; Math.abs(result - target)) &#123;</span><br><span class="line">                result = sum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="1-4-FourSum"><a href="#1-4-FourSum" class="headerlink" title="1.4 FourSum"></a>1.4 FourSum</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/FourSum.PNG"><br></center>
-
-<ul>
-<li>解法：从towsum到threeesum可以看出一些规律，可以用递归的方式解决xSum的问题。这是因为kSum的问题可以分解成两个问题：<ul>
-<li>twoSum问题</li>
-<li>将K sum问题简化为K-1 sum问题</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; fourSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        len = nums.length;</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        <span class="keyword">return</span> kSum(nums, target, <span class="number">4</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="keyword">private</span> ArrayList&lt;List&lt;Integer&gt;&gt; kSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target, <span class="keyword">int</span> k, <span class="keyword">int</span> index) &#123;</span><br><span class="line">        ArrayList&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;List&lt;Integer&gt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(index &gt;= len) &#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(k == <span class="number">2</span>) &#123;</span><br><span class="line">        	<span class="keyword">int</span> i = index, j = len - <span class="number">1</span>;</span><br><span class="line">        	<span class="keyword">while</span>(i &lt; j) &#123;</span><br><span class="line">                <span class="comment">//find a pair</span></span><br><span class="line">        	    <span class="keyword">if</span>(target - nums[i] == nums[j]) &#123;</span><br><span class="line">        	    	List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">                	temp.add(nums[i]);</span><br><span class="line">                	temp.add(target-nums[i]);</span><br><span class="line">                    res.add(temp);</span><br><span class="line">                    <span class="comment">//skip duplication</span></span><br><span class="line">                    <span class="keyword">while</span>(i&lt;j &amp;&amp; nums[i]==nums[i+<span class="number">1</span>]) i++;</span><br><span class="line">                    <span class="keyword">while</span>(i&lt;j &amp;&amp; nums[j-<span class="number">1</span>]==nums[j]) j--;</span><br><span class="line">                    i++;</span><br><span class="line">                    j--;</span><br><span class="line">                <span class="comment">//move left bound</span></span><br><span class="line">        	    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (target - nums[i] &gt; nums[j]) &#123;</span><br><span class="line">        	        i++;</span><br><span class="line">                <span class="comment">//move right bound</span></span><br><span class="line">        	    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        	        j--;</span><br><span class="line">        	    &#125;</span><br><span class="line">        	&#125;</span><br><span class="line">        &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; len - k + <span class="number">1</span>; i++) &#123;</span><br><span class="line">                <span class="comment">//use current number to reduce ksum into k-1sum</span></span><br><span class="line">                ArrayList&lt;List&lt;Integer&gt;&gt; temp = kSum(nums, target - nums[i], k-<span class="number">1</span>, i+<span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span>(temp != <span class="keyword">null</span>)&#123;</span><br><span class="line">                    <span class="comment">//add previous results</span></span><br><span class="line">                    <span class="keyword">for</span> (List&lt;Integer&gt; t : temp) &#123;</span><br><span class="line">                        t.add(<span class="number">0</span>, nums[i]);</span><br><span class="line">                    &#125;</span><br><span class="line">                    res.addAll(temp);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">while</span> (i &lt; len-<span class="number">1</span> &amp;&amp; nums[i] == nums[i+<span class="number">1</span>]) &#123;</span><br><span class="line">                    <span class="comment">//skip duplicated numbers</span></span><br><span class="line">                    i++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="1-5-FourSum-II"><a href="#1-5-FourSum-II" class="headerlink" title="1.5 FourSum II"></a>1.5 FourSum II</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/FourSum%20II.PNG"><br></center>
-
-<p>看到这个问题时，最先想到的方法就是暴力法，四个for循环嵌套，但可想而知算法的速度是多么慢解决这种复杂问题的一个思路就是<strong><em>分治</em></strong>，把复杂问题分解成几个比较简单的问题。</p>
-<ul>
-<li>解法1：使用HashMap。首先将数组A和数组B中元素的所有可能的和算出来，放入hashmp中，如果某个和出现多于一次，每出现一次就将其出现的次数加一；否则将出现次数设置为一。然后将数组C和数组D中所有可能出现的和算出来并取相反数，和hashmap中的数比较，最终算出所有相同的数的个数，即为最终结果。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span>[] B, <span class="keyword">int</span>[] C, <span class="keyword">int</span>[] D)</span> </span>&#123;</span><br><span class="line">        Map&lt;Integer, Integer&gt; sums = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.length; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; B.length; j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> sum = A[i] + B[j];</span><br><span class="line">                <span class="keyword">if</span>(sums.containsKey(sum))&#123;</span><br><span class="line">                    sums.put(sum, sums.get(sum)+<span class="number">1</span>);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    sums.put(sum, <span class="number">1</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; C.length; k++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> v = <span class="number">0</span>; v &lt; D.length; v++)&#123;</span><br><span class="line">                <span class="keyword">int</span> sum = -(C[k] + D[v]);</span><br><span class="line">                <span class="keyword">if</span>(sums.containsKey(sum))&#123;</span><br><span class="line">                    count += sums.get(sum);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解法1的简化写法，使用HashMap中的getOrDefault方法，这个方法有两个参数：getOrDefault(A, B)，参数A表示key值，参数B表示默认值。如果HashMap中包含该key值，就使用key值对应的value，否则就使用B。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span>[] B, <span class="keyword">int</span>[] C, <span class="keyword">int</span>[] D)</span> </span>&#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; sums = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.length; i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; B.length; j++)&#123;</span><br><span class="line">            <span class="keyword">int</span> sum = A[i] + B[j];</span><br><span class="line">            sums.put(sum, sums.getOrDefault(sum, <span class="number">0</span>)+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; C.length; k++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> v = <span class="number">0</span>; v &lt; D.length; v++)&#123;</span><br><span class="line">            count += sums.getOrDefault(-<span class="number">1</span> * (C[k]+D[v]), <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解法2：使用排序。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fourSumCount</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span>[] B, <span class="keyword">int</span>[] C, <span class="keyword">int</span>[] D)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> nAB = A.length * B.length;</span><br><span class="line">    <span class="keyword">int</span>[] sumAB = <span class="keyword">new</span> <span class="keyword">int</span>[nAB];</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> a : A)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> b : B)&#123;</span><br><span class="line">            sumAB[i++] = a +b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> nCD = C.length * D.length;</span><br><span class="line">    <span class="keyword">int</span>[] negSumCD = <span class="keyword">new</span> <span class="keyword">int</span>[nCD];</span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> c : C)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> d : D)&#123;</span><br><span class="line">            negSumCD[i++] = -(c + d);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Arrays.sort(sumAB);</span><br><span class="line">    Arrays.sort(negSumCD);</span><br><span class="line"></span><br><span class="line">    i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = <span class="number">0</span>, count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; nAB &amp;&amp; j &lt; nCD)&#123;</span><br><span class="line">        <span class="keyword">if</span>(sumAB[i] == negSumCD[j])&#123;</span><br><span class="line">            <span class="keyword">int</span> countAB = <span class="number">1</span>, countCD = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span>(++i &lt; nAB &amp;&amp; sumAB[i]==sumAB[i-<span class="number">1</span>]) countAB += <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span>(++j &lt; nCD &amp;&amp; negSumCD[j]==negSumCD[j-<span class="number">1</span>]) countCD += <span class="number">1</span>;</span><br><span class="line">            count += countAB * countCD;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(sumAB[i] &lt; negSumCD[j])&#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="2-Trapping-Water-盛水问题"><a href="#2-Trapping-Water-盛水问题" class="headerlink" title="2. Trapping  Water(盛水问题)"></a>2. Trapping  Water(盛水问题)</h1><h2 id="2-1-Trapping-Rain-Water"><a href="#2-1-Trapping-Rain-Water" class="headerlink" title="2.1 Trapping Rain Water"></a>2.1 Trapping Rain Water</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/trapping%20rain%20water.PNG"><br></center>
-
-<ul>
-<li>解法：这种问题的比较好的解决方法就是<strong><em>双指针法</em></strong>。需要注意的问题是，程序中<code>if(height[left] &lt; height[right])</code>这句话是关键，它比较出此时<code>left</code>指针和<code>right</code>指针指向的<code>height</code>的高度，然后移动高度小的指针。因为盛水多少是由<code>height</code>比较短的一端决定的。如果移动<code>height</code>比较长的指针，比如当<code>left</code>指向下标<code>3</code>而<code>right</code>指向下标<code>7</code>的时候，此时移动<code>right</code>，下一步就会执行<code>right_max - height[right]</code>出错，因为很明显水位没有到达此时<code>height[right]</code>的高度。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="keyword">int</span>[] height)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = height.length-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> left_max = <span class="number">0</span>, right_max = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">            <span class="keyword">if</span>(height[left] &lt; height[right])&#123;</span><br><span class="line">                <span class="keyword">if</span>(height[left] &gt;= left_max)&#123;</span><br><span class="line">                    left_max = height[left];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    ans += left_max - height[left];</span><br><span class="line">                &#125;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(height[right] &gt;= right_max)&#123;</span><br><span class="line">                    right_max = height[right];</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    ans += right_max - height[right];</span><br><span class="line">                &#125;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="2-2-Container-With-Most-Water"><a href="#2-2-Container-With-Most-Water" class="headerlink" title="2.2 Container With Most Water"></a>2.2 Container With Most Water</h2><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/containing%20with%20most%20water.PNG"><br></center>
-
-<ul>
-<li>解法：这个题的思路和上个题目类似，不同的是需要移动<code>height</code>值较短的指针。</li>
-</ul>
-<p>假设现在有一个容器，则容器的盛水量取决于容器的底和容器较短的那条高。则我们可以从最大的底长入手，即当容器的底等于数组的长度时，则容器的盛水量为较短边的长乘底</p>
-<p>可见 只有较短边会对盛水量造成影响，因此移动较短边的指针，并比较当前盛水量和当前最大盛水量。直至左右指针相遇。主要的困惑在于如何移动双指针才能保证最大的盛水量被遍历到</p>
-<p>假设有左指针left和右指针right，且left指向的值小于right的值，假如我们将右指针左移，则右指针左移后的值和左指针指向的值相比有三种情况：</p>
-<p>（1）右指针指向的值大于左指针<br>这种情况下，容器的高取决于左指针，但是底变短了，所以容器盛水量一定变小<br>（2）右指针指向的值等于左指针<br>这种情况下，容器的高取决于左指针，但是底变短了，所以容器盛水量一定变小<br>（3）右指针指向的值小于左指针<br>这种情况下，容器的高取决于右指针，但是右指针小于左指针，且底也变短了，所以容量盛水量一定变小了</p>
-<p>综上所述，容器高度较大的一侧的移动只会造成容器盛水量减小。所以应当移动高度较小一侧的指针，并继续遍历，直至两指针相遇。</p>
-<p><strong><em>更严谨的证明：反证法</em></strong><br>&emsp; 之前证明的只是在左指针不改变的情况下，左移右指针只会造成容器的容量减小。但是一旦紧接着左指针发生变化，就无法证明以该左指针为一侧高，右指针右侧的值生成的容器的容量比当前值小。<br>&emsp; 以下补充一个简单的反证法证明算法的合理性<br>&emsp; 当前的算法为：使用两个指针分别指向数组的头和尾。指向的值较小的那个指针移动，即左指针右移，右指针左移。当左右指针相遇时，<br>&emsp; 假设：该算法并没有遍历到容量最大的情况<br>&emsp; 我们令容量最大时的指针为p_left和p_right。根据题设，我们可以假设遍历时左指针先到达p_left，但是当左指针为p_left时，右指针还没有经过p_right左指针就移动了。<br>&emsp; 已知当左指针停留在p_left时，它只有在两种场景下会发生改变:</p>
-<ul>
-<li>左指针和右指针在p_left相遇，则右指针一定在前往p_left的途中经过p_right，与题设矛盾</li>
-<li>右指针位于p_right右侧且当前的值大于左指针。则在这种情况下，此时容器的盛水量比题设中最大的盛水量还要大，与题设矛盾<br>因此该算法的遍历一定经过了最大的盛水量的情况<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> max = <span class="number">0</span>, l = <span class="number">0</span>, r = height.length-<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(l &lt; r)&#123;</span><br><span class="line">            max = Math.max(max, Math.min(height[l], height[r]) * (r - l));</span><br><span class="line">            <span class="keyword">if</span>(height[l] &lt; height[r])&#123;</span><br><span class="line">                l++;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                r--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h1 id="3-Best-Time-to-Buy-and-Sell-利润最大问题"><a href="#3-Best-Time-to-Buy-and-Sell-利润最大问题" class="headerlink" title="3. Best Time to Buy and Sell(利润最大问题)"></a>3. Best Time to Buy and Sell(利润最大问题)</h1><h2 id="3-1-Best-Time-to-Buy-and-Sell-Stock"><a href="#3-1-Best-Time-to-Buy-and-Sell-Stock" class="headerlink" title="3.1 Best Time to Buy and Sell Stock"></a>3.1 Best Time to Buy and Sell Stock</h2><p><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/best%20time%20to%20buy%20and%20sell%20stock.PNG" alt=""><br><strong><em>注意：</em></strong>题目中要求，只能进行一次交易。</p>
-<ul>
-<li>解法1：暴力循环。因为只能进行一次交易，只需找到满足条件(这里的条件值的是小值要在大值之前)的“最大值”和“最小值”即可。外层就是一个冒泡排序法的嵌套循环。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span> prices[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> maxprofit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; prices.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; prices.length; j++) &#123;</span><br><span class="line">                <span class="keyword">int</span> profit = prices[j] - prices[i];</span><br><span class="line">                <span class="keyword">if</span> (profit &gt; maxprofit)</span><br><span class="line">                    maxprofit = profit;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxprofit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>解法2：一个窍门。方法一中暴力循环方法其实是用的冒泡排序法的思想，但是显然这里不需要排序，只需要找到最大值和最小值就行可以。先看下面的图：<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/121_profit_graph.png"><br></center>
-
-</li>
-</ul>
-<p>只需要找到“波峰”和“波谷”就行。可以定义两个变量<code>minprice</code>和<code>maxprofit</code>来解决这个问题。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span> prices[])</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> minprice = Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">int</span> maxprofit = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (prices[i] &lt; minprice)</span><br><span class="line">                minprice = prices[i];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (prices[i] - minprice &gt; maxprofit)</span><br><span class="line">                maxprofit = prices[i] - minprice;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxprofit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-2-Best-Time-to-Buy-and-Sell-Stock-II"><a href="#3-2-Best-Time-to-Buy-and-Sell-Stock-II" class="headerlink" title="3.2 Best Time to Buy and Sell Stock II"></a>3.2 Best Time to Buy and Sell Stock II</h2><p><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/best%20time%20to%20buy%20and%20sell%20stock_2.PNG" alt=""><br><strong><em>注意：</em></strong>和上一个题目的不同之处在于可以进行多次买卖。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2088,7 +2144,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
