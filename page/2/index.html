@@ -259,6 +259,389 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/RabbitMQ系列-1-初识消息中间件/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/31/RabbitMQ系列-1-初识消息中间件/" itemprop="url">RabbitMQ系列(1)--初识消息中间件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:10:22+08:00">
+                2018-12-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">RabbitMQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="RabbitMQ系列-1-–认识消息队列中间件"><a href="#RabbitMQ系列-1-–认识消息队列中间件" class="headerlink" title="RabbitMQ系列(1)–认识消息队列中间件"></a>RabbitMQ系列(1)–认识消息队列中间件</h1><hr>
+<h1 id="初识消息队列中间件"><a href="#初识消息队列中间件" class="headerlink" title="初识消息队列中间件"></a>初识消息队列中间件</h1><p>消息(Message)是指在应用之间传递的数据。</p>
+<p>消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是<strong>上下层之间的中间(纵向的“中间”)</strong>，一种是<strong>左右之间的中间（横向的“中间”）</strong>。</p>
+<p>上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行了封装，为上层应用程序提供跨平台的数据交流。</p>
+<p>左右之间的中间是指，消息中间件常常被用于分布式环境中，它可以为两个分布式节点之间提供通信服务。</p>
+<h1 id="传递模式"><a href="#传递模式" class="headerlink" title="传递模式"></a>传递模式</h1><p>消息中间件一般有两种传递模式：<strong>点对点</strong>(P2P，Point to point)模式和<strong>发布/订阅</strong>(Pub/Sub)模式。</p>
+<h2 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h2><p>点对点模式是基于队列(queue)的，消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。队列的存在使得消息的异步传输成为可能。消息被消费以后，queue中不再存储，所以消息消费者不可能消费到已经被消费的消息。</p>
+<p>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
+<p>示意图如下图所示：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-p2p.jpg"><br></center>
+
+<h2 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布/订阅模式"></a>发布/订阅模式</h2><p>Pub/Sub发布订阅（广播）：使用topic作为通信载体。消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。和点对点方式不同，发布到topic的消息会被所有订阅者消费。</p>
+<p>示意图如下：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-pub-sub.jpg"><br></center>
+
+<h1 id="常用协议"><a href="#常用协议" class="headerlink" title="常用协议"></a>常用协议</h1><h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><p>AMQP即<strong>Advanced Message Queuing Protocol(高级队列消息协议)</strong>。AMQP协议定义了消息路由规则和方式。生产者将消息发送到Broker，Broker中的Exchange充当了路由器的角色，由它将消息路由到一个或者多个队列中。如果路由不到，或许会返回给生产者，获取会丢弃。</p>
+<p>多个消费者可以订阅同一个队列中的消息，这是队列中的消息会通过“轮询”的方式平均分配给每个消费者，而不是每个消费者都会消费所有消息。</p>
+<p>AMQP的模型如下所示：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/amqp.jpg"><br></center>
+
+<h2 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h2><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。点对点与发布订阅最初是由JMS定义的。</p>
+<p>严格来说，JMS不是一种消息队列协议，它是一种跨平台的API，换句话说，可以使用JMS API来连接支持AMQP、STOMP等协议的消息中间件产品，它的作用更像JDBC，我们可以使用JDBC API来连接具体的数据库产品。</p>
+<h1 id="常见消息中间件对比"><a href="#常见消息中间件对比" class="headerlink" title="常见消息中间件对比"></a>常见消息中间件对比</h1><p>待续。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《RabbitMQ实战指南》<br>《分布式消息中间件实战》<br><a href="https://blog.csdn.net/lizhitao/article/details/47723105" target="_blank" rel="noopener">消息队列中点对点与发布订阅区别</a><br><a href="https://blog.csdn.net/wqc19920906/article/details/82193316" target="_blank" rel="noopener">消息中间件（一）MQ详解及四大MQ比较</a><br><a href="https://blog.csdn.net/btt2013/article/details/80211599" target="_blank" rel="noopener">Java消息中间件(入门篇)</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/Java并发-3-从synchronized到锁优化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/31/Java并发-3-从synchronized到锁优化/" itemprop="url">Java并发(3)--从synchronized到锁优化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T17:08:41+08:00">
+                2018-12-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Java并发——从synchronized到锁优化"><a href="#Java并发——从synchronized到锁优化" class="headerlink" title="Java并发——从synchronized到锁优化"></a>Java并发——从synchronized到锁优化</h1><hr>
+<h1 id="synchronized用法"><a href="#synchronized用法" class="headerlink" title="synchronized用法"></a>synchronized用法</h1><p>synchronized关键字同步的三种用法:<br>①.同步实例方法，锁是当前实例对象<br>②.同步类方法，锁是当前类对象<br>③.同步代码块，锁是括号里面的对象</p>
+<p>示例代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步实例方法，锁实例对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步类方法，锁类对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步代码块</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 锁类对象</span></span><br><span class="line">        <span class="keyword">synchronized</span> (SynchronizedTest.class) &#123;</span><br><span class="line">            <span class="comment">// 锁实例对象</span></span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="synchronized实现"><a href="#synchronized实现" class="headerlink" title="synchronized实现"></a>synchronized实现</h1><p>javap -verbose查看上述示例:</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/synchronized_javap.PNG"><br></center>
+
+<p>可以看到，同步代码块是使用monitorenter和monitorexit指令实现的，同步方法（在这看不出来需要看JVM底层实现）依靠的是方法修饰符上的ACC_SYNCHRONIZED实现。具体如下：</p>
+<p><strong>同步方法：</strong>方法级同步没有通过字节码指令来控制，它实现在方法调用和返回操作之中。当方法调用时，调用指令会检查方法ACC_SYNCHRONIZED访问标志是否被设置，若设置了则执行线程需要持有管程(Monitor)才能运行方法，当方法完成(无论是否出现异常)时释放管程。<br><strong>同步代码块</strong>：synchronized关键字经过编译后，会在同步块的前后分别形成monitorenter和monitorexit两个字节码指令，每条monitorenter指令都必须执行其对应的monitorexit指令，为了保证方法异常完成时这两条指令依然能正确执行，编译器会<strong>自动产生一个异常处理器</strong>，其目的就是用来执行monitorexit指令(图中14-18、24-30为异常流程)。</p>
+<h1 id="java对象头和monitor"><a href="#java对象头和monitor" class="headerlink" title="java对象头和monitor"></a>java对象头和monitor</h1><p>Java对象头和monitor是实现synchronized的基础。</p>
+<h2 id="java对象头"><a href="#java对象头" class="headerlink" title="java对象头"></a>java对象头</h2><p>synchronized用的锁是存在Java对象头里的，Hotspot虚拟机的对象头主要包括两部分数据：<strong>Mark Word（标记字段）</strong>、<strong>Klass Pointer（类型指针）</strong>。其中Klass Point是是对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例，Mark Word用于存储对象自身的运行时数据，它是实现轻量级锁和偏向锁的关键。</p>
+<h3 id="Mark-Word"><a href="#Mark-Word" class="headerlink" title="Mark Word"></a>Mark Word</h3><p>默认存储对象的HashCode，分代年龄和锁标志位信息。这些信息都是与对象自身定义无关的数据，所以Mark Word被设计成一个非固定的数据结构以便在极小的空间内存存储尽量多的数据。它会根据对象的状态复用自己的存储空间，也就是说在运行期间Mark Word里存储的数据会随着锁标志位的变化而变化。</p>
+<h3 id="Klass-Point"><a href="#Klass-Point" class="headerlink" title="Klass Point"></a>Klass Point</h3><p>对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
+<h2 id="Monitor"><a href="#Monitor" class="headerlink" title="Monitor"></a>Monitor</h2><p>每个对象都拥有自己的监视器，当这个对象由同步块或者这个对象的同步方法调用时，执行方法的线程必须先获取该对象的监视器才能进入同步块和同步方法，如果没有获取到监视器的线程将会被阻塞在同步块和同步方法的入口处，进入到BLOCKED状态，如图:</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/monitorenterandexit.jpg"><br></center>
+
+<p>Monitor是<strong>线程私有</strong>的数据结构，每个线程都有一个可用<strong>monitor record</strong>列表，同时<br>还有一个全局的可用列表。每一个被锁住的对象都会和一个monitor record关联(对象头的MarkWord中的LockWord指向monitor record的起始地址)，同时monitor record中有一个owner字段存放拥有该锁的线程的唯一标识，表示该锁被这个线程占用。其结构如下:</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/monitorstructure.jpg"><br></center>
+
+<ul>
+<li><strong>Owner：</strong>初始时为NULL表示当前没有任何线程拥有该monitor record，当线程成功拥有该锁后保存线程唯一标识，当锁被释放时又设置为NULL；</li>
+<li><strong>EntryQ:</strong>关联一个系统互斥锁（semaphore），阻塞所有试图锁住monitor record失败的线程。</li>
+<li><strong>RcThis:</strong>表示blocked或waiting在该monitor record上的所有线程的个数。</li>
+<li><strong>Nest:</strong>用来实现重入锁的计数。</li>
+<li><strong>HashCode:</strong>保存从对象头拷贝过来的HashCode值（可能还包含GC age）。</li>
+<li><strong>Candidate:</strong>用来避免不必要的阻塞或等待线程唤醒，因为每一次只有一个线程能够成功拥有锁，如果每次前一个释放锁的线程唤醒所有正在阻塞或等待的线程，会引起不必要的上下文切换（从阻塞到就绪然后因为竞争锁失败又被阻塞）从而导致性能严重下降。Candidate只有两种可能的值0表示没有需要唤醒的线程1表示要唤醒一个继任线程来竞争锁。</li>
+</ul>
+<h1 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h1><p>阻塞或唤醒一个Java线程需要操作系统切换CPU状态来完成，这种状态转换需要耗费处理器时间。如果同步代码块中的内容过于简单，状态转换消耗的时间有可能比用户代码执行的时间还要长。这种方式就是synchronized最初实现同步的方式，这就是JDK 6之前synchronized效率低的原因。这种依赖于操作系统Mutex Lock所实现的锁我们称之为“重量级锁”，JDK 6中为了减少获得锁和释放锁带来的性能消耗，引入了“偏向锁”和“轻量级锁”。</p>
+<p>所以目前锁一共有<strong>4种</strong>状态，级别从低到高依次是：<strong>无锁</strong>、<strong>偏向锁</strong>、<strong>轻量级锁</strong>和<strong>重量级锁</strong>。锁状态只能升级不能降级。</p>
+<p>四种锁状态对应的的Mark Word内容如下：</p>
+<table>
+<thead>
+<tr>
+<th>锁状态</th>
+<th>存储内容</th>
+<th>标志位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无锁</td>
+<td>对象的hashCode、对象分代年龄、是否是偏向锁（0）</td>
+<td>01</td>
+</tr>
+<tr>
+<td>偏向锁</td>
+<td>偏向线程ID、偏向时间戳、对象分代年龄、是否是偏向锁（1）</td>
+<td>01</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td>指向栈中锁记录的指针</td>
+<td>00</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td>指向互斥量（重量级锁）的指针</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<h2 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h2><p>无锁没有对资源进行锁定，所有的线程都能访问并修改同一个资源，但同时只有一个线程能修改成功。</p>
+<p>无锁的特点就是修改操作在循环内进行，线程会不断的尝试修改共享资源。如果没有冲突就修改成功并退出，否则就会继续循环尝试。如果有多个线程修改同一个值，必定会有一个线程能修改成功，而其他修改失败的线程会不断重试直到修改成功。CAS即是无锁的实现。无锁无法全面代替有锁，但无锁在某些场合下的性能是非常高的。</p>
+<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁，降低获取锁的代价。</p>
+<p>在大多数情况下，锁总是由同一线程多次获得，不存在多线程竞争，所以出现了偏向锁。其目标就是在只有一个线程执行同步代码块时能够提高性能。</p>
+<p>当一个线程访问同步代码块并获取锁时，会在Mark Word里存储锁偏向的线程ID。在线程进入和退出同步块时不再通过CAS操作来加锁和解锁，而是检测Mark Word里是否存储着指向当前线程的偏向锁。引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次CAS原子指令，而偏向锁只需要在置换ThreadID的时候依赖一次CAS原子指令即可。</p>
+<p>偏向锁只有遇到其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁，线程不会主动释放偏向锁。偏向锁的撤销，需要等待全局安全点（在这个时间点上没有字节码正在执行），它会首先暂停拥有偏向锁的线程，判断锁对象是否处于被锁定状态。撤销偏向锁后恢复到无锁（标志位为“01”）或轻量级锁（标志位为“00”）的状态。</p>
+<p>偏向锁在JDK 6及以后的JVM里是默认启用的。可以通过JVM参数关闭偏向锁：-XX:-UseBiasedLocking=false，关闭之后程序默认会进入轻量级锁状态。</p>
+<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>是指当锁是偏向锁的时候，被另外的线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，从而提高性能。</p>
+<p>在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁标志位为“01”状态，是否为偏向锁为“0”），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前的Mark Word的拷贝，然后拷贝对象头中的Mark Word复制到锁记录中。</p>
+<p>拷贝成功后，虚拟机将使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针，并将Lock Record里的owner指针指向对象的Mark Word。</p>
+<p>如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位设置为“00”，表示此对象处于轻量级锁定状态。</p>
+<p>如果轻量级锁的更新操作失败了，虚拟机首先会检查对象的Mark Word是否指向当前线程的栈帧，如果是就说明当前线程已经拥有了这个对象的锁，那就可以直接进入同步块继续执行，否则说明多个线程竞争锁。</p>
+<p>若当前只有一个等待线程，则该线程通过自旋进行等待。但是当自旋超过一定的次数，或者一个线程在持有锁，一个在自旋，又有第三个来访时，轻量级锁升级为重量级锁。</p>
+<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><p>升级为重量级锁时，锁标志的状态值变为“10”，此时Mark Word中存储的是指向重量级锁的指针，此时等待锁的线程都会进入阻塞状态。</p>
+<p>重量级锁通过对象内部的监视器(monitor)实现，其中monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>偏向锁通过对比Mark Word解决加锁问题，避免多次执行CAS操作。而轻量级锁是通过用CAS操作和自旋来解决加锁问题，避免线程阻塞和唤醒而影响性能。重量级锁是将除了拥有锁的线程以外的线程都阻塞。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://juejin.im/post/5b42c2546fb9a04f8751eabc" target="_blank" rel="noopener">Java并发——关键字synchronized解析</a><br><a href="http://cmsblogs.com/?p=2071" target="_blank" rel="noopener">【死磕Java并发】—–深入分析synchronized的实现原理</a><br><a href="https://blog.csdn.net/u012465296/article/details/53022317" target="_blank" rel="noopener">Java中synchronized的实现原理与应用</a><br><a href="https://www.jianshu.com/p/c5058b6fe8e5" target="_blank" rel="noopener">JVM源码分析之synchronized实现</a><br><a href="https://www.jianshu.com/p/9c19eb0ea4d8" target="_blank" rel="noopener">JVM源码分析之java对象头实现</a><br><a href="https://tech.meituan.com/Java_Lock.html" target="_blank" rel="noopener">不可不说的Java“锁”事</a><br><a href="https://blog.csdn.net/jingzi123456789/article/details/69951057" target="_blank" rel="noopener">JAVA并发：多线程编程之同步“监视器monitor”（三）</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/欲/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1809,383 +2192,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/Java泛型-2-泛型数组/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/29/Java泛型-2-泛型数组/" itemprop="url">Java泛型(2)--泛型数组</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T15:25:45+08:00">
-                2018-12-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h1><p>今天在刷题时，遇到了需要使用泛型数组的场景。题目是<strong>按之字形打印二叉树</strong>。这道题目需要交替使用两个栈来解决，我的初始代码为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayDeque&lt;TreeNode&gt;[] stacks = <span class="keyword">new</span> ArrayDeque&lt;TreeNode&gt;[<span class="number">2</span>];    <span class="comment">//1</span></span><br><span class="line">stacks[<span class="number">0</span>] = <span class="keyword">new</span> ArrayDeque&lt;TreeNode&gt;();</span><br><span class="line">stacks[<span class="number">1</span>] = <span class="keyword">new</span> ArrayDeque&lt;TreeNode&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>而在编译时，代码1报出了如下编译错误：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cannot create a generic array of ArrayDeque&lt;Integer&gt;</span><br></pre></td></tr></table></figure></p>
-<p>原来Java不支持泛型数组。</p>
-<h1 id="Java中的泛型做了什么"><a href="#Java中的泛型做了什么" class="headerlink" title="Java中的泛型做了什么"></a>Java中的泛型做了什么</h1><p>首先看一下Java中的泛型做了什么。看下面这段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    T value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        value = t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用javap命令反编译生成的GenTest类的class文件，可以得到下面的输出：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">javap -c -p GenTest</span><br><span class="line">Compiled from <span class="string">"GenTest.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenTest</span> <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span></span>&#123;</span><br><span class="line">java.lang.Object value;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">GenTest</span><span class="params">()</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   1:   invokespecial   #12; //Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   <span class="number">4</span>:   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> java.lang.<span class="function">Object <span class="title">getValue</span><span class="params">()</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   1:   getfield        #23; //Field value:Ljava/lang/Object;</span><br><span class="line">   <span class="number">4</span>:   areturn</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(java.lang.Object)</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   <span class="number">1</span>:   aload_1</span><br><span class="line">   2:   putfield        #23; //Field value:Ljava/lang/Object;</span><br><span class="line">   <span class="number">5</span>:   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>我们清楚的看到，<strong>泛型T在GenTest类中就是Object类型（java.lang.Object value;）。同样，get方法和set方法也都是将泛型T当作Object来处理的。</strong>如果我们规定泛型是Numeric类或者其子类，那么在这里泛型T就是被当作Numeric类来处理的。</p>
-<p>好，既然GenTest类中没有什么乾坤，那么我们继续看使用GenTest的时候又什么新东西：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UseGenTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String value = <span class="string">"value"</span>;</span><br><span class="line">        GenTest&lt;String&gt; test = <span class="keyword">new</span> GenTest&lt;String&gt;();</span><br><span class="line">        test.setValue(value);</span><br><span class="line">        String nv = test.getValue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用javap命令反编译生成的GenTest类的class文件，可以得到下面的输出：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">javap -c -p UseGenTest</span><br><span class="line">Compiled from <span class="string">"UseGenTest.java"</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UseGenTest</span> <span class="keyword">extends</span> <span class="title">java</span>.<span class="title">lang</span>.<span class="title">Object</span></span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">UseGenTest</span><span class="params">()</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   <span class="number">0</span>:   aload_0</span><br><span class="line">   1:   invokespecial   #8; //Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   <span class="number">4</span>:   <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">  Code:</span><br><span class="line">   0:   ldc     #16; //String value</span><br><span class="line">   <span class="number">2</span>:   astore_1</span><br><span class="line">   3:   new     #18; //class GenTest</span><br><span class="line">   <span class="number">6</span>:   dup</span><br><span class="line">   7:   invokespecial   #20; //Method GenTest."&lt;init&gt;":()V</span><br><span class="line">   <span class="number">10</span>:  astore_2</span><br><span class="line">   <span class="number">11</span>:  aload_2</span><br><span class="line">   <span class="number">12</span>:  aload_1</span><br><span class="line">   13:  invokevirtual   #21; //Method GenTest.setValue:(Ljava/lang/Object;)V</span><br><span class="line">   <span class="number">16</span>:  aload_2</span><br><span class="line">   17:  invokevirtual   #25; //Method GenTest.getValue:()Ljava/lang/Object;</span><br><span class="line">   20:  checkcast       #29; //class java/lang/String</span><br><span class="line">   <span class="number">23</span>:  astore_3</span><br><span class="line">   <span class="number">24</span>:  <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>重点在17、20和23三处。17就是调用getValue方法。而20则是关键——类型检查。<strong>也就是说，在调用getValue方法之后，并没有直接把返回值赋值给nv，而是先检查了返回值是否是String类型</strong>，换句话说，“String nv = test.getValue();”被编译器变成了“String nv =(String)test.getValue();”。最后，如果检查无误，在23处才会赋值。也就是说，如果没有完成类型检查，则会报出类似ClassCastException，而代码将不会继续向下执行，这就有效的避免了错误的出现。</p>
-<p><strong>也就是说：在类的内部，泛型类型就是被基类型代替的（默认是Object类型），而对外，所有返回值类型为泛型类型的方法，在真正使用返回值之前，都是会经过类型转换的。</strong></p>
-<h1 id="为什么不支持泛型的数组？"><a href="#为什么不支持泛型的数组？" class="headerlink" title="为什么不支持泛型的数组？"></a>为什么不支持泛型的数组？</h1><p>根据上面的分析可以看出来，泛型其实是挺严谨的，说白了就是在“编译的时候通过增加强制类型转换的代码，来避免用户编写出可能引发ClassCastException的代码”。这其实也算是Java引入泛型的一个目的。</p>
-<p>但是，如果允许了泛型数组，那么编译器添加的强制类型转换的代码就会有可能是错误的。</p>
-<p>看下面的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面的代码使用了泛型的数组，是无法通过编译的</span></span><br><span class="line">GenTest&lt;String&gt; genArr[] = <span class="keyword">new</span> GenTest&lt;String&gt;[<span class="number">2</span>];</span><br><span class="line">Object[] test = genArr;</span><br><span class="line">GenTest&lt;StringBuffer&gt; strBuf = <span class="keyword">new</span> GenTest&lt;StringBuffer&gt;();</span><br><span class="line">strBuf.setValue(<span class="keyword">new</span> StringBuffer());</span><br><span class="line">test[<span class="number">0</span>] = strBuf;</span><br><span class="line">GenTest&lt;String&gt; ref = genArr[<span class="number">0</span>]; <span class="comment">//上面两行相当于使用数组移花接木，让Java编译器把GenTest&lt;StringBuffer&gt;当作了GenTest&lt;String&gt;</span></span><br><span class="line">String value = ref.getValue();<span class="comment">// 这里是重点！</span></span><br></pre></td></tr></table></figure></p>
-<p>上面的代码中，最后一行是重点。根据本文第一部分的介绍，“String value = ref.getValue()”会被替换成“String value =(String)ref.getValue()”。当然我们知道，ref实际上是指向一个存储着StringBuffer对象的GenTest对象。所以，编译器生成出来的代码是隐含着错误的，在运的时候就会抛出ClassCastException。</p>
-<p>但是，如果没有“String value = ref.getValue();”这行代码，那么程序可以说没有任何错误。这全都是Java中多态的功劳。我们来分析一下，对于上面代码中创建出来的GenTest对象，其实无论value引用实际指向的是什么对象，对于类中的代码来说都是没有任何影响的——因为在GenTest类中，这个对象仅仅会被当作是基类型的对象（在这里也就是Object的对象）来使用。所以，无论是String的对象，还是StringBuffer的对象，都不可能引发任何问题。举例来说，如果调用valued的hashcode方法，那么，如果value指向的是String的对象，实际执行的就是String类中的hashcode方法，如果是StringBuffer的对象，那么实际执行的就是StringBuffer类中的hashcode方法。</p>
-<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><h2 id="包装类实现泛型数组-编译无错，运行出错"><a href="#包装类实现泛型数组-编译无错，运行出错" class="headerlink" title="包装类实现泛型数组(编译无错，运行出错)"></a>包装类实现泛型数组(编译无错，运行出错)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericArray</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object[] values;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GenericArray</span><span class="params">(<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        values = <span class="keyword">new</span> Object[count];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T t,<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        values[position] = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T)values[position];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注意此句代码调用会出错</span></span><br><span class="line">    <span class="keyword">public</span> T[] getValues()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T[])values;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        GenericArray&lt;String&gt; generic=<span class="keyword">new</span> GenericArray(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        generic.setValue(<span class="string">"wenwei1"</span>, <span class="number">0</span>);</span><br><span class="line">        generic.setValue(<span class="string">"wenwei2"</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(generic.getValue(<span class="number">0</span>));</span><br><span class="line">        System.out.println(generic.getValue(<span class="number">1</span>));</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        String[]content = generic.getValues();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>分析：上面代码可以编译通过，而且我们使用GenericArray存储数据可以正常使用，但当我们调用其getValues则会出现强转类型错误（这种错误就是我们在概述中分析的编译器生成强转代码造成的）。 </p>
-<h2 id="使用反射"><a href="#使用反射" class="headerlink" title="使用反射"></a>使用反射</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericArray1</span> &lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T[] values;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GenericArray1</span><span class="params">(Class&lt;T&gt; type,<span class="keyword">int</span> length)</span></span>&#123;</span><br><span class="line">        values= (T[])Array.newInstance(type, length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(T t,<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        values[position] = t;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getValue</span><span class="params">(<span class="keyword">int</span> position)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (T)values[position];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> T[] getValues()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> values;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>测试代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        GenericArray1&lt;String&gt; generic=<span class="keyword">new</span> GenericArray1&lt;String&gt;(String.class,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">        generic.setValue(<span class="string">"wenwei1"</span>, <span class="number">0</span>);</span><br><span class="line">        generic.setValue(<span class="string">"wenwei2"</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(generic.getValue(<span class="number">0</span>));</span><br><span class="line">        System.out.println(generic.getValue(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">        String[]content = generic.getValues();</span><br><span class="line">        System.out.println(content[<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>分析：上面代码可以编译通过，我们使用GenericArray存储数据可以正常使用，而且调用其getValues也不会出现强转类型错误，这种方式比较推荐（因为我们调用Array.newInstance()生成的数组是String[]类型的数组）。</p>
-<h2 id="使用通配符"><a href="#使用通配符" class="headerlink" title="使用通配符"></a>使用通配符</h2><p>The Java™ Tutorials: Generics给出的解决方案如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;?&gt;[] lsa = <span class="keyword">new</span> List&lt;?&gt;[<span class="number">10</span>];                <span class="comment">//1</span></span><br><span class="line">Object[] oa = lsa;</span><br><span class="line">List&lt;Integer&gt; li = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">li.add(<span class="keyword">new</span> Integer(<span class="number">3</span>));</span><br><span class="line"></span><br><span class="line">oa[<span class="number">1</span>] = li;</span><br><span class="line"></span><br><span class="line">Integer s = (Integer) lsa[<span class="number">1</span>].get(<span class="number">0</span>)            <span class="comment">//2</span></span><br></pre></td></tr></table></figure></p>
-<p>在第1处，用?取代了确定的参数类型。根据通配符的定义以及Java类型擦除的保留上界原则，在2处lsa[1].get(0)取出的将会是Object，所以需要程序员做一次显式的类型转换。假如说程序员要将2处取出的值强转为String，就会出错。所以，这种做法相当于把风险把控交给了程序员。</p>
-<p>补充说明：对于泛型数组，最简单的我们可以利用容器List来模拟实现！</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Java为什么不允许泛型数组？</p>
-<p>先看为什么要用泛型。泛型的引入就是为了避免类型的不一致，假如声明一个List<pair>类型的list，那么在写出语句list.add(5)的时候，编译就会出错，因为类型不匹配，所以<strong>泛型可以将类型不匹配的错误扼杀在编译阶段。</strong></pair></p>
-<p>但是泛型数组就不行了，如果允许创建泛型数组，将能在数组p里存放任何类的对象，并且能够通过编译，因为在编译阶段p被认为是一个Object[ ]，也就是p里面可以放一个int，也可以放一个Pair，这样就<strong>绕过了编译器对泛型的检查</strong>。但是取出的时候就有可能将一个int类型的赋值给Pair类型。为了避免这种错误的出现，Java不支持直接创建泛型数组。</p>
-<p>所以最初的问题可以解决如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayDeque&lt;Integer&gt;[] stacks = (ArrayDeque&lt;Integer&gt;[]) Array.newInstance(ArrayDeque.class, <span class="number">2</span>);</span><br></pre></td></tr></table></figure></p>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>后来无意中发现如果将最初的问题写为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayDeque&lt;TreeNode&gt;[] stacks = <span class="keyword">new</span> ArrayDeque[<span class="number">2</span>];</span><br></pre></td></tr></table></figure></p>
-<p>即后面的ArrayDeque后面不加泛型限定，可以正常使用。但是好像这种写法不太规范。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/scutwang/articles/3735219.html" target="_blank" rel="noopener">分析一下为什么JAVA不支持泛型类型的数组</a><br><a href="https://blog.csdn.net/qq_22494029/article/details/79386607" target="_blank" rel="noopener">java泛型与数组</a><br><a href="https://blog.csdn.net/yi_Afly/article/details/52058708" target="_blank" rel="noopener">Java泛型的实现：“禁止”泛型数组</a><br><a href="https://blog.csdn.net/aabbwoshishei/article/details/50163261" target="_blank" rel="noopener">Java为什么不能创建泛型数组？</a><br><a href="https://www.cnblogs.com/ixenos/p/5648519.html" target="_blank" rel="noopener">Java 泛型 泛型数组</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/Java泛型-1-泛型基础/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/29/Java泛型-1-泛型基础/" itemprop="url">Java泛型(1)--泛型基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T15:22:05+08:00">
-                2018-12-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="泛型简介"><a href="#泛型简介" class="headerlink" title="泛型简介"></a>泛型简介</h2><p>泛型泛型，泛泛的类型。泛型就是一种不确定的类型。那么为什么要使用泛型？</p>
-<p>使用泛型的好处大概有两个：</p>
-<ul>
-<li>类型安全。将运行时的异常转变为编译时的异常。</li>
-<li>代码重用。泛型合并了同类型的处理代码，使得代码可以很好重用。</li>
-</ul>
-<p><strong>对于第一种好处</strong>，可以举个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List list = <span class="keyword">new</span> ArrayList();</span><br><span class="line">    list.add(<span class="number">10</span>);</span><br><span class="line">    list.add(<span class="string">"adamhand"</span>);</span><br><span class="line"></span><br><span class="line">    String num = (String) list.get(<span class="number">0</span>);  <span class="comment">//1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面的代码在编译时期不会出现任何问题，但是运行的时候在1处却会出现类型转换错误：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String</span><br></pre></td></tr></table></figure></p>
-<p>而使用泛型可以避免这个错误，使得错误在编译时期就会被检查，如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list.add(<span class="number">10</span>);   <span class="comment">//1</span></span><br><span class="line">    list.add(<span class="string">"adamhand"</span>);</span><br><span class="line"></span><br><span class="line">    String num = (String) list.get(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上述代码在编译的时候，1处就会报错。</p>
-<p><strong>对于第二种好处</strong>，使用Object似乎也可以实现，比如下面的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stove</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">heat</span><span class="params">(Object food)</span></span>&#123;</span><br><span class="line">        System.out.println(food +<span class="string">"is done"</span>);</span><br><span class="line">        <span class="keyword">return</span> food;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Meat meat = <span class="keyword">new</span> Meat();</span><br><span class="line">        meat = (Meat) Stove.heat(meat);</span><br><span class="line"></span><br><span class="line">        Soup soup = <span class="keyword">new</span> Soup();</span><br><span class="line">        soup = (Soup) Stove.heat(soup);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>定义了一个微波炉的类，使用微波炉的加热方法对不同的食物进行加热。这种写法看似没问题，但是存在小瑕疵：如果客户端不知道加热的具体内容是什么，在取出的时候进行强制类型转换，可能会出现错误。</p>
-<p>而使用泛型可以解决这个问题，上面的代码可以改为如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stove</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">T <span class="title">heat</span><span class="params">(T food)</span></span>&#123;</span><br><span class="line">        System.out.println(food +<span class="string">"is done"</span>);</span><br><span class="line">        <span class="keyword">return</span> food;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Meat meat = <span class="keyword">new</span> Meat();</span><br><span class="line">        meat = Stove.heat(meat);</span><br><span class="line"></span><br><span class="line">        Soup soup = <span class="keyword">new</span> Soup();</span><br><span class="line">        soup = Stove.heat(soup);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样就可以免去强制类型转换了。</p>
-<h2 id="泛型类和泛型方法"><a href="#泛型类和泛型方法" class="headerlink" title="泛型类和泛型方法"></a>泛型类和泛型方法</h2><p>需要注意的是，定义泛型方法的时候，需要将泛型定义在返回值之前；且静态方法无法使用类上定义的泛型<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 泛型类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenericTest</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> T value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getObject</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 泛型方法，将泛型定义现在返回值之前。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> w</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;W&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> &lt;W&gt; <span class="function"><span class="keyword">void</span> <span class="title">method</span><span class="params">(W w)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"method:"</span> + w);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 当方法静态时，不能访问类上定义的泛型。如果静态方法使用泛型，</span></span><br><span class="line"><span class="comment">     * 只能将泛型定义在方法上。</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> y</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;Y&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;Y&gt; <span class="function"><span class="keyword">void</span> <span class="title">staticMethod</span><span class="params">(Y y)</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"staticmethod"</span> + y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="compareTo"><a href="#compareTo" class="headerlink" title="compareTo"></a>compareTo</h2><p>如果需要比较两个泛型数的大小，需要使用Compareable接口：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;M extends Comparable&lt;M&gt;&gt; <span class="function"><span class="keyword">int</span> <span class="title">countGreaterThan</span><span class="params">(M[] array, M elem)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(M e : array)&#123;</span><br><span class="line">        <span class="keyword">if</span>(e.compareTo(elem) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>调用方式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Integer[] array = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;;</span><br><span class="line">    GenericTest.countGreaterThan(array, <span class="number">3</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><p>在java中，数组是可以协变的，比如dog extends Animal，那么Animal[] 与dog[]是兼容的。而集合是不能协变的，也就是说<code>List&lt;Animal&gt;</code>不是<code>List&lt;dog&gt;</code>的父类，这时候就可以用到通配符了。</p>
-<p>主要有三种通配符的使用：</p>
-<ul>
-<li>无边界通配符：<code>List&lt;?&gt;</code></li>
-<li>上界通配符：<code>List&lt;? extends E&gt;</code></li>
-<li>下界通配符：<code>List&lt;? super E&gt;</code></li>
-</ul>
-<h3 id="通配符-与-T-的区别"><a href="#通配符-与-T-的区别" class="headerlink" title="通配符 与 T 的区别"></a>通配符 与 T 的区别</h3><p>T：表示一个确定的类型。作用于模板上，用于将数据类型进行参数化，不能用于实例化对象。<br>?：表示一个不确定的类型。在实例化对象的时候，不确定泛型参数的具体类型时，可以使用通配符进行对象定义。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt; T &gt; 等同于 &lt; T extends Object&gt;</span><br><span class="line">&lt; ? &gt; 等同于 &lt; ? extends Object&gt;</span><br></pre></td></tr></table></figure></p>
-<p>例一：定义泛型类，将key，value的数据类型进行&lt; K, V &gt;参数化，而不可以使用通配符。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Container</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> K key;</span><br><span class="line">    <span class="keyword">private</span> V value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Container</span><span class="params">(K k, V v)</span> </span>&#123;</span><br><span class="line">        key = k;</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>例二：实例化泛型对象，我们不能够确定eList存储的数据类型是Integer还是Long，因此我们使用List&lt;? extends Number&gt;定义变量的类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? extends Number&gt; eList = <span class="keyword">null</span>;</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Long&gt;();</span><br></pre></td></tr></table></figure></p>
-<h3 id="无界通配符"><a href="#无界通配符" class="headerlink" title="无界通配符"></a>无界通配符</h3><p>等同于<code>&lt;? extends Object&gt;</code>。</p>
-<h3 id="上界类型通配符（-extends-E）"><a href="#上界类型通配符（-extends-E）" class="headerlink" title="上界类型通配符（? extends E）"></a>上界类型通配符（? extends E）</h3><p>为什么叫上界？</p>
-<p><code>？</code>表示E或者E的子类，那么E就是上限。E是父类，父类可接受子类。比如Object可以接收所有类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? extends Number&gt; eList = <span class="keyword">null</span>;</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">Number numObject = eList.get(<span class="number">0</span>);  <span class="comment">//语句1，正确</span></span><br><span class="line"></span><br><span class="line">Integer intObject = eList.get(<span class="number">0</span>);  <span class="comment">//语句2，错误</span></span><br><span class="line"></span><br><span class="line">eList.add(<span class="keyword">new</span> Integer(<span class="number">1</span>));  <span class="comment">//语句3，错误</span></span><br></pre></td></tr></table></figure></p>
-<p>语句1：List&lt;? extends Number&gt;eList存放Number及其子类的对象，语句1取出Number（或者Number子类）对象直接赋值给Number类型的变量是符合java规范的。 </p>
-<p>语句2：List&lt;? extends Number&gt;eList存放Number及其子类的对象，语句2取出Number（或者Number子类）对象直接赋值给Integer类型（Number子类）的变量是不符合java规范的。</p>
-<p>语句3：List&lt;? extends Number&gt;eList不能够确定实例化对象的具体类型，因此无法add具体对象至列表中，可能的实例化对象如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Long&gt;();</span><br><span class="line">eList = <span class="keyword">new</span> ArrayList&lt;Float&gt;();</span><br></pre></td></tr></table></figure></p>
-<p>总结：上界类型通配符add方法受限，但可以获取列表中的各种类型的数据，并赋值给父类型（extends Number）的引用。<strong>也就是说，上界通配符允许取元素不允许存元素。</strong></p>
-<h3 id="下界类型通配符（-super-E）"><a href="#下界类型通配符（-super-E）" class="headerlink" title="下界类型通配符（? super E）"></a>下界类型通配符（? super E）</h3><p>为什么叫下界：</p>
-<p><code>？</code>表示E或者E的父类，那么E就是下限。E是子类，子类不可以接收父类<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;? <span class="keyword">super</span> Integer&gt; sList = <span class="keyword">null</span>;</span><br><span class="line">sList = <span class="keyword">new</span> ArrayList&lt;Number&gt;();</span><br><span class="line"></span><br><span class="line">Number numObj = sList.get(<span class="number">0</span>);  <span class="comment">//语句1，错误</span></span><br><span class="line"></span><br><span class="line">Integer intObj = sList.get(<span class="number">0</span>);  <span class="comment">//语句2，错误</span></span><br><span class="line"></span><br><span class="line">sList.add(<span class="keyword">new</span> Integer(<span class="number">1</span>));  <span class="comment">//语句3，正确</span></span><br></pre></td></tr></table></figure></p>
-<p>语句1：List&lt;? super Integer&gt; 无法确定sList中存放的对象的具体类型，因此sList.get获取的值存在不确定性，子类对象的引用无法赋值给兄弟类的引用，父类对象的引用无法赋值给子类的引用，因此语句错误。 </p>
-<p>语句2：同语句1。 </p>
-<p>语句3：子类对象的引用可以赋值给父类对象的引用，因此语句正确。 </p>
-<p><strong>总结：下界类型通配符get方法受限，但可以往列表中添加各种数据类型的对象。因此如果你想把对象写入一个数据结构里，使用 ? super 通配符。限定通配符总是包括自己。</strong></p>
-<hr>
-<p>参考：<br><a href="https://blog.csdn.net/claram/article/details/51943742" target="_blank" rel="noopener">Java泛型三：通配符详解extends super</a><br><a href="https://blog.csdn.net/yiifaa/article/details/73433623" target="_blank" rel="noopener">三句话总结JAVA泛型通配符（PECS）</a><br><a href="https://www.jianshu.com/p/95f349258afb" target="_blank" rel="noopener">JAVA泛型通配符T，E，K，V区别，T以及Class<t>，Class&lt;?&gt;的区别</t></a></p>
-<hr>
-<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h2><p>泛型是 Java 1.5 版本才引进的概念，在这之前是没有泛型的概念的，但显然，<strong>泛型代码能够很好地和之前版本的代码很好地兼容</strong>。</p>
-<p>这是因为，泛型信息只存在于代码编译阶段，在进入 JVM 之前，<strong>与泛型相关的信息会被擦除掉，专业术语叫做类型擦除</strong>。</p>
-<p>看下面的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Erasure</span> &lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    T object;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Erasure</span><span class="params">(T object)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.object = object;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用<code>javap -c</code>命令查看反编译的结果:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Generic.Erasure.Erasure(T);</span><br><span class="line">  Code:</span><br><span class="line">     <span class="number">0</span>: aload_0</span><br><span class="line">     1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">     <span class="number">4</span>: aload_0</span><br><span class="line">     <span class="number">5</span>: aload_1</span><br><span class="line">     6: putfield      #2                  // Field object:Ljava/lang/Object;</span><br><span class="line">     <span class="number">9</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure></p>
-<p>可以看到，在编译的时候<code>T</code>全被替换成了<code>Object</code>。</p>
-<p>那可不可以说，泛型类被类型擦除后，相应的类型就被替换成 Object 类型呢？</p>
-<p>非也，看下面的代码(给上面代码中的T加上了上限)：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Erasure</span> &lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">String</span>&gt;</span>&#123;</span><br><span class="line">    T object;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Erasure</span><span class="params">(T object)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.object = object;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>反编译的结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Generic.Erasure.Erasure(T);</span><br><span class="line">  Code:</span><br><span class="line">     <span class="number">0</span>: aload_0</span><br><span class="line">     1: invokespecial #1                  // Method java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">     <span class="number">4</span>: aload_0</span><br><span class="line">     <span class="number">5</span>: aload_1</span><br><span class="line">     6: putfield      #2                  // Field object:Ljava/lang/String;</span><br><span class="line">     <span class="number">9</span>: <span class="keyword">return</span></span><br></pre></td></tr></table></figure></p>
-<p>可以看到，<code>T</code>没有被替换成Object而是被替换成String。于是可以得到结论：</p>
-<p><strong>在泛型类被类型擦除的时候，之前泛型类中的类型参数部分如果没有指定上限，如 <code>&lt;T&gt;</code> 则会被转译成普通的 Object 类型，如果指定了上限如 <code>&lt;T extends String&gt;</code> 则类型参数就被替换成类型上限。</strong></p>
-<h2 id="类型擦除带来的局限性"><a href="#类型擦除带来的局限性" class="headerlink" title="类型擦除带来的局限性"></a>类型擦除带来的局限性</h2><p>类型擦除，是泛型能够与之前的 java 版本代码兼容共存的原因。但也因为类型擦除，它会抹掉很多继承相关的特性，这是它带来的局限性。</p>
-<p>理解类型擦除有利于我们绕过开发当中可能遇到的雷区，同样理解类型擦除也能让我们绕过泛型本身的一些限制。比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToolTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="number">3</span>);</span><br><span class="line">        list.add(<span class="string">"123"</span>);   <span class="comment">//1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>正常情况下，因为泛型的限制，编译器不让最后一行代码编译通过，因为类似不匹配，但是，基于对类型擦除的了解，利用反射，我们可以绕过这个限制。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面是 List 和其中的 add() 方法的源码定义。</p>
-<p>因为 E 代表任意的类型，所以类型擦除时，add 方法其实等同于<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(Object obj)</span></span>;</span><br></pre></td></tr></table></figure></p>
-<p>那么，利用反射，我们绕过编译器去调用 add 方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToolTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; ls = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        ls.add(<span class="number">23</span>);</span><br><span class="line"><span class="comment">//      ls.add("text");</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//getDeclaredMethods(),该方法是获取本类中的所有方法</span></span><br><span class="line">            Method method = ls.getClass().getDeclaredMethod(<span class="string">"add"</span>,Object.class);</span><br><span class="line"></span><br><span class="line">            method.invoke(ls,<span class="string">"test"</span>);</span><br><span class="line">            method.invoke(ls,<span class="number">42.9f</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ( Object o: ls)&#123;</span><br><span class="line">            System.out.println(o);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>打印结果是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">23</span></span><br><span class="line">test</span><br><span class="line"><span class="number">42.9</span></span><br></pre></td></tr></table></figure></p>
-<p>可以看到，利用类型擦除的原理，用反射的手段就绕过了正常开发中编译器不允许的操作限制。</p>
-<hr>
-<p>参考：<br><a href="https://blog.csdn.net/briblue/article/details/76736356" target="_blank" rel="noopener">Java 泛型，你了解类型擦除吗？</a><br><a href="http://www.importnew.com/24029.html" target="_blank" rel="noopener">Java泛型详解</a><br>《码出高效：Java开发手册》</p>
-<hr>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2236,7 +2242,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2246,7 +2252,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-1.html">
+                <a href="/categories/index-2.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
