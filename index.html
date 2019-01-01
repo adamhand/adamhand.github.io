@@ -259,6 +259,205 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/《剑指offer》题目小结-2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/01/《剑指offer》题目小结-2/" itemprop="url">《剑指offer》题目小结(2)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T11:07:41+08:00">
+                2019-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="6-二叉树的下一个节点"><a href="#6-二叉树的下一个节点" class="headerlink" title="6. 二叉树的下一个节点"></a>6. 二叉树的下一个节点</h1><center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/Btree%20next%20node.PNG"><br></center>
+
+<p>思路：<br>要找到中序遍历下的下一个节点。这个节点可以分为两种情况:</p>
+<ul>
+<li><p>该节点有右子树。这种情况比较简单，直接将其右节点进行中序遍历即可，并将一个遍历到的最右节点返回。简单点说，该节点的下一个节点是右子树的最左节点。</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/have%20a%20right%20node.PNG"><br></center>
+</li>
+<li><p>该节点没有右子树。这种情况又可以分为两种情况：</p>
+<ul>
+<li>该节点是父节点的左子节点。直接将父节点返回即可。</li>
+<li>该节点是父节点的右子节点。需要不断寻找当前节点父亲节点，直到当前节点是父亲节点的左子节点。这是因为中序遍历是<strong>是直先遍历节点的左子树，然后是节点本身，然后是节点的右子树</strong>，所以，如果一个节点是父节点的右子节点且该节点没有右子树，说明该节点是“当前树”的一个“最右节点”，所以我们就需要找到“当前树”的父节点。<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/have%20not%20a%20right%20node.PNG"><br></center>
+</li>
+</ul>
+</li>
+<li><p>解法1：非递归法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeLinkNode <span class="title">GetNext</span><span class="params">(TreeLinkNode pNode)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pNode == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(pNode.right != <span class="keyword">null</span>)&#123;</span><br><span class="line">            pNode = pNode.right;</span><br><span class="line">            <span class="keyword">while</span>(pNode.left != <span class="keyword">null</span>)&#123;</span><br><span class="line">                pNode = pNode.left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> pNode;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>(pNode.next != <span class="keyword">null</span>)&#123;</span><br><span class="line">                TreeLinkNode parent = pNode.next;</span><br><span class="line">                <span class="keyword">if</span>(parent.left == pNode)&#123;</span><br><span class="line">                    <span class="keyword">return</span> parent;</span><br><span class="line">                &#125;</span><br><span class="line">                pNode = pNode.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解法2：递归法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TreeLinkNode <span class="title">GetNext</span><span class="params">(TreeLinkNode pNode)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pNode == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(pNode.right != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> getNextNode(pNode.right);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(pNode.next == <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(pNode.next.left == pNode)&#123;</span><br><span class="line">                <span class="keyword">return</span> pNode.next;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">while</span>(pNode.next.right == pNode)&#123;</span><br><span class="line">                    pNode = pNode.next;</span><br><span class="line">                    <span class="keyword">if</span>(pNode.next == <span class="keyword">null</span>)&#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> pNode.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> TreeLinkNode <span class="title">getNextNode</span><span class="params">(TreeLinkNode pNode)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pNode == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        TreeLinkNode result = <span class="keyword">null</span>;</span><br><span class="line">        result = getNextNode(pNode.left);</span><br><span class="line">        <span class="keyword">if</span>(result == <span class="keyword">null</span>)&#123;</span><br><span class="line">            result = pNode;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="7-用两个栈实现队列"><a href="#7-用两个栈实现队列" class="headerlink" title="7. 用两个栈实现队列"></a>7. 用两个栈实现队列</h1><p>用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。</p>
+<p>思路：stack1完成push操作，stack2完成pop操作。每次pop时，都要将stack1中的元素放入stack2中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    Stack&lt;Integer&gt; stack1 = <span class="keyword">new</span> Stack&lt;Integer&gt;();</span><br><span class="line">    Stack&lt;Integer&gt; stack2 = <span class="keyword">new</span> Stack&lt;Integer&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> node)</span> </span>&#123;</span><br><span class="line">        stack1.push(node);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(stack2.isEmpty())&#123;</span><br><span class="line">            <span class="keyword">while</span>(!stack1.isEmpty())&#123;</span><br><span class="line">                stack2.push(stack1.pop());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> stack2.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="8-斐波那契数列"><a href="#8-斐波那契数列" class="headerlink" title="8.斐波那契数列"></a>8.斐波那契数列</h1><p><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/Fibonacci.PNG" alt=""></p>
+<ul>
+<li><p>解法1：递归方法。不推荐</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Fibonacci</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(n &lt;= <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> n;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> Fibonacci(n - <span class="number">1</span>) + Fibonacci(n - <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解法2：递推方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Fibonacci</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(n &lt;= <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> n;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> pre2 = <span class="number">0</span>, pre1 = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> fib = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;=n; i++)&#123;</span><br><span class="line">            fib = pre2 + pre1;</span><br><span class="line">            pre2 = pre1;</span><br><span class="line">            pre1 = fib;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> fib;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解法3：使用一个不常用的公式。<br>具体见leetcode第70题，clibe stairs。</p>
+</li>
+</ul>
+<h1 id="9-跳台阶"><a href="#9-跳台阶" class="headerlink" title="9. 跳台阶"></a>9. 跳台阶</h1><p>一只青蛙一次可以跳上 1 级台阶，也可以跳上 2 级。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。</p>
+<p>解法：当n=1，只有一种跳法；当n=2，有两种跳法；当n&gt;2，记f(n)为n阶台阶的跳法，则可以分为两种情况：第一次跳一个台阶，则跳法数为f(n-1)；第一次跳两个台阶，则跳法数为f(n-2)。则f(n)=f(n-1)+f(n-2),不难看出，这是一个斐波那契数列问题。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">JumpFloor</span><span class="params">(<span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(target &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(target &lt;= <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> target;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> pre2 = <span class="number">1</span>, pre1 = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; target; i++)&#123;</span><br><span class="line">            result = pre2 + pre1;</span><br><span class="line">            pre2 = pre1;</span><br><span class="line">            pre1 = result;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="10-变态跳台阶"><a href="#10-变态跳台阶" class="headerlink" title="10. 变态跳台阶"></a>10. 变态跳台阶</h1><p>一只青蛙一次可以跳上 1 级台阶，也可以跳上 2 级… 它也可以跳上 n 级。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。</p>
+<ul>
+<li><p>解法1：</p>
+<ul>
+<li>用f(n)表示跳上n阶台阶的方法数。如果按照定义，f(0)肯定需要为0，否则没有意义。但是我们设定f(0) = 1；n = 0是特殊情况，通过下面的分析就会知道，强制令f(0) = 1很有好处。ps. f(0)等于几都不影响我们解题，但是会影响我们下面的分析理解。 </li>
+<li><strong>当n = 1 时</strong>， 只有一种跳法，即1阶跳：f(1) = 1;<br><strong>当n = 2 时</strong>， 有两种跳的方式，一阶跳和二阶跳：f(2) = 2; 到这里为止，和普通跳台阶是一样的。<br><strong>当n = 3 时</strong>，有三种跳的方式，第一次跳出一阶后，对应f(3-1)种跳法； 第一次跳出二阶后，对应f(3-2)种跳法；第一次跳出三阶后，只有这一种跳法。f(3) = f(2) + f(1)+ 1 = f(2) + f(1) + f(0) = 4;<br><strong>当n = 4时</strong>，有四种方式：第一次跳出一阶，对应f(4-1)种跳法；第一次跳出二阶，对应f(4-2)种跳法；第一次跳出三阶，对应f(4-3)种跳法；第一次跳出四阶，只有这一种跳法。所以，f(4) = f(4-1) + f(4-2) + f(4-3) + 1 = f(4-1) + f(4-2) + f(4-3) + f(4-4) 种跳法。<br><strong>当n = n 时</strong>，共有n种跳的方式，第一次跳出一阶后，后面还有f(n-1)中跳法； 第一次跳出二阶后，后面还有f(n-2)中跳法……………………..第一次跳出n阶后，后面还有 f(n-n)中跳法。f(n) = f(n-1)+f(n-2)+f(n-3)+……….+f(n-n) = f(0)+f(1)+f(2)+…….+f(n-1)。<br>通过上述分析，我们就得到了通项公式：<br><code>f(n) = f(0)+f(1)+f(2)+…….+ f(n-2) + f(n-1)</code><br>不难看出，这是一个斐波那契数列的变种问题。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">JumpFloorII</span><span class="params">(<span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(target == <span class="number">0</span> || target == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(target == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; target; i++)&#123;</span><br><span class="line">            result += JumpFloorII(i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>解法2：</p>
+<ul>
+<li>思路1中得到通项公式 f(n) = f(0)+f(1)+f(2)+…….+ f(n-2) + f(n-1) </li>
+<li>则 f(n-1) = f(0)+f(1)+f(2)+…….+ f(n-2) n&gt;=2</li>
+<li>两式相减，得<code>f(n)-f(n-1) = f(n-1)，即f(n) = 2*f(n-1)</code><br>即得到如下递推公式：<br>$$ f(n)= \begin{cases} 1, &amp; \text {n=0} \ 1, &amp; \text{n=1} \ 2*f(n-1), &amp; \text{n&gt;=2} \end{cases} $$<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">JumpFloorII</span><span class="params">(<span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> jumpFlo=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>((--target) &gt;<span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            jumpFlo*=<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> jumpFlo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>解法3：每个台阶都有跳与不跳两种情况（除了最后一个台阶），最后一个台阶必须跳。所以共用$2^{(n-1)}$种情况。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">JumpFloorII</span><span class="params">(<span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span>  <span class="number">1</span>&lt;&lt;--target;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%89%91%E6%8C%87%20offer%20%E9%A2%98%E8%A7%A3.md" target="_blank" rel="noopener">《剑指offer》题解</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java之变量/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1831,156 +2030,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/Linux下安装VSCode/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/Linux下安装VSCode/" itemprop="url">Linux下安装VSCode</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:16:05+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="linux中安装VSCode"><a href="#linux中安装VSCode" class="headerlink" title="linux中安装VSCode"></a>linux中安装VSCode</h1><hr>
-<h2 id="１-从官网下载"><a href="#１-从官网下载" class="headerlink" title="１.从官网下载"></a>１.从官网下载</h2><p>访问Visual Studio Code官网 <a href="https://code.visualstudio.com/docs?dv=linux64" target="_blank" rel="noopener">https://code.visualstudio.com/docs?dv=linux64</a><br>或者直接用下列命令下载64位安装包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://az764295.vo.msecnd.net/stable/7ba55c5860b152d999dda59393ca3ebeb1b5c85f/code-stable-code_1.7.2-1479766213_amd64.tar.gz</span><br></pre></td></tr></table></figure></p>
-<h2 id="2-解压"><a href="#2-解压" class="headerlink" title="2.解压"></a>2.解压</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xzvf code-stable-code_1.7.2-1479766213_amd64.tar.gz</span><br></pre></td></tr></table></figure>
-<h2 id="3-移动到local-usr下"><a href="#3-移动到local-usr下" class="headerlink" title="3.移动到local/usr下"></a>3.移动到local/usr下</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv VSCode-linux-x64 /usr/local/</span><br></pre></td></tr></table></figure>
-<h2 id="4-可能还需要给可执行的权限-然后就已经可以运行了"><a href="#4-可能还需要给可执行的权限-然后就已经可以运行了" class="headerlink" title="4.可能还需要给可执行的权限, 然后就已经可以运行了"></a>4.可能还需要给可执行的权限, 然后就已经可以运行了</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /usr/local/VSCode-linux-x64/code</span><br></pre></td></tr></table></figure>
-<h2 id="5-复制一个VScode图标文件到-usr-share-icons-目录"><a href="#5-复制一个VScode图标文件到-usr-share-icons-目录" class="headerlink" title="5.复制一个VScode图标文件到 /usr/share/icons/ 目录"></a>5.复制一个VScode图标文件到 /usr/share/icons/ 目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/local/VSCode-linux-x64/resources/app/resources/linux/code.png /usr/share/icons/</span><br></pre></td></tr></table></figure>
-<h2 id="6-创建启动器-在-usr-share-applications-目录-也可以将它复制到桌面目录"><a href="#6-创建启动器-在-usr-share-applications-目录-也可以将它复制到桌面目录" class="headerlink" title="6.创建启动器, 在/usr/share/applications/ 目录, 也可以将它复制到桌面目录"></a>6.创建启动器, 在/usr/share/applications/ 目录, 也可以将它复制到桌面目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/share/applications/VSCode.desktop</span><br></pre></td></tr></table></figure>
-<p>输入下列文字;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[Desktop Entry]</span><br><span class="line">Name=Visual Studio Code</span><br><span class="line">Comment=Multi-platform code editor for Linux</span><br><span class="line">Exec=/usr/local/VSCode-linux-x64/code</span><br><span class="line">Icon=/usr/share/icons/code.png</span><br><span class="line">Type=Application</span><br><span class="line">StartupNotify=true</span><br><span class="line">Categories=TextEditor;Development;Utility;</span><br><span class="line">MimeType=text/plain;</span><br></pre></td></tr></table></figure></p>
-<p>保存后退出, 然后可以复制到桌面:<br>cp /usr/share/applications/VSCode.desktop ~/桌面/<br>之后 就会发现 桌面和 应用程序菜单都有了 VSCode的快捷方式了</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2031,7 +2080,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2041,7 +2090,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-2.html">
+                <a href="/categories/index-1.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
