@@ -259,6 +259,199 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/Java代理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/29/Java代理/" itemprop="url">Java代理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T14:27:08+08:00">
+                2018-12-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Java–代理"><a href="#Java–代理" class="headerlink" title="Java–代理"></a>Java–代理</h1><hr>
+<h1 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h1><p>给某个对象提供一个代理对象，并由代理对象控制对于原对象的访问。</p>
+<p>代理类的应用场景很多，最容易想到的情况就是权限过滤，我有一个类做某项业务，但是由于安全原因只有某些用户才可以调用这个类，此时我们就可以做一个该类的代理类，要求所有请求必须通过该代理类，由该代理类做权限判断，如果安全则调用实际类的业务开始处理。</p>
+<p>还有就是Spring的AOP，利用代理实现切面编程，将不同业务逻辑中相同功能的代码提取出来，减少了耦合。</p>
+<p>Java里实现代理有两种方式：<strong>静态代理</strong>和<strong>动态代理</strong>。动态代理又可以使用<strong>JDKProxy</strong>或者<strong>CGLib</strong>的方式实现。</p>
+<h1 id="二、静态代理"><a href="#二、静态代理" class="headerlink" title="二、静态代理"></a>二、静态代理</h1><p>静态代理的特点就是，代理和被代理对象在代理之前就是已经确定好的，它们都实现共同的接口或者继承相同的抽象类。</p>
+<p>静态代理通常用于对原有业务逻辑的扩充。比如要在原有类的基础上加上日志功能，但又不能修改袁石磊，就可以使用代理模式，通过让代理类持有真实对象，然后在原代码中调用代理类方法，来达到添加所需要业务逻辑的目的。有点类似于<strong>装饰模式</strong>。</p>
+<p>一个典型的代理模式通常有三个角色，这里称之为<strong>代理三要素</strong>：<strong>共同接口</strong>、<strong>真实对象</strong>和<strong>代理对象</strong>。</p>
+<h2 id="共同接口"><a href="#共同接口" class="headerlink" title="共同接口"></a>共同接口</h2><p>一个Hello接口。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">say</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="真实对象"><a href="#真实对象" class="headerlink" title="真实对象"></a>真实对象</h2><p>实现了Hello接口。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloImp</span> <span class="keyword">implements</span> <span class="title">Hello</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello"</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="代理对象"><a href="#代理对象" class="headerlink" title="代理对象"></a>代理对象</h2><p>写一个 HelloProxy 类，让它去调用 HelloImpl 的 say() 方法，在调用的前后分别进行逻辑处理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloProxy</span> <span class="keyword">implements</span> <span class="title">Hello</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> HelloImp helloImp;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HelloProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        helloImp = <span class="keyword">new</span> HelloImp();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        before();</span><br><span class="line">        helloImp.say(name);</span><br><span class="line">        after();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Before"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"After"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试类和结果如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    HelloProxy helloProxy = <span class="keyword">new</span> HelloProxy();</span><br><span class="line">    helloProxy.say(<span class="string">"Jack"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Before</span><br><span class="line">HelloJack</span><br><span class="line">After</span><br></pre></td></tr></table></figure></p>
+<h1 id="三、动态代理"><a href="#三、动态代理" class="headerlink" title="三、动态代理"></a>三、动态代理</h1><p>Java实现动态代理的方式有两种：使用<strong>JDKProxy</strong>或使用<strong>CGLib</strong>类库。<strong>使用JDKProxy代理的类必须实现一个接口，CGLIB即使代理类没有实现任何接口也可以实现动态代理功能。</strong></p>
+<p>JDKProxy使用反射机制实现，CGLib使用ASM实现。</p>
+<h2 id="JDKProxy"><a href="#JDKProxy" class="headerlink" title="JDKProxy"></a>JDKProxy</h2><p>使用JDKProxy实现的动态代理主要包含以下三个元素：</p>
+<blockquote>
+<ul>
+<li>业务接口（Interface）<br>业务的抽象表示</li>
+<li>业务具体实现类（concreteManager）<br>实现业务接口，执行具体的业务操作</li>
+<li>业务代理类（proxyHandler，实现了InvocationHandler接口的类）<br>代理方法的直接调用者，通过InvocationHandler中的invoke方法直接发起代理</li>
+<li>客户端调用对象（client）<br>发起业务</li>
+</ul>
+</blockquote>
+<p>实现步骤如下：</p>
+<blockquote>
+<ul>
+<li>创建被代理的接口和类；</li>
+<li>创建一个类实现InvocationHandler接口，实现其中的invoke()方法；</li>
+<li>调用Proxy的静态方法，创建一个代理类：newProxyInstance(ClassLoader loader, Class[] interfaces, InvocationHander h)；</li>
+<li>通过代理调用方法；</li>
+</ul>
+</blockquote>
+<p>还是基于上面的Hello接口和HelloImp类。下面创建一个实现InvocationHandler接口的方法DynamicProxy，在 DynamicProxy 类中，定义了一个 Object 类型的 target 变量，它就是被代理的目标对象，通过构造函数来初始化。</p>
+<p>DynamicProxy 实现了 InvocationHandler 接口，那么必须实现该接口的 invoke 方法，参数见注释。在该方法中，直接通过反射去 invoke method，在调用前后分别处理 before 与 after，最后将 result 返回。</p>
+<p>接着，在DynamicProxy 里添加了一个 getProxy() 方法，在里面调用 JDK 给我们提供的 Proxy 类的工厂方法 newProxyInstance() 去动态地创建一个 Hello 接口的代理类，最后调用这个代理类的 say() 方法。这样可以简化主函数中的代码。</p>
+<p>@SuppressWarnings(“unchecked”) 注解表示忽略编译时的警告（因为 Proxy.newProxyInstance() 方法返回的是一个 Object，这里我强制转换为 T 了，这是向下转型，IDE 中就会有警告，编译时也会出现提示。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="comment">//被代理的对象</span></span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicProxy</span><span class="params">(Object target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> proxy：被代理的对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> method：被代理对象的方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args：方法的参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InvocationTargetException</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> IllegalAccessException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> InvocationTargetException, IllegalAccessException </span>&#123;</span><br><span class="line">        before();</span><br><span class="line">        Object result = method.invoke(target, args);</span><br><span class="line">        after();</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Proxy.newProxyInstance的三个参数：</span></span><br><span class="line"><span class="comment">     * 1. 被代理类的类加载器</span></span><br><span class="line"><span class="comment">     * 2. 该实现类的所有接口</span></span><br><span class="line"><span class="comment">     * 3. 动态代理对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> &lt;T&gt;</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getProxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (T) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(),</span><br><span class="line">                <span class="keyword">this</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Before"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"After"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试方法和结果如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    DynamicProxy dynamicProxy = <span class="keyword">new</span> DynamicProxy(<span class="keyword">new</span> HelloImp());</span><br><span class="line">    Hello hello = dynamicProxy.getProxy();</span><br><span class="line"></span><br><span class="line">    hello.say(<span class="string">"Jack"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Before</span><br><span class="line">HelloJack</span><br><span class="line">After</span><br></pre></td></tr></table></figure></p>
+<h2 id="CGLib"><a href="#CGLib" class="headerlink" title="CGLib"></a>CGLib</h2><p>Cglib是一个优秀的动态代理框架，它的底层使用ASM在内存中动态的生成被代理类的子类，使用CGLIB即使代理类没有实现任何接口也可以实现动态代理功能。CGLIB具有简单易用，它的运行速度要远远快于JDK的Proxy动态代理：</p>
+<p>cglib有两种可选方式，<strong>继承</strong>和<strong>引用</strong>。第一种是基于继承实现的动态代理，所以可以直接通过super调用target方法，但是这种方式在spring中是不支持的，因为这样的话，这个target对象就不能被spring所管理，所以cglib还是才用类似jdk的方式，通过持有target对象来达到拦截方法的效果。</p>
+<p>使用CGLib实现代理的步骤如下：</p>
+<blockquote>
+<ul>
+<li>创建被代理的接口和类；</li>
+<li>实现 CGLib 提供的 MethodInterceptor 实现类，并填充 intercept() 方法；</li>
+<li>通过Enhancer类产生一个代理类；</li>
+<li>通过代理调用方法；</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CGLibProxy</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> CGLibProxy instance = <span class="keyword">new</span> CGLibProxy();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">CGLibProxy</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getProxy</span><span class="params">(Class&lt;T&gt; cls)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (T) Enhancer.create(cls, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> o：目标类的实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> method：目标方法的反射对象</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> objects：目标方法的参数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> methodProxy：代理类的实例</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object o, Method method, Object[] objects, MethodProxy methodProxy)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        before();</span><br><span class="line">        Object restult = methodProxy.invokeSuper(o, objects);</span><br><span class="line">        after();</span><br><span class="line">        <span class="keyword">return</span> restult;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CGLibProxy <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Before"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"After"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述代码中，使用了单例模式，简化了主函数中的代码；</p>
+<p>主函数和结果如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    HelloImp helloImp = CGLibProxy.getInstance().getProxy(HelloImp.class);</span><br><span class="line"></span><br><span class="line">    helloImp.say(<span class="string">"Jack"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Before</span><br><span class="line">HelloJack</span><br><span class="line">After</span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://my.oschina.net/huangyong/blog/159788" target="_blank" rel="noopener">Proxy那点事</a><br><a href="https://www.jianshu.com/p/23d3f1a2b3c7" target="_blank" rel="noopener">Java动态代理实现及原理分析</a><br><a href="https://blog.csdn.net/zghwaicsdn/article/details/50957474" target="_blank" rel="noopener">CGLIB介绍与原理</a><br><a href="https://blog.csdn.net/wangqyoho/article/details/77584832" target="_blank" rel="noopener">静态代理和动态代理的理解</a><br><a href="https://blog.csdn.net/Scplove/article/details/52451899" target="_blank" rel="noopener">java动态代理原理及解析</a><br><a href="https://blog.csdn.net/u011784767/article/details/78281384" target="_blank" rel="noopener">详解java动态代理机制以及使用场景(一)</a><br><a href="https://blog.csdn.net/heyutao007/article/details/49738887" target="_blank" rel="noopener">Java动态代理的两种实现方法</a><br><a href="https://www.cnblogs.com/lfdingye/p/7717063.html" target="_blank" rel="noopener">Java设计模式之动态代理</a><br><a href="https://blog.csdn.net/jiaotuwoaini/article/details/51675684" target="_blank" rel="noopener">CGLib之Enhancer</a><br><a href="https://www.jianshu.com/p/20203286ccd9" target="_blank" rel="noopener">代理8 cglib demo以及Enhancer源码解析</a><br><a href="https://blog.csdn.net/lw_power/article/details/44278419" target="_blank" rel="noopener">基于 JDK 的动态代理-佟刚老师《Spring4视频教程》学习笔记（16）</a><br><a href="http://www.importnew.com/20732.html" target="_blank" rel="noopener">java的动态代理机制详解</a><br><a href="http://www.importnew.com/26166.html" target="_blank" rel="noopener">JAVA动态代理</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/28/孤独时/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -772,7 +965,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -782,7 +975,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-2.html">
+                <a href="/categories/index-1.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
