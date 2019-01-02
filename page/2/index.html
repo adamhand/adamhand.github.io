@@ -259,6 +259,332 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java之变量/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/01/Java之变量/" itemprop="url">Java之变量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T10:54:12+08:00">
+                2019-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="成员变量和局部变量"><a href="#成员变量和局部变量" class="headerlink" title="成员变量和局部变量"></a>成员变量和局部变量</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>&emsp; 可以将Java中的变量分为<strong>成员变量</strong>、<strong>静态变量</strong>和<strong>局部变量</strong>，成员变量和静态变量是在类范围内定义的变量，其中成员变量又叫实例变量，不用static关键字修饰，静态变量又叫类变量，需要用static关键字修饰。局部变量是在一个方法内定义的变量。<br>&emsp; 局部变量可分为：形参（形式参数）、方法局部变量、代码块局部变量。<br>&emsp; 如下图所示：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/javaviriable1.png"><br></center>
+
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="成员变量和局部变量的区别"><a href="#成员变量和局部变量的区别" class="headerlink" title="成员变量和局部变量的区别"></a>成员变量和局部变量的区别</h3><ul>
+<li>在类中的位置不同<br>成员变量：在类中方法外<br>局部变量：在方法定义中或者方法声明上</li>
+<li><strong>在内存中的位置不同<br>成员变量：在堆内存<br>局部变量：如果是基本类型，会把值直接存储在栈；如果是引用类型，比如<code>String s = new String(&quot;william&quot;);</code>会把其对象存储在堆，而把这个对象的引用（指针）存储在栈。</strong></li>
+<li>生命周期不同<br>成员变量：随着对象的创建而存在，随着对象的消失而消失<br>局部变量：随着方法的调用而存在，随着方法的调用完毕而消失</li>
+<li>初始化值不同<br>成员变量：有默认初始化值<br>局部变量：没有默认初始化值，必须定义，赋值，然后才能使用。</li>
+</ul>
+<h3 id="成员变量和静态变量的区别"><a href="#成员变量和静态变量的区别" class="headerlink" title="成员变量和静态变量的区别"></a>成员变量和静态变量的区别</h3><ul>
+<li>成员变量所属于对象。所以也称为实例变量。<br>静态变量所属于类。所以也称为类变量。</li>
+<li><strong>成员变量，基本类型和引用类型的成员变量都在这个对象的空间中，作为一个整体存储在堆。<br>静态变量存在于方法区中，只有被调用的时候才会被压栈，放入栈中。</strong></li>
+<li>成员变量随着对象创建而存在。随着对象被回收而消失。<br>静态变量随着类的加载而存在。随着类的消失而消失。</li>
+<li>成员变量只能被对象所调用。<br>静态变量可以被对象调用，也可以被类名调用。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java之参数传递/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/01/Java之参数传递/" itemprop="url">Java之参数传递</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T10:51:03+08:00">
+                2019-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>首先说明，<strong>Java 语言的参数传递只有「按值传递」</strong></p>
+<p>然而我们经常看到对于对象（数组，类，接口）的传递似乎有点像引用传递，可以改变对象中某个属性的值。但是不要被这个假象所蒙蔽，实际上这个传入函数的值是<strong>对象引用的拷贝，即传递的是引用的地址值，是将对象的地址以值的方式传递到形参中，方法得到的是所有参数值的一个拷贝，所以还是按值传递。</strong></p>
+<p>方法参数共有两种类型：</p>
+<ul>
+<li>基本数据类型</li>
+<li>对象引用</li>
+</ul>
+<p>下面以这两种类型分别说明参数传递的过程。</p>
+<h2 id="基本数据类型为参数"><a href="#基本数据类型为参数" class="headerlink" title="基本数据类型为参数"></a>基本数据类型为参数</h2><p>先看一段代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">1</span>;</span><br><span class="line">    System.out.println(num);</span><br><span class="line"></span><br><span class="line">    changeNumber(num);</span><br><span class="line"></span><br><span class="line">    System.out.println(num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">changeNumber</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    x++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>以上程序的执行过程为：</p>
+<ul>
+<li>x被初始化为num的一个拷贝，值为1；</li>
+<li>x执行<code>++</code>操作，但是num并没有改变；</li>
+<li>方法调用完成之后，参数不再使用，num的值从始至终没有改变。</li>
+</ul>
+<h2 id="引用为参数"><a href="#引用为参数" class="headerlink" title="引用为参数"></a>引用为参数</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] nums = &#123;<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>&#125;;</span><br><span class="line"></span><br><span class="line">    changeNums(nums);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++)</span><br><span class="line">        System.out.print(nums[i] + <span class="string">" "</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">changeNums</span><span class="params">(<span class="keyword">int</span>[] nums)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++)</span><br><span class="line">        nums[i]++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">4</span> <span class="number">3</span> <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到，调用<code>changeNums</code>函数之后，nums数组的值被改变了。</p>
+<p>以上程序的执行过程为：</p>
+<ul>
+<li><code>changeNums</code>方法的参数nums初始化为数组nums的拷贝，参数nums的值为数组nums的地址，所以，这两个指向同一个内存空间；</li>
+<li>对参数nums指向的内存空间的值进行<code>++</code>操作，可以看到，原nums数组也被修改。</li>
+</ul>
+<p>再看另一个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dog</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    String name;</span><br><span class="line"></span><br><span class="line">    Dog(String name) &#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getObjectAddress</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PassByValueExample</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Dog dog = <span class="keyword">new</span> Dog(<span class="string">"A"</span>);</span><br><span class="line">        System.out.println(dog.getObjectAddress()); <span class="comment">// Dog@4554617c</span></span><br><span class="line">        func(dog);</span><br><span class="line">        System.out.println(dog.getObjectAddress()); <span class="comment">// Dog@4554617c</span></span><br><span class="line">        System.out.println(dog.getName());          <span class="comment">// A</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">(Dog dog)</span> </span>&#123;             <span class="comment">//调用该方法后，dog被初始化为A第一个拷贝</span></span><br><span class="line">        System.out.println(dog.getObjectAddress()); <span class="comment">// Dog@4554617c</span></span><br><span class="line">        dog = <span class="keyword">new</span> Dog(<span class="string">"B"</span>);                         <span class="comment">//将A的拷贝指向另一个对象，对A没有任何影响</span></span><br><span class="line">        System.out.println(dog.getObjectAddress()); <span class="comment">// Dog@74a14482</span></span><br><span class="line">        System.out.println(dog.getName());          <span class="comment">// B</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果在方法中改变对象的字段值会改变原对象该字段值，因为改变的是同一个地址指向的内容。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PassByValueExample</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Dog dog = <span class="keyword">new</span> Dog(<span class="string">"A"</span>);</span><br><span class="line">        func(dog);</span><br><span class="line">        System.out.println(dog.getName());          <span class="comment">// B</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">(Dog dog)</span> </span>&#123;</span><br><span class="line">        dog.setName(<span class="string">"B"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>参考：<br><a href="https://www.cnblogs.com/coderising/p/5697986.html" target="_blank" rel="noopener">java的值传递和引用传递的问题</a><br><a href="https://www.cnblogs.com/xiaoxiaoyihan/p/4883770.html" target="_blank" rel="noopener">java值传递还是引用传递</a><br><a href="https://www.cnblogs.com/nnngu/p/8299724.html" target="_blank" rel="noopener">Java的参数传递是「按值传递」还是「按引用传递」？</a></p>
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/从字符串比较到-和equals-的区别/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1655,393 +1981,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/RabbitMQ系列-1-初识消息中间件/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/RabbitMQ系列-1-初识消息中间件/" itemprop="url">RabbitMQ系列(1)--初识消息中间件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:10:22+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
-                    <span itemprop="name">RabbitMQ</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="RabbitMQ系列-1-–认识消息队列中间件"><a href="#RabbitMQ系列-1-–认识消息队列中间件" class="headerlink" title="RabbitMQ系列(1)–认识消息队列中间件"></a>RabbitMQ系列(1)–认识消息队列中间件</h1><hr>
-<h1 id="初识消息队列中间件"><a href="#初识消息队列中间件" class="headerlink" title="初识消息队列中间件"></a>初识消息队列中间件</h1><p>消息(Message)是指在应用之间传递的数据。</p>
-<p>消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是<strong>上下层之间的中间(纵向的“中间”)</strong>，一种是<strong>左右之间的中间（横向的“中间”）</strong>。</p>
-<p>上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行了封装，为上层应用程序提供跨平台的数据交流。</p>
-<p>左右之间的中间是指，消息中间件常常被用于分布式环境中，它可以为两个分布式节点之间提供通信服务。</p>
-<h1 id="传递模式"><a href="#传递模式" class="headerlink" title="传递模式"></a>传递模式</h1><p>消息中间件一般有两种传递模式：<strong>点对点</strong>(P2P，Point to point)模式和<strong>发布/订阅</strong>(Pub/Sub)模式。</p>
-<h2 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h2><p>点对点模式是基于队列(queue)的，消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。队列的存在使得消息的异步传输成为可能。消息被消费以后，queue中不再存储，所以消息消费者不可能消费到已经被消费的消息。</p>
-<p>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
-<p>示意图如下图所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-p2p.jpg"><br></center>
-
-<h2 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布/订阅模式"></a>发布/订阅模式</h2><p>Pub/Sub发布订阅（广播）：使用topic作为通信载体。消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。和点对点方式不同，发布到topic的消息会被所有订阅者消费。</p>
-<p>示意图如下：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-pub-sub.jpg"><br></center>
-
-<h1 id="常用协议"><a href="#常用协议" class="headerlink" title="常用协议"></a>常用协议</h1><h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><p>AMQP即<strong>Advanced Message Queuing Protocol(高级队列消息协议)</strong>。AMQP协议定义了消息路由规则和方式。生产者将消息发送到Broker，Broker中的Exchange充当了路由器的角色，由它将消息路由到一个或者多个队列中。如果路由不到，或许会返回给生产者，获取会丢弃。</p>
-<p>多个消费者可以订阅同一个队列中的消息，这是队列中的消息会通过“轮询”的方式平均分配给每个消费者，而不是每个消费者都会消费所有消息。</p>
-<p>AMQP的模型如下所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/amqp.jpg"><br></center>
-
-<h2 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h2><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。点对点与发布订阅最初是由JMS定义的。</p>
-<p>严格来说，JMS不是一种消息队列协议，它是一种跨平台的API，换句话说，可以使用JMS API来连接支持AMQP、STOMP等协议的消息中间件产品，它的作用更像JDBC，我们可以使用JDBC API来连接具体的数据库产品。</p>
-<h1 id="常见消息中间件对比"><a href="#常见消息中间件对比" class="headerlink" title="常见消息中间件对比"></a>常见消息中间件对比</h1><p>待续。</p>
-<hr>
-<h1 id="补丁：消息的消费模式"><a href="#补丁：消息的消费模式" class="headerlink" title="补丁：消息的消费模式"></a>补丁：消息的消费模式</h1><p>消息的消费模式有两种：<strong>推模式(push)</strong>和<strong>拉模式(pull)</strong>。</p>
-<p><strong>推(push)模式</strong>是一种基于客户器/服务器机制、由服务器主动将信息送到客户器的技术。在push模式应用中，服务器把信息送给客户器之前，并没有明显的客户请求。push事务由服务器发起。push模式可以让信息主动、快速地寻找用户/客户器，信息的主动性和实时性比较好。但精确性较差，可能推送的信息并不一定满足客户的需求。推送模式不能保证能把信息送到客户器，因为推模式采用了广播机制，如果客户器正好联网并且和服务器在同一个频道上，推送模式才是有效的。push模式无法跟踪状态，采用了开环控制模式，没有用户反馈信息。在实际应用中，由客户器向服务器发送一个申请，并把自己的地址（如IP、port）告知服务器，然后服务器就源源不断地把信息推送到指定地址。在多媒体信息广播中也采用了推模式。另外，如手机*、qq广播。</p>
-<p><strong>拉（pull）模式</strong>与推模式相反，是由客户器主动发起的事务。服务器把自己所拥有的信息放在指定地址（如IP、port），客户器向指定地址发送请求，把自己需要的资源“拉”回来。不仅可以准确获取自己需要的资源，还可以及时把客户端的状态反馈给服务器。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《RabbitMQ实战指南》<br>《分布式消息中间件实战》<br><a href="https://blog.csdn.net/lizhitao/article/details/47723105" target="_blank" rel="noopener">消息队列中点对点与发布订阅区别</a><br><a href="https://blog.csdn.net/wqc19920906/article/details/82193316" target="_blank" rel="noopener">消息中间件（一）MQ详解及四大MQ比较</a><br><a href="https://blog.csdn.net/btt2013/article/details/80211599" target="_blank" rel="noopener">Java消息中间件(入门篇)</a><br><a href="https://blog.csdn.net/zeng_z/article/details/77246368" target="_blank" rel="noopener">消息模式–推模式和拉模式</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/Java并发-3-从synchronized到锁优化/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/Java并发-3-从synchronized到锁优化/" itemprop="url">Java并发(3)--从synchronized到锁优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T17:08:41+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Java并发——从synchronized到锁优化"><a href="#Java并发——从synchronized到锁优化" class="headerlink" title="Java并发——从synchronized到锁优化"></a>Java并发——从synchronized到锁优化</h1><hr>
-<h1 id="synchronized用法"><a href="#synchronized用法" class="headerlink" title="synchronized用法"></a>synchronized用法</h1><p>synchronized关键字同步的三种用法:<br>①.同步实例方法，锁是当前实例对象<br>②.同步类方法，锁是当前类对象<br>③.同步代码块，锁是括号里面的对象</p>
-<p>示例代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步实例方法，锁实例对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步类方法，锁类对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 同步代码块</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 锁类对象</span></span><br><span class="line">        <span class="keyword">synchronized</span> (SynchronizedTest.class) &#123;</span><br><span class="line">            <span class="comment">// 锁实例对象</span></span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="synchronized实现"><a href="#synchronized实现" class="headerlink" title="synchronized实现"></a>synchronized实现</h1><p>javap -verbose查看上述示例:</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/synchronized_javap.PNG"><br></center>
-
-<p>可以看到，同步代码块是使用monitorenter和monitorexit指令实现的，同步方法（在这看不出来需要看JVM底层实现）依靠的是方法修饰符上的ACC_SYNCHRONIZED实现。具体如下：</p>
-<p><strong>同步方法：</strong>方法级同步没有通过字节码指令来控制，它实现在方法调用和返回操作之中。当方法调用时，调用指令会检查方法ACC_SYNCHRONIZED访问标志是否被设置，若设置了则执行线程需要持有管程(Monitor)才能运行方法，当方法完成(无论是否出现异常)时释放管程。<br><strong>同步代码块</strong>：synchronized关键字经过编译后，会在同步块的前后分别形成monitorenter和monitorexit两个字节码指令，每条monitorenter指令都必须执行其对应的monitorexit指令，为了保证方法异常完成时这两条指令依然能正确执行，编译器会<strong>自动产生一个异常处理器</strong>，其目的就是用来执行monitorexit指令(图中14-18、24-30为异常流程)。</p>
-<h1 id="java对象头和monitor"><a href="#java对象头和monitor" class="headerlink" title="java对象头和monitor"></a>java对象头和monitor</h1><p>Java对象头和monitor是实现synchronized的基础。</p>
-<h2 id="java对象头"><a href="#java对象头" class="headerlink" title="java对象头"></a>java对象头</h2><p>synchronized用的锁是存在Java对象头里的，Hotspot虚拟机的对象头主要包括两部分数据：<strong>Mark Word（标记字段）</strong>、<strong>Klass Pointer（类型指针）</strong>。其中Klass Point是是对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例，Mark Word用于存储对象自身的运行时数据，它是实现轻量级锁和偏向锁的关键。</p>
-<h3 id="Mark-Word"><a href="#Mark-Word" class="headerlink" title="Mark Word"></a>Mark Word</h3><p>默认存储对象的HashCode，分代年龄和锁标志位信息。这些信息都是与对象自身定义无关的数据，所以Mark Word被设计成一个非固定的数据结构以便在极小的空间内存存储尽量多的数据。它会根据对象的状态复用自己的存储空间，也就是说在运行期间Mark Word里存储的数据会随着锁标志位的变化而变化。</p>
-<h3 id="Klass-Point"><a href="#Klass-Point" class="headerlink" title="Klass Point"></a>Klass Point</h3><p>对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
-<h2 id="Monitor"><a href="#Monitor" class="headerlink" title="Monitor"></a>Monitor</h2><p>每个对象都拥有自己的监视器，当这个对象由同步块或者这个对象的同步方法调用时，执行方法的线程必须先获取该对象的监视器才能进入同步块和同步方法，如果没有获取到监视器的线程将会被阻塞在同步块和同步方法的入口处，进入到BLOCKED状态，如图:</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/monitorenterandexit.jpg"><br></center>
-
-<p>Monitor是<strong>线程私有</strong>的数据结构，每个线程都有一个可用<strong>monitor record</strong>列表，同时<br>还有一个全局的可用列表。每一个被锁住的对象都会和一个monitor record关联(对象头的MarkWord中的LockWord指向monitor record的起始地址)，同时monitor record中有一个owner字段存放拥有该锁的线程的唯一标识，表示该锁被这个线程占用。其结构如下:</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/monitorstructure.jpg"><br></center>
-
-<ul>
-<li><strong>Owner：</strong>初始时为NULL表示当前没有任何线程拥有该monitor record，当线程成功拥有该锁后保存线程唯一标识，当锁被释放时又设置为NULL；</li>
-<li><strong>EntryQ:</strong>关联一个系统互斥锁（semaphore），阻塞所有试图锁住monitor record失败的线程。</li>
-<li><strong>RcThis:</strong>表示blocked或waiting在该monitor record上的所有线程的个数。</li>
-<li><strong>Nest:</strong>用来实现重入锁的计数。</li>
-<li><strong>HashCode:</strong>保存从对象头拷贝过来的HashCode值（可能还包含GC age）。</li>
-<li><strong>Candidate:</strong>用来避免不必要的阻塞或等待线程唤醒，因为每一次只有一个线程能够成功拥有锁，如果每次前一个释放锁的线程唤醒所有正在阻塞或等待的线程，会引起不必要的上下文切换（从阻塞到就绪然后因为竞争锁失败又被阻塞）从而导致性能严重下降。Candidate只有两种可能的值0表示没有需要唤醒的线程1表示要唤醒一个继任线程来竞争锁。</li>
-</ul>
-<h1 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h1><p>阻塞或唤醒一个Java线程需要操作系统切换CPU状态来完成，这种状态转换需要耗费处理器时间。如果同步代码块中的内容过于简单，状态转换消耗的时间有可能比用户代码执行的时间还要长。这种方式就是synchronized最初实现同步的方式，这就是JDK 6之前synchronized效率低的原因。这种依赖于操作系统Mutex Lock所实现的锁我们称之为“重量级锁”，JDK 6中为了减少获得锁和释放锁带来的性能消耗，引入了“偏向锁”和“轻量级锁”。</p>
-<p>所以目前锁一共有<strong>4种</strong>状态，级别从低到高依次是：<strong>无锁</strong>、<strong>偏向锁</strong>、<strong>轻量级锁</strong>和<strong>重量级锁</strong>。锁状态只能升级不能降级。</p>
-<p>四种锁状态对应的的Mark Word内容如下：</p>
-<table>
-<thead>
-<tr>
-<th>锁状态</th>
-<th>存储内容</th>
-<th>标志位</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>无锁</td>
-<td>对象的hashCode、对象分代年龄、是否是偏向锁（0）</td>
-<td>01</td>
-</tr>
-<tr>
-<td>偏向锁</td>
-<td>偏向线程ID、偏向时间戳、对象分代年龄、是否是偏向锁（1）</td>
-<td>01</td>
-</tr>
-<tr>
-<td>轻量级锁</td>
-<td>指向栈中锁记录的指针</td>
-<td>00</td>
-</tr>
-<tr>
-<td>重量级锁</td>
-<td>指向互斥量（重量级锁）的指针</td>
-<td>10</td>
-</tr>
-</tbody>
-</table>
-<h2 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h2><p>无锁没有对资源进行锁定，所有的线程都能访问并修改同一个资源，但同时只有一个线程能修改成功。</p>
-<p>无锁的特点就是修改操作在循环内进行，线程会不断的尝试修改共享资源。如果没有冲突就修改成功并退出，否则就会继续循环尝试。如果有多个线程修改同一个值，必定会有一个线程能修改成功，而其他修改失败的线程会不断重试直到修改成功。CAS即是无锁的实现。无锁无法全面代替有锁，但无锁在某些场合下的性能是非常高的。</p>
-<h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁，降低获取锁的代价。</p>
-<p>在大多数情况下，锁总是由同一线程多次获得，不存在多线程竞争，所以出现了偏向锁。其目标就是在只有一个线程执行同步代码块时能够提高性能。</p>
-<p>当一个线程访问同步代码块并获取锁时，会在Mark Word里存储锁偏向的线程ID。在线程进入和退出同步块时不再通过CAS操作来加锁和解锁，而是检测Mark Word里是否存储着指向当前线程的偏向锁。引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次CAS原子指令，而偏向锁只需要在置换ThreadID的时候依赖一次CAS原子指令即可。</p>
-<p>偏向锁只有遇到其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁，线程不会主动释放偏向锁。偏向锁的撤销，需要等待全局安全点（在这个时间点上没有字节码正在执行），它会首先暂停拥有偏向锁的线程，判断锁对象是否处于被锁定状态。撤销偏向锁后恢复到无锁（标志位为“01”）或轻量级锁（标志位为“00”）的状态。</p>
-<p>偏向锁在JDK 6及以后的JVM里是默认启用的。可以通过JVM参数关闭偏向锁：-XX:-UseBiasedLocking=false，关闭之后程序默认会进入轻量级锁状态。</p>
-<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>是指当锁是偏向锁的时候，被另外的线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，从而提高性能。</p>
-<p>在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁标志位为“01”状态，是否为偏向锁为“0”），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前的Mark Word的拷贝，然后拷贝对象头中的Mark Word复制到锁记录中。</p>
-<p>拷贝成功后，虚拟机将使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针，并将Lock Record里的owner指针指向对象的Mark Word。</p>
-<p>如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位设置为“00”，表示此对象处于轻量级锁定状态。</p>
-<p>如果轻量级锁的更新操作失败了，虚拟机首先会检查对象的Mark Word是否指向当前线程的栈帧，如果是就说明当前线程已经拥有了这个对象的锁，那就可以直接进入同步块继续执行，否则说明多个线程竞争锁。</p>
-<p>若当前只有一个等待线程，则该线程通过自旋进行等待。但是当自旋超过一定的次数，或者一个线程在持有锁，一个在自旋，又有第三个来访时，轻量级锁升级为重量级锁。</p>
-<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><p>升级为重量级锁时，锁标志的状态值变为“10”，此时Mark Word中存储的是指向重量级锁的指针，此时等待锁的线程都会进入阻塞状态。</p>
-<p>重量级锁通过对象内部的监视器(monitor)实现，其中monitor的本质是依赖于底层操作系统的Mutex Lock实现，操作系统实现线程之间的切换需要从用户态到内核态的切换，切换成本非常高。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>偏向锁通过对比Mark Word解决加锁问题，避免多次执行CAS操作。而轻量级锁是通过用CAS操作和自旋来解决加锁问题，避免线程阻塞和唤醒而影响性能。重量级锁是将除了拥有锁的线程以外的线程都阻塞。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://juejin.im/post/5b42c2546fb9a04f8751eabc" target="_blank" rel="noopener">Java并发——关键字synchronized解析</a><br><a href="http://cmsblogs.com/?p=2071" target="_blank" rel="noopener">【死磕Java并发】—–深入分析synchronized的实现原理</a><br><a href="https://blog.csdn.net/u012465296/article/details/53022317" target="_blank" rel="noopener">Java中synchronized的实现原理与应用</a><br><a href="https://www.jianshu.com/p/c5058b6fe8e5" target="_blank" rel="noopener">JVM源码分析之synchronized实现</a><br><a href="https://www.jianshu.com/p/9c19eb0ea4d8" target="_blank" rel="noopener">JVM源码分析之java对象头实现</a><br><a href="https://tech.meituan.com/Java_Lock.html" target="_blank" rel="noopener">不可不说的Java“锁”事</a><br><a href="https://blog.csdn.net/jingzi123456789/article/details/69951057" target="_blank" rel="noopener">JAVA并发：多线程编程之同步“监视器monitor”（三）</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2092,7 +2031,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2102,7 +2041,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-2.html">
+                <a href="/categories/index-1.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
