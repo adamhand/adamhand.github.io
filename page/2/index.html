@@ -259,6 +259,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java对象创建过程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/01/Java对象创建过程/" itemprop="url">Java对象创建过程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T10:30:02+08:00">
+                2019-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="对象创建的过程"><a href="#对象创建的过程" class="headerlink" title="对象创建的过程"></a>对象创建的过程</h1><p>在存在继承时，并且子类和父类中包括静态变量、静态代码块和普通代码块的时候，变量的初始过程如下：</p>
+<ul>
+<li>1 启动<code>JVM</code>；</li>
+<li>2 将主函数所在的<code>Test.class</code>文件加载进入方法区中，加载过程静态内容要加载进入静态区；</li>
+<li>3 执行<code>main</code>方法。<code>JVM</code>会将<code>main</code>方法加载到栈中，从第一行开始执行；</li>
+<li>4 执行<code>new Child()</code>。<code>JVM</code>会在方法区中查找是否有<code>Child</code>文件，如果没有就加载<code>Child.class</code>文件(从哪里加载呢？参见类加载过程)；如果<code>Child</code>有直接父类，首先查找父类是否存在方法区中，如果不在要先加载父类；<br><code>Child.class</code>和<code>Parent.class</code>中的所有的非静态内容会加载到非静态的区域中，而静态的内容会加载到静态区中。静态内容（静态变量，静态代码块，静态方法）按照书写顺序加载；</li>
+</ul>
+<p><em>说明：类的加载只会执行一次。下次再创建对象时，可以直接在方法区中获取<code>class</code>信息。</em></p>
+<ul>
+<li>5 开始给静态区中的所有静态的成员变量默认初始化。默认初始化完成之后，给所有的静态成员变量显示初始化；</li>
+<li>6 所有静态成员变量显示初始化完成之后，开始执行静态的代码块。先执行父类的静态代码块，再执行子类的静态代码块；</li>
+</ul>
+<p><em>说明：静态代码块是在类加载的时候执行的，类的加载只会执行一次所以静态代码块也只会执行一次；<br>非静态代码块和构造函数中的代码是在对象创建的时候执行的，因此对象创建(<code>new</code>)一次，它们就会执行一次。</em></p>
+<p>这时<code>Parent.class</code>文件 和 <code>Child.class</code>文件加载完成；</p>
+<ul>
+<li>7 开始在堆中创建<code>Child</code>对象。给<code>Child</code>对象分配内存空间，其实就是分配内存地址；</li>
+<li>8 为对象的成员变量进行默认初始化；</li>
+<li><p>9 调用对象的构造方法，执行<strong>隐式三步</strong>：</p>
+<ul>
+<li>(1)隐式<code>super()</code>，首先需要执行父类的构造函数，对父类进行构造函数初始化；</li>
+<li>(2)子类对象成员变量的显示初始化；</li>
+<li><p>(3)执行子类的构造代码块；</p>
+<p>接着才会执行子类构造代码块的剩余代码。<br>在第(1)步中，父类构造函数初始化的时候也有隐式三步，因为父类继承自超类<code>Object</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>10 将地址赋值给引用变量，对象初始化结束。</p>
+</li>
+</ul>
+<p>下面是一个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> NewAObject;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parent</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> staticNum = <span class="number">101</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Parent静态代码块：staticNum="</span>+staticNum);</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"Parent普通代码块：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Parent()&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        System.out.println(<span class="string">"Parent构造函数：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">        show();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Parent show函数：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> staticNum = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Child静态代码块：staticNum="</span>+staticNum);</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"Child普通代码块：num+"</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Child()&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="comment">//通过super初始化父类内容时，子类的成员并未显式初始化，而是父类初始化完毕时候才会进行显示初始化。</span></span><br><span class="line">        System.out.println(<span class="string">"Child构造函数：num="</span>+num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">        num++;</span><br><span class="line">        staticNum++;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Child show函数：num="</span>+ num+<span class="string">" "</span>+<span class="string">"staticNum="</span>+staticNum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewAObject</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Child child = <span class="keyword">new</span> Child();</span><br><span class="line">        child.show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上述代码的执行结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Parent静态代码块：staticNum=<span class="number">101</span></span><br><span class="line">Child静态代码块：staticNum=<span class="number">2</span></span><br><span class="line">Parent普通代码块：num=<span class="number">100</span> staticNum=<span class="number">102</span></span><br><span class="line">Parent构造函数：num=<span class="number">101</span> staticNum=<span class="number">103</span></span><br><span class="line">Child show函数：num=<span class="number">0</span> staticNum=<span class="number">3</span></span><br><span class="line">Child普通代码块：num+<span class="number">1</span> staticNum=<span class="number">3</span></span><br><span class="line">Child构造函数：num=<span class="number">2</span> staticNum=<span class="number">4</span></span><br><span class="line">Child show函数：num=<span class="number">3</span> staticNum=<span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>小结：对象的加载过程可简化为：</p>
+<ul>
+<li>父类（静态变量、静态语句块）</li>
+<li>子类（静态变量、静态语句块）</li>
+<li>父类（实例变量、普通语句块）</li>
+<li>父类（构造函数）</li>
+<li>子类（实例变量、普通语句块）</li>
+<li>子类（构造函数）</li>
+</ul>
+<hr>
+<p><strong>补充：为何java中static静态数据无法访问非static数据，但是反过来却可以</strong></p>
+<p>由上述过程可知，类在加载的时候会初始化static变量，但是没有对非static变量声明和初始化，也就是说，对static变量的初始化是先于对非static变量的初始化的。如果我们在static方法中调用类非static变量的话，就极有可能出错，当然java是不允许的。所以在编译阶段，就会报错。</p>
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/时间口袋/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1848,257 +2033,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/Netty系列-3-Netty传输/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/Netty系列-3-Netty传输/" itemprop="url">Netty系列(3)--Netty传输</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T16:59:59+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Netty/" itemprop="url" rel="index">
-                    <span itemprop="name">Netty</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Netty系列-3-–netty传输"><a href="#Netty系列-3-–netty传输" class="headerlink" title="Netty系列(3)–netty传输"></a>Netty系列(3)–netty传输</h1><hr>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>数据在网络中是以<strong>字节</strong>的形式传输的，这些字节如何流动取决于网络传输–一个将底层数据传输机制进行抽象的概念。</p>
-<p>Netty提供了诸多的传输方式，而且提供了通用API供用户调用。</p>
-<h1 id="Netty传输API"><a href="#Netty传输API" class="headerlink" title="Netty传输API"></a>Netty传输API</h1><p>传输API的核心是interfaceChannel，它被用于所有的I/O操作。Channel类的层次结构如图所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/netty-transport.PNG"><br></center>
-
-<p>如图所示，每个Channel都将被分配一个ChannelPipeline和ChannelConfig。ChannelConfig包含了该Channel的所有配置设置，并且支持热更新。</p>
-<p>ChannelPipeline持有所有将应用于入站和出站数据以及事件的ChannelHandler实例，这些ChannelHandler实现了应用程序用于处理状态变化以及数据处理的逻辑。</p>
-<p>ChannelHandler的典型用途包括：</p>
-<ul>
-<li>将数据从一种格式转为另外一种格式</li>
-<li>提供异常通知</li>
-<li>提供Channel变为活动或非活动的通知</li>
-<li>提供当Channel注册到EventLoop或者从EventLoop注销时通知</li>
-<li>提供有关用户自定义事件的通知</li>
-</ul>
-<p>Netty 所提供的广泛功能只依赖于少量的接口。这意味着，可以对应用程序逻辑进行重大的修改，而无需大规模的重构代码库。</p>
-<h1 id="Netty内置的传输"><a href="#Netty内置的传输" class="headerlink" title="Netty内置的传输"></a>Netty内置的传输</h1><p>Netty能够提供的传输包含以下几个：</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>描述</th>
-<th>使用场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>NIO</td>
-<td>使用Java.nio.channels包作为基础—————基于选择器的方式</td>
-<td>非阻塞代码库或一个常规的起点</td>
-</tr>
-<tr>
-<td>Epoll</td>
-<td>由JNI驱动的epoll()和非阻塞IO。这个传输支持只有在Linux上可用的多种特性。如SO_Reuseport，比NIO传输更快且完全非阻塞的</td>
-<td>非阻塞代码库或一个常规的起点(在Linux上)</td>
-</tr>
-<tr>
-<td>OIO</td>
-<td>使用java.net包作为基础—————使用阻塞流</td>
-<td>阻塞代码库</td>
-</tr>
-<tr>
-<td>Local</td>
-<td>可以在VM内部通过管道进行通信的文本传输</td>
-<td>同一个JVM内部通信</td>
-</tr>
-<tr>
-<td>Embedded</td>
-<td>Embedded传输，允许使用ChannelHandler而又不需要真正的基于网络的传输。这在测试ChannelHandler时很有用</td>
-<td>测试ChannelHandler</td>
-</tr>
-</tbody>
-</table>
-<h2 id="NIO–非阻塞I-O"><a href="#NIO–非阻塞I-O" class="headerlink" title="NIO–非阻塞I/O"></a>NIO–非阻塞I/O</h2><p>NIO的使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">EventLoopGroup goup = <span class="keyword">new</span> NioEventLoopGroup();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">new</span> ServerBootstrap().channel(NioServerSockerChannel.class) <span class="comment">//服务端</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Bootstrap().channel(NioSockerChannel.class) <span class="comment">//客户端</span></span><br></pre></td></tr></table></figure></p>
-<p>NIO提供了一个所有I/O操作的全异步实现。选择器背后的概念相当于一个“注册表”，在那里你可以请求在Channel的状态发生变化时得到通知。可能的状态有：</p>
-<ul>
-<li>新的Channel已被接受并且就绪</li>
-<li>Channel连接已经完成</li>
-<li>Channel有已经就绪的可供读取的数据</li>
-<li>Channel可用于写数据</li>
-</ul>
-<p>状态变化集的定义如下：</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OP_ACCEPT</td>
-<td>请求在接受新连接并创建Channel时获得通知</td>
-</tr>
-<tr>
-<td>OP_CONNECT</td>
-<td>请求在建立一个连接时获得通知</td>
-</tr>
-<tr>
-<td>OP_READ</td>
-<td>请求当数据已就绪 ，可以在Channel中读取数据时获得通知</td>
-</tr>
-<tr>
-<td>OP_WRITE</td>
-<td>请求当可以向Channel中写更多数据时获得通知。这处理了套接字缓冲区被完全填满时的情况，该情况通知发生在数据的发送速度比远程节点可处理的速度更快时</td>
-</tr>
-</tbody>
-</table>
-<p>选择并处理状态变化集的过程如下：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/netty-selector.PNG"><br></center>
-
-<h2 id="Epoll————用于LINUX的本地非阻塞传输"><a href="#Epoll————用于LINUX的本地非阻塞传输" class="headerlink" title="Epoll————用于LINUX的本地非阻塞传输"></a>Epoll————用于LINUX的本地非阻塞传输</h2><p>Netty为Linux提供了一组NIO API，其以一种和它本身的设计更加一致的方法使用epoll，并且以一种更加轻量的方式使用中断。如果应用程序指在运行于linux系统，应首先利用这个传输；在高负载下它的性能要优于JDK的NIO实现。</p>
-<p>epoll的使用：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">EventLoopGroup group = <span class="keyword">new</span> EpollEventLoopGroup();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">new</span> ServerBootstrap().channel(EpollServerSocketChannel.class) <span class="comment">//服务端</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Bootstrap().channel(EpollSocketChannel.class) <span class="comment">//客户端</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<h2 id="OIO–旧的阻塞I-O"><a href="#OIO–旧的阻塞I-O" class="headerlink" title="OIO–旧的阻塞I/O"></a>OIO–旧的阻塞I/O</h2><p>Netty是如何能够使用和用于异步传输相同的API来支持OIO的呢？</p>
-<p>在NIO中，一个 EventLoop 对应一个线程，一个Channel 绑定一个 EventLoop，而一个EventLoop 可以绑定多个Channel 来实现异步，也就是说一个线程可以处理多个 Channel。而OIO中，一个 EventLoop 仅绑定一个 Channel，也就是说每个线程只处理一个Channel ，这就有点像传统IO中，在服务端（ServerSocket）写了一个多线程来处理客户端的并发请求。</p>
-<p>现在还有一个问题，channel是双向的，既可以读，也可以写。而stream是单向的，OIO中利用 InputStream 来读，OutputStream 来写。那么Channel 是如何实现阻塞的读和写的呢？答案就是， Netty利用了<strong>SO_TIMEOUT</strong>这个Socket标志，<strong>它指定了等待一个I/O操作完成的最大毫秒数,I/O 操作期间Channel是阻塞的，如果操作在指定的时间间隔内没有完成，则将会抛出一个SocketTimeout Exception。 Netty将捕获这个异常并继续处理循环。在EventLoop下一次运行时，它将再次尝试。</strong>这实际上也是类似于Netty这样的异步框架能够支持OIO的唯一方式。</p>
-<p>OIO的使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">EventLoopGroup group = <span class="keyword">new</span> OioEventLoopGroup();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">new</span> ServerBootstrap().channel(OioServerSocketChannel.class)  <span class="comment">//服务端</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Bootstrap().channel(OioSocketChannel.class)  <span class="comment">//客户端</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>OIO的处理逻辑如下图所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/netty-oio.PNG"><br></center>
-
-<p>##Local —— 用于 JVM 内部通信的 Local 传输<br>Netty 提供了一个Local传输， 用于在同一个 JVM 中运行的客户端和服务器程序之间的异步通信。</p>
-<p> 在这个传输中，和服务器 Channel 相关联的 SocketAddress 并没有绑定物理网络地址；相反，只要服务器还在运行， 它就会被存储在注册表里，并在 Channel 关闭时注销。 因为这个传输并不接受真正的网络流量，所以它并不能够和其他传输实现进行互操作。因此，客户端希望连接到（在同一个 JVM 中）使用了这个传输的服务器端时也必须使用它。</p>
-<p>Local的使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">EventLoopGroup group = <span class="keyword">new</span> DefaultEventLoop();</span><br><span class="line">...</span><br><span class="line"><span class="keyword">new</span> ServerBootstrap().channel(LocalServerChannel.class) <span class="comment">//服务端</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Bootstrap().channel(LocalChannel.class) <span class="comment">//客户端</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<h2 id="Embedded"><a href="#Embedded" class="headerlink" title="Embedded"></a>Embedded</h2><p>Netty 提供了一种额外的传输， 使得你可以将一组 ChannelHandler 作为帮助器类嵌入到其他的 ChannelHandler 内部。 通过这种方式，你将可以扩展一个 ChannelHandler 的功能，而又不需要修改其内部代码。</p>
-<p>Embedded 传输的关键是一个被称为 EmbeddedChannel 的具体的Channel实现。</p>
-<p>如果你想要为自己的 ChannelHandler 实现编写单元测试， 那么请考虑使用 Embedded 传输。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《Netty 实战》</p>
-<p><a href="https://www.jianshu.com/p/9581068f9739" target="_blank" rel="noopener">《Netty实战》–传输</a></p>
-<p><a href="https://www.cnblogs.com/jmcui/p/9171733.html" target="_blank" rel="noopener">Netty 系列二（传输）.</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2149,7 +2083,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2159,7 +2093,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-1.html">
+                <a href="/categories/index-3.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
