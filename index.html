@@ -259,6 +259,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/RabbitMQ系列-2-交换器/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/02/RabbitMQ系列-2-交换器/" itemprop="url">RabbitMQ系列(2)--交换器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-02T11:31:38+08:00">
+                2019-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">RabbitMQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="RabbitMQ系列-2-–交换器"><a href="#RabbitMQ系列-2-–交换器" class="headerlink" title="RabbitMQ系列(2)–交换器"></a>RabbitMQ系列(2)–交换器</h1><hr>
+<h1 id="几个概念"><a href="#几个概念" class="headerlink" title="几个概念"></a>几个概念</h1><ul>
+<li>QUeue：队列。用于存储消息。</li>
+<li>Exchange：交换器。用于将生产者生产的消息路由到一个或多个队列中。</li>
+<li>Routing Key：路由键。用于指定某个消息的路由规则。Routing Key需要和Binding Key联合使用</li>
+<li>Binding：绑定。RabbitMQ中通过绑定将交换器和队列关联起来，在绑定的时候一般会指定一个绑定建(Binding Key)，这样交换器就会知道如何将消息路由到队列了。在绑定多个队列到一个交换器的时候，允许使用相同的Binding Key。</li>
+</ul>
+<p><strong>可以用一个形象的比喻来描述路由过程</strong>：<strong>交换器</strong>相当于投递包裹的邮箱，<strong>Routing Key</strong>相当于填写在包裹上的地址，<strong>Binding Key</strong>相当于包裹的目的地址，当填写在包裹上的地址和包裹的实际地址相匹配时，这个包裹才会被正确投递到目的地。这个包裹的“主人”——<strong>Queue</strong>可以保留这个包裹。</p>
+<p>如果填写的地址出错，没有找到匹配的目的地址，包裹便不能被正确投递，有可能会还给寄件人，有可能会被丢弃。</p>
+<h1 id="交换器类型"><a href="#交换器类型" class="headerlink" title="交换器类型"></a>交换器类型</h1><p>RabbitMQ常用的交换器类型有fanout、direct、topic、headers这四种。AMQP协议里还有另外两种类型：System和自定义，但是不是很常用。</p>
+<h2 id="fanout"><a href="#fanout" class="headerlink" title="fanout"></a>fanout</h2><p>会将所有发送到该交换器的消息路由到所有与该交换器绑定的队列中。很像子网广播，每台子网内的主机都获得了一份复制的消息。Fanout交换机转发消息是最快的。 </p>
+<h2 id="direct"><a href="#direct" class="headerlink" title="direct"></a>direct</h2><p>direct类型的交换机会将消息路由到那些Binding Key和Routing Key<strong>完全匹配</strong>的队列中。</p>
+<p>如下图所示，交换器的类型为direct，如果某条消息的路由键为“warning”，则消息会路由到Queue1和Queue2中；如果设置路由键为“info”或者“debug”，消息只会路由到Queue2。</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/direct-exchange.PNG"><br></center>
+
+<h2 id="topic"><a href="#topic" class="headerlink" title="topic"></a>topic</h2><p>direct中的路由方式是RoutingKey和BindingKey的<strong>完全匹配</strong>，而topic提供了一种更为宽松的“<strong>模糊匹配</strong>”方式。</p>
+<p>在topic中，每一个RoutingKey和BindingKey都做是一个被“.”分隔的字符串（被“.”分隔的每一个独立的字符串都成为一个<strong>单词</strong>）。比如“java.util.concurrent”。</p>
+<p>BindingKey中可以存在两种特殊字符串“<code>*</code>”和“<code>#</code>”用作模糊匹配。其中<strong>“<code>*</code>”用于匹配一个单词，“<code>#</code>”用于匹配多个单词，也可以是0个</strong>。</p>
+<p>如下图所示，</p>
+<ul>
+<li>路由键”com.rabbitmq.client”的消息只会被路由到Queue1和Queue2</li>
+<li>路由键”com.hiddin.client”的消息只会被路由到Queue2</li>
+<li>路由键”com.hiddin.demo”的消息只会被路由到Queue2</li>
+<li>路由键”java.rabbitmq.demo”的消息只会被路由到Queue1</li>
+<li>路由键”java.util.concurrent”的消息会被丢弃或返回给生产者，具体需要设置mandatory参数</li>
+</ul>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/topic-exchange.PNG"><br></center>
+
+<h2 id="headers"><a href="#headers" class="headerlink" title="headers"></a>headers</h2><p>headers属性的交换器不依赖与路由键的规则来路由消息，而是根据发送的消息内容中的headers属性进行匹配。</p>
+<p>在绑定队列和交换器的时候指定一组键值对，当发送消息到交换机时，RabbitMQ会获得消息中的headers(也是一个键值对)属性，对比其中的键值对是否完全匹配队列和交换机绑定时指定的键值对，如果完全匹配会将消息路由到该队列，否则不会进行路由。</p>
+<p>headers交换机的性能很差且不实用，基本上不会被用到。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《RabbitMQ实战指南》<br><a href="https://blog.csdn.net/fxq8866/article/details/62049393/" target="_blank" rel="noopener">【RabbitMQ】三种类型交换器 Fanout,Direct,Topic</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java并发-4-阻塞队列/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1954,156 +2127,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/慎用异或-的方式交换两个数的值/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/慎用异或-的方式交换两个数的值/" itemprop="url">慎用异或(^)的方式交换两个数的值</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:57:03+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/杂/" itemprop="url" rel="index">
-                    <span itemprop="name">杂</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>一般认为用异或的方式交换两个数的值不需要辅助空间，面试的时候是个好说法。但是这种方法却不很实用，因为有时候使用异或的方式交换两个数的值会出现错误的情况，下面举个例子。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectionSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] nums)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> min ;</span><br><span class="line">        <span class="keyword">int</span> temp;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            min = i;                                 <span class="comment">//记录最小元素的位置</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[j] &lt; nums[min]) &#123;</span><br><span class="line">                    min = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            nums[i] = nums[i] ^ nums[min];</span><br><span class="line">            nums[min] = nums[i] ^ nums[min];</span><br><span class="line">            nums[i] = nums[i] ^ nums[min];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] nums = &#123;<span class="number">34</span>, <span class="number">19</span>, <span class="number">11</span>, <span class="number">109</span>, <span class="number">3</span>, <span class="number">56</span>&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">            System.out.print(nums[i]+<span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println();</span><br><span class="line"></span><br><span class="line">        SelectionSort.sort(nums);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++)&#123;</span><br><span class="line">            System.out.print(nums[i]+<span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>例如上面这个例子，是一个快速排序的算法。该程序的输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">34 19 11 109 3 56 </span><br><span class="line">3 11 0 34 56 109</span><br></pre></td></tr></table></figure></p>
-<p>可以看到，排序之后的19变成0了。问题就出在异或的地方。因为在其中一次循环完成之后，<code>min=i=2</code>，这时执行异或的语句就相当于<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nums[<span class="number">2</span>] = nums[<span class="number">2</span>] ^ nums[<span class="number">2</span>];            <span class="comment">//结果为0</span></span><br><span class="line">nums[<span class="number">2</span>] = nums[<span class="number">2</span>] ^ nums[<span class="number">2</span>];            <span class="comment">//结果为0</span></span><br><span class="line">nums[<span class="number">2</span>] = nums[<span class="number">2</span>] ^ nums[<span class="number">2</span>];            <span class="comment">//结果为0</span></span><br></pre></td></tr></table></figure></p>
-<p>就出现了错误。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2149,7 +2177,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2159,7 +2187,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-1.html">
+                <a href="/categories/index-2.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
