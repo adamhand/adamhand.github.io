@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Dethnote">
 <meta property="og:description" content="21. 正则表达式匹配题目描述：&amp;emsp; 请实现一个函数用来匹配包含&amp;#39;.&amp;#39;和&amp;#39;*&amp;#39;的正则表达式。模式中的字符‘.’表示任意一个字符，而&amp;#39;*&amp;#39;表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串&amp;quot;aaa&amp;quot;与模式&amp;quot;a.a&amp;quot;和&amp;quot;ab*ac*a&amp;quot;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-04T13:26:16.292Z">
+<meta property="og:updated_time" content="2019-01-04T13:32:20.276Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《剑指off》题目小结(5)">
 <meta name="twitter:description" content="21. 正则表达式匹配题目描述：&amp;emsp; 请实现一个函数用来匹配包含&amp;#39;.&amp;#39;和&amp;#39;*&amp;#39;的正则表达式。模式中的字符‘.’表示任意一个字符，而&amp;#39;*&amp;#39;表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串&amp;quot;aaa&amp;quot;与模式&amp;quot;a.a&amp;quot;和&amp;quot;ab*ac*a&amp;quot;">
@@ -380,15 +380,9 @@
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNumeric_1</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Double number = Double.parseDouble(<span class="keyword">new</span> String(str));</span><br><span class="line">    &#125;<span class="keyword">catch</span> (NumberFormatException e)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>思路三：使用正则表达式。<br>[]  ： 字符集合<br>()  ： 分组<br>?   ： 重复 0 ~ 1</p>
-<ul>
-<li>： 重复 1 ~ n</li>
-</ul>
-<ul>
-<li>： 重复 0 ~ n<br>.   ： 任意字符<br>\. ： 转义后的 .<br>\d ： 数字<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNumeric_2</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(str).matches(<span class="string">"[+-]?\\d*(\\.\\d+)?([eE][+-]?\\d+)?"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+<p>思路三：使用正则表达式。<br><code>[]</code>  ： 字符集合<br><code>()</code>  ： 分组<br><code>?</code>   ： 重复 0 ~ 1<br><code>+</code>   ： 重复 1 ~ n<br><code>*</code>   ： 重复 0 ~ n<br><code>.</code>   ： 任意字符<br><code>\\.</code> ： 转义后的 .<br><code>\\d</code> ： 数字</p>
 </blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNumeric_2</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(str).matches(<span class="string">"[+-]?\\d*(\\.\\d+)?([eE][+-]?\\d+)?"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="23-字符流中第一个不重复的字符"><a href="#23-字符流中第一个不重复的字符" class="headerlink" title="23. 字符流中第一个不重复的字符"></a>23. 字符流中第一个不重复的字符</h1><p>题目描述：<br>&emsp; 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符”go”时，第一个只出现一次的字符是”g”。当从该字符流中读出前六个字符“google”时，第一个只出现一次的字符是”l”。 </p>
 <hr>
 <blockquote>
