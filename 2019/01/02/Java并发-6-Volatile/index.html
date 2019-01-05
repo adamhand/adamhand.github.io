@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Dethnote">
 <meta property="og:description" content="Java并发之volatile 综述volatile让变量每次在使用的时候，都从主存中取。而不是从各个线程的“工作内存”。Volatile 变量具有 synchronized 的可见性性和有序性，但是不具备原子特性，所以，volatile变量并不保证并发的正确性。 在Java内存模型中，有main memory，每个线程也有自己的memory (例如寄存器)。为了性能，一个线程会在自己的memor">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-02T11:00:26.501Z">
+<meta property="og:updated_time" content="2019-01-05T14:07:02.511Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发(6)--Volatile">
 <meta name="twitter:description" content="Java并发之volatile 综述volatile让变量每次在使用的时候，都从主存中取。而不是从各个线程的“工作内存”。Volatile 变量具有 synchronized 的可见性性和有序性，但是不具备原子特性，所以，volatile变量并不保证并发的正确性。 在Java内存模型中，有main memory，每个线程也有自己的memory (例如寄存器)。为了性能，一个线程会在自己的memor">
@@ -406,7 +406,6 @@
 <tr>
 <td>Java代码：</td>
 <td>instance = new Singleton();    //instance是volatile变量</td>
-<td></td>
 </tr>
 <tr>
 <td>汇编代码：</td>
