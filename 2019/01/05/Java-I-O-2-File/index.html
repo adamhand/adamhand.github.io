@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="三、磁盘操作——FileFile 类可以用于表示文件和目录的信息，但是它不表示文件的内容。 基本操作文件或文件夹的创建主要涉及到三个方法：   createNewFile()：创建文件，这句话后，才真正在磁盘上创建了文件。 mkdir()：//创建目录，如果新建的目录的上级目录不存在会报异常不能成功创建文件夹。 mkdirs()：//创建目录，如果新建的目录的上级目录不存在则会将目录与上级目录一起">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java I&#x2F;O(2)--File">
+<meta property="og:url" content="http://yoursite.com/2019/01/05/Java-I-O-2-File/index.html">
+<meta property="og:site_name" content="Dethnote">
+<meta property="og:description" content="三、磁盘操作——FileFile 类可以用于表示文件和目录的信息，但是它不表示文件的内容。 基本操作文件或文件夹的创建主要涉及到三个方法：   createNewFile()：创建文件，这句话后，才真正在磁盘上创建了文件。 mkdir()：//创建目录，如果新建的目录的上级目录不存在会报异常不能成功创建文件夹。 mkdirs()：//创建目录，如果新建的目录的上级目录不存在则会将目录与上级目录一起">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-05T13:53:01.807Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java I&#x2F;O(2)--File">
+<meta name="twitter:description" content="三、磁盘操作——FileFile 类可以用于表示文件和目录的信息，但是它不表示文件的内容。 基本操作文件或文件夹的创建主要涉及到三个方法：   createNewFile()：创建文件，这句话后，才真正在磁盘上创建了文件。 mkdir()：//创建目录，如果新建的目录的上级目录不存在会报异常不能成功创建文件夹。 mkdirs()：//创建目录，如果新建的目录的上级目录不存在则会将目录与上级目录一起">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/05/Java-I-O-2-File/">
+
+
+
+
+
+  <title>Java I/O(2)--File | Dethnote</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Dethnote</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/Java-I-O-2-File/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java I/O(2)--File</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-05T21:52:37+08:00">
+                2019-01-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="三、磁盘操作——File"><a href="#三、磁盘操作——File" class="headerlink" title="三、磁盘操作——File"></a>三、磁盘操作——File</h1><p>File 类可以用于表示文件和目录的信息，但是它不表示文件的内容。</p>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="文件或文件夹的创建"><a href="#文件或文件夹的创建" class="headerlink" title="文件或文件夹的创建"></a>文件或文件夹的创建</h3><p>主要涉及到三个方法：</p>
+<blockquote>
+<ul>
+<li>createNewFile()：创建文件，这句话后，才真正在磁盘上创建了文件。</li>
+<li>mkdir()：//创建目录，如果新建的目录的上级目录不存在会报异常不能成功创建文件夹。</li>
+<li>mkdirs()：//创建目录，如果新建的目录的上级目录不存在则会将目录与上级目录一起创建。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createFile</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	<span class="comment">//创建了file对象并不是创建了真实的文件，执行这句话后，如果文件不存在，并没有创建</span></span><br><span class="line">	File file = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/FileTest/createFile.txt"</span>);</span><br><span class="line">	File dir = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/FileTest/dir"</span>);</span><br><span class="line">	File dir_1 = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/FileTest/dir_1/a.txt"</span>);</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		file.createNewFile();  <span class="comment">//创建文件，这句话后，才真正在磁盘上创建了文件</span></span><br><span class="line">	<span class="keyword">if</span>(!dir.exists())</span><br><span class="line">		dir.mkdir();          <span class="comment">//创建目录，如果新建的目录的上级目录不存在会报异常不能成功创建文件夹</span></span><br><span class="line">	<span class="keyword">if</span>(!dir_1.exists())</span><br><span class="line">		dir_1.mkdirs();       <span class="comment">//创建目录，如果新建的目录的上级目录不存在则会将目录与上级目录一起创建。  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<h3 id="判断文件或文件夹属性"><a href="#判断文件或文件夹属性" class="headerlink" title="判断文件或文件夹属性"></a>判断文件或文件夹属性</h3><p>isFile()和isDirectory()分别用于判断是不是文件和是不是文件夹，canRead(),canWrite(),isHidden(),分别用于判断文件是否可读，可写，是否隐藏。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">judgeFile</span><span class="params">(File file)</span> </span>&#123;</span><br><span class="line">	file.setReadable(<span class="keyword">true</span>);     <span class="comment">//设置文件可读</span></span><br><span class="line">	file.setWritable(<span class="keyword">false</span>);    <span class="comment">//设置文件不可写</span></span><br><span class="line">	System.out.println(file.isFile());   <span class="comment">//判断是不是文件</span></span><br><span class="line">	System.out.println(file.isDirectory()); <span class="comment">//判断是不是路径</span></span><br><span class="line">	System.out.println(file.isHidden());  <span class="comment">//判断是不是隐藏文件</span></span><br><span class="line">	System.out.println(file.canRead());  <span class="comment">//判断是不是可读</span></span><br><span class="line">	System.out.println(file.canWrite()); <span class="comment">//判断是不是可写</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="文件或文件夹的删除"><a href="#文件或文件夹的删除" class="headerlink" title="文件或文件夹的删除"></a>文件或文件夹的删除</h3><p>删除一个文件比较简单，直接判断文件是否存在，如果存在的话就删除，如果文件不存在可以不用操作。但是删除一个文件夹比较麻烦，我们不能够直接的删除一个文件夹，删除文件夹时必须保证该文件夹为空，也就是说文件夹里面的文件和文件夹要全部被删除之后才能够删除该文件夹。</p>
+<p>递归删除一个文件或路径<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除文件或路径，参数为File</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> file</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">removeFiles</span><span class="params">(File file)</span> </span>&#123;</span><br><span class="line">	File[] files = file.listFiles();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(File f : files) &#123;</span><br><span class="line">		<span class="keyword">if</span>(f.isDirectory())</span><br><span class="line">			removeFiles(f);</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			System.out.println(f+<span class="string">":"</span>+f.delete());</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println(file+<span class="string">":"</span>+file.delete());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除文件或路径，参数为路径的字符串表示</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dir</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteFiles</span><span class="params">(String dir)</span> </span>&#123;</span><br><span class="line">	File file = <span class="keyword">new</span> File(dir);</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(file.isFile())</span><br><span class="line">		System.out.println(file+<span class="string">":"</span>+file.delete());</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(file.isDirectory()) &#123;</span><br><span class="line">		File[] files = file.listFiles();</span><br><span class="line">		<span class="keyword">for</span>(File f : files) &#123;</span><br><span class="line">			System.out.print(<span class="string">":"</span>+f.getAbsolutePath());</span><br><span class="line">			deleteFiles(f.getAbsolutePath());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	System.out.println(file+<span class="string">":"</span>+file.delete());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="和流的联合使用"><a href="#和流的联合使用" class="headerlink" title="和流的联合使用"></a>和流的联合使用</h3><p>将一个文件中的内容复制到另一个文件中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        String fromPath = <span class="string">"/usr/Prom/eclipse/testAll/src/IO/from.txt"</span>;</span><br><span class="line">        String toPath = <span class="string">"/usr/Prom/eclipse/testAll/src/IO/to.txt"</span>;</span><br><span class="line"></span><br><span class="line">        readWriteDemo(fromPath, toPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readWriteDemo</span><span class="params">(String fromPath, String toPath)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        File fileFrom = <span class="keyword">new</span> File(fromPath);</span><br><span class="line">        File fileTo = <span class="keyword">new</span> File(toPath);</span><br><span class="line">        <span class="keyword">if</span>(!fileFrom.exists())</span><br><span class="line">        	fileFrom.createNewFile();</span><br><span class="line">        <span class="keyword">if</span>(!fileTo.exists())</span><br><span class="line">        	fileTo.createNewFile();</span><br><span class="line">    	</span><br><span class="line">    	FileReader fr = <span class="keyword">null</span>;</span><br><span class="line">        FileWriter fw = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            fr = <span class="keyword">new</span> FileReader(fileFrom);</span><br><span class="line">            fw = <span class="keyword">new</span> FileWriter(fileTo);</span><br><span class="line">            <span class="comment">//注意和FileInputStream不同的是，这里读取的是字符，所以要新建字符数组做缓冲区。</span></span><br><span class="line">            <span class="keyword">char</span>[] buf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>((len = fr.read(buf)) != -<span class="number">1</span>)&#123;</span><br><span class="line">                fw.write(buf, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(fr != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    fr.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(fw != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    fw.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="文件过滤器"><a href="#文件过滤器" class="headerlink" title="文件过滤器"></a>文件过滤器</h2><p>在java中,专门提供了文件过滤器接口.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> interface FilenameFilter　　　　<span class="title">accept</span><span class="params">(File dirs,String name)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> interface FileFilter　　　　　　　<span class="title">accept</span><span class="params">(File pathname)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>下面看具体的应用。</p>
+<p>需要注意list方法和listFiles方法的两点区别：</p>
+<blockquote>
+<ul>
+<li>返回值类型不同：前者为String数组，后者为File对象数组 </li>
+<li>数组中元素内容不同：前者为string类型的【文件名】（包含后缀名），后者为File对象类型的【完整路径】。<br>因此，遍历文件夹中所有文件，包括子文件夹中的文件时，必须用listFiles（）方法</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 后缀名过滤</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">fileFilterDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	File dir = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/FileFilter/11"</span>);</span><br><span class="line">	<span class="keyword">if</span>(!dir.exists())</span><br><span class="line">		dir.mkdirs();</span><br><span class="line">	<span class="comment">//list方法的参数不能为FileFlter</span></span><br><span class="line">	File[] fileList = dir.listFiles(<span class="keyword">new</span> FileFilter() &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">accept</span><span class="params">(File pathname)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> !pathname.isHidden();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(File f : fileList) &#123;</span><br><span class="line">		System.out.println(f);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 隐藏文件过滤</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">fileNameFilterDemo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	File dir = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/FileFilter/11"</span>);</span><br><span class="line">	<span class="keyword">if</span>(!dir.exists())</span><br><span class="line">		dir.mkdirs();</span><br><span class="line">	<span class="comment">//使用listFiles方法也行</span></span><br><span class="line">	String[] fileList = dir.list(<span class="keyword">new</span> FilenameFilter() &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">accept</span><span class="params">(File dir, String name)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> name.endsWith(<span class="string">".java"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(String f : fileList) &#123;</span><br><span class="line">		System.out.println(f);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="File和Properties"><a href="#File和Properties" class="headerlink" title="File和Properties"></a>File和Properties</h2><p>Properties继承自Hashtable，属于Map体系，主要用于生产配置文件与读取配置文件的信息。它可以和IO流结合，从流中读取配置文件的信息加载到Properties对象中，在对象中完成对配置文件中信息的修改后再通过流将信息写入到文件中，相当于是一个中间的操作过程。Properties中的键和值都是字符串类型。</p>
+<p>看一下具体的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	String filePath = <span class="string">"/usr/Prom/eclipse/testAll/src/FileFilter/test.properties"</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//创建File对象，配置文件的后缀名一般也叫properties</span></span><br><span class="line">	File file = <span class="keyword">new</span> File(filePath);</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		file.createNewFile();</span><br><span class="line">	</span><br><span class="line">	creatProperties(file);</span><br><span class="line">	</span><br><span class="line">	readProperties(file);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//读取配置文件的信息 </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readProperties</span><span class="params">(File file)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//创建Properties对象</span></span><br><span class="line">	Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">	<span class="comment">//加载配置文件信息到Properties中</span></span><br><span class="line">	properties.load(<span class="keyword">new</span> FileReader(file));</span><br><span class="line">	<span class="comment">//遍历</span></span><br><span class="line">	Set&lt;Entry&lt;Object, Object&gt;&gt; entrys = properties.entrySet();</span><br><span class="line">	<span class="keyword">for</span>(Entry&lt;Object, Object&gt; entry  :entrys)&#123;</span><br><span class="line">		System.out.println(<span class="string">"键："</span>+ entry.getKey() +<span class="string">" 值："</span>+ entry.getValue());</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//修改狗娃的密码</span></span><br><span class="line">	properties.setProperty(<span class="string">"狗娃"</span>, <span class="string">"007"</span>);</span><br><span class="line">	<span class="comment">//把修改后的Properties写回配置文件</span></span><br><span class="line">	properties.store(<span class="keyword">new</span> FileWriter(file), <span class="string">"info"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//保存配置文件文件的信息。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">creatProperties</span><span class="params">(File file)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//创建Properties</span></span><br><span class="line">	Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">	properties.setProperty(<span class="string">"狗娃"</span>, <span class="string">"123"</span>);</span><br><span class="line">	properties.setProperty(<span class="string">"狗剩"</span>,<span class="string">"234"</span>);</span><br><span class="line">	properties.setProperty(<span class="string">"铁蛋"</span>,<span class="string">"345"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//第一个参数是一个输出流对象，第二参数是使用一个字符串描述这个配置文件的信息。</span></span><br><span class="line">	properties.store(<span class="keyword">new</span> FileWriter(file), <span class="string">"info"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另一个例子：定义功能，获取一个应用程序运行的次数，如果超过3次，给出使用次数已到请注册的提示。并不要在运行<br>程序。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetCounts</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		String filePath = <span class="string">"/usr/Prom/eclipse/testAll/src/FileFilter/times.properties"</span>;</span><br><span class="line">		</span><br><span class="line">		getCounts(filePath);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getCounts</span><span class="params">(String filePath)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		File file = <span class="keyword">new</span> File(filePath);</span><br><span class="line">		<span class="keyword">if</span>(!file.exists())&#123;</span><br><span class="line">			<span class="comment">//如果配置文件不存在，则创建该配置文件</span></span><br><span class="line">			file.createNewFile();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//创建Properties对象。</span></span><br><span class="line">		Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">		<span class="comment">//把配置文件的信息加载到properties中</span></span><br><span class="line">		properties.load(<span class="keyword">new</span> FileInputStream(file));</span><br><span class="line">		FileOutputStream fileOutputStream = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> count = <span class="number">0</span>; <span class="comment">//定义该变量是用于保存软件的运行次数的。</span></span><br><span class="line">		<span class="comment">//读取配置文件的运行次数</span></span><br><span class="line">		String value = properties.getProperty(<span class="string">"count"</span>);</span><br><span class="line">		<span class="keyword">if</span>(value!=<span class="keyword">null</span>)&#123;</span><br><span class="line">			count = Integer.parseInt(value);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//判断使用的次数是否已经达到了三次，</span></span><br><span class="line">		<span class="keyword">if</span>(count==<span class="number">3</span>)&#123;</span><br><span class="line">			System.out.println(<span class="string">"你已经超出了试用次数，请购买正版软件！！"</span>);</span><br><span class="line">			System.exit(<span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		count++;</span><br><span class="line">		System.out.println(<span class="string">"你已经使用了本软件第"</span>+count+<span class="string">"次"</span>);</span><br><span class="line">		properties.setProperty(<span class="string">"count"</span>,count+<span class="string">""</span>);</span><br><span class="line">		<span class="comment">//使用Properties生成一个配置文件</span></span><br><span class="line">		properties.store(fileOutputStream,<span class="string">"runtime"</span>);</span><br><span class="line">		</span><br><span class="line">		fileOutputStream.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="流和File综合练习"><a href="#流和File综合练习" class="headerlink" title="流和File综合练习"></a>流和File综合练习</h2><p>实现两个函数，一个实现文件切割功能，一个实现文件合并功能。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIZE = <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	File file = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/FileFilter/fate.mp3"</span>);</span><br><span class="line">	File dir = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/"</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		file.createNewFile();</span><br><span class="line">	<span class="keyword">if</span>(!dir.exists())</span><br><span class="line">		dir.mkdirs();</span><br><span class="line">	</span><br><span class="line">	spiliteFile(file);</span><br><span class="line">	</span><br><span class="line">	mergeFile(dir);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 切割文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> file</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">spiliteFile</span><span class="params">(File file)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!file.exists())</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 用读取流关联源文件。</span></span><br><span class="line">	FileInputStream fis = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">	<span class="comment">// 定义一个1M的缓冲区。</span></span><br><span class="line">	<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[SIZE];</span><br><span class="line">	<span class="comment">// 创建目的。</span></span><br><span class="line">	FileOutputStream fos = <span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	* 切割文件时，必须记录住被切割文件的名称，以及切割出来碎片文件的个数。 以方便于合并。</span></span><br><span class="line"><span class="comment">	* 这个信息为了进行描述，使用键值对的方式。用到了properties对象</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	Properties prop = <span class="keyword">new</span> Properties();</span><br><span class="line">	File dir = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src"</span>);</span><br><span class="line">	<span class="keyword">if</span> (!dir.exists())</span><br><span class="line">		dir.mkdirs();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">while</span> ((len = fis.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">		fos = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(dir, (count++) + <span class="string">".part"</span>));</span><br><span class="line">		fos.write(buf, <span class="number">0</span>, len);</span><br><span class="line">		fos.close();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将被切割文件的信息保存到prop集合中。</span></span><br><span class="line">	prop.setProperty(<span class="string">"partcount"</span>, count+<span class="string">""</span>);</span><br><span class="line">	prop.setProperty(<span class="string">"filename"</span>, file.getName());</span><br><span class="line">	fos = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(dir,count+<span class="string">".properties"</span>));</span><br><span class="line">	<span class="comment">//将prop集合中的数据存储到文件中。</span></span><br><span class="line">	prop.store(fos, <span class="string">"save file info"</span>);</span><br><span class="line">	fos.close();</span><br><span class="line">	fis.close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 合并文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> dir</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> IOException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mergeFile</span><span class="params">(File dir)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	* 获取指定目录下的配置文件对象。</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	File[] files = dir.listFiles(<span class="keyword">new</span> SuffixFilter(<span class="string">".properties"</span>));</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(files.length != <span class="number">1</span>)</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(dir+<span class="string">",该目录下没有properties扩展名的文件或者不唯一"</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//记录配置文件对象。</span></span><br><span class="line">	File confile = files[<span class="number">0</span>];</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//获取该文件中的信息</span></span><br><span class="line">	Properties prop = <span class="keyword">new</span> Properties();</span><br><span class="line">	FileInputStream fis = <span class="keyword">new</span> FileInputStream(confile);</span><br><span class="line">	prop.load(fis);</span><br><span class="line">	String filename = prop.getProperty(<span class="string">"filename"</span>);</span><br><span class="line">	<span class="keyword">int</span> count = Integer.parseInt(prop.getProperty(<span class="string">"partcount"</span>));</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//获取该目录下的所有碎片文件</span></span><br><span class="line">	File[] partFiles = dir.listFiles(<span class="keyword">new</span> SuffixFilter(<span class="string">".part"</span>));</span><br><span class="line">	<span class="keyword">if</span>(partFiles.length!=(count-<span class="number">1</span>))&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">" 碎片文件不符合要求，个数不对!应该"</span>+count+<span class="string">"个"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//将碎片文件和流对象关联 并存储到集合中。</span></span><br><span class="line">	ArrayList&lt;FileInputStream&gt; al = <span class="keyword">new</span> ArrayList&lt;FileInputStream&gt;();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> x=<span class="number">0</span>; x&lt;partFiles.length; x++)&#123;</span><br><span class="line">		al.add(<span class="keyword">new</span> FileInputStream(partFiles[x]));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//将多个流合并成一个序列流。</span></span><br><span class="line">	Enumeration&lt;FileInputStream&gt; en = Collections.enumeration(al);</span><br><span class="line">	SequenceInputStream sis = <span class="keyword">new</span> SequenceInputStream(en);</span><br><span class="line">	FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(dir,filename));</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">	<span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span>((len=sis.read(buf))!=-<span class="number">1</span>)&#123;</span><br><span class="line">		fos.write(buf,<span class="number">0</span>,len);</span><br><span class="line">	&#125;</span><br><span class="line">	fos.close();</span><br><span class="line">	sis.close();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 后缀名过滤器</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> adamhand</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SuffixFilter</span> <span class="keyword">implements</span> <span class="title">FilenameFilter</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String suffix;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SuffixFilter</span><span class="params">(String suffix)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.suffix = suffix;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">accept</span><span class="params">(File dir, String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> name.endsWith(suffix);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/05/Java-I-O-1-字节流与字符流/" rel="next" title="Java I/O(1)--字节流与字符流">
+                <i class="fa fa-chevron-left"></i> Java I/O(1)--字节流与字符流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/05/Java-I-O-3-对象操作/" rel="prev" title="Java I/O(3)--对象操作">
+                Java I/O(3)--对象操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">adamhand</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index-3.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#三、磁盘操作——File"><span class="nav-number">1.</span> <span class="nav-text">三、磁盘操作——File</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作"><span class="nav-number">1.1.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件或文件夹的创建"><span class="nav-number">1.1.1.</span> <span class="nav-text">文件或文件夹的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断文件或文件夹属性"><span class="nav-number">1.1.2.</span> <span class="nav-text">判断文件或文件夹属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件或文件夹的删除"><span class="nav-number">1.1.3.</span> <span class="nav-text">文件或文件夹的删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#和流的联合使用"><span class="nav-number">1.1.4.</span> <span class="nav-text">和流的联合使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件过滤器"><span class="nav-number">1.2.</span> <span class="nav-text">文件过滤器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#File和Properties"><span class="nav-number">1.3.</span> <span class="nav-text">File和Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流和File综合练习"><span class="nav-number">1.4.</span> <span class="nav-text">流和File综合练习</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">adamhand</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
