@@ -259,6 +259,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java之变量/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/01/Java之变量/" itemprop="url">Java之变量</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T10:54:12+08:00">
+                2019-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="成员变量和局部变量"><a href="#成员变量和局部变量" class="headerlink" title="成员变量和局部变量"></a>成员变量和局部变量</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>&emsp; 可以将Java中的变量分为<strong>成员变量</strong>、<strong>静态变量</strong>和<strong>局部变量</strong>，成员变量和静态变量是在类范围内定义的变量，其中成员变量又叫实例变量，不用static关键字修饰，静态变量又叫类变量，需要用static关键字修饰。局部变量是在一个方法内定义的变量。<br>&emsp; 局部变量可分为：形参（形式参数）、方法局部变量、代码块局部变量。<br>&emsp; 如下图所示：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/javaviriable1.png"><br></center>
+
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="成员变量和局部变量的区别"><a href="#成员变量和局部变量的区别" class="headerlink" title="成员变量和局部变量的区别"></a>成员变量和局部变量的区别</h3><ul>
+<li>在类中的位置不同<br>成员变量：在类中方法外<br>局部变量：在方法定义中或者方法声明上</li>
+<li><strong>在内存中的位置不同<br>成员变量：在堆内存<br>局部变量：如果是基本类型，会把值直接存储在栈；如果是引用类型，比如<code>String s = new String(&quot;william&quot;);</code>会把其对象存储在堆，而把这个对象的引用（指针）存储在栈。</strong></li>
+<li>生命周期不同<br>成员变量：随着对象的创建而存在，随着对象的消失而消失<br>局部变量：随着方法的调用而存在，随着方法的调用完毕而消失</li>
+<li>初始化值不同<br>成员变量：有默认初始化值<br>局部变量：没有默认初始化值，必须定义，赋值，然后才能使用。</li>
+</ul>
+<h3 id="成员变量和静态变量的区别"><a href="#成员变量和静态变量的区别" class="headerlink" title="成员变量和静态变量的区别"></a>成员变量和静态变量的区别</h3><ul>
+<li>成员变量所属于对象。所以也称为实例变量。<br>静态变量所属于类。所以也称为类变量。</li>
+<li><strong>成员变量，基本类型和引用类型的成员变量都在这个对象的空间中，作为一个整体存储在堆。<br>静态变量存在于方法区中，只有被调用的时候才会被压栈，放入栈中。</strong></li>
+<li>成员变量随着对象创建而存在。随着对象被回收而消失。<br>静态变量随着类的加载而存在。随着类的消失而消失。</li>
+<li>成员变量只能被对象所调用。<br>静态变量可以被对象调用，也可以被类名调用。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java之参数传递/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1825,175 +1981,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/31/RabbitMQ系列-1-初识消息中间件/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/31/RabbitMQ系列-1-初识消息中间件/" itemprop="url">RabbitMQ系列(1)--初识消息中间件</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-31T22:10:22+08:00">
-                2018-12-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
-                    <span itemprop="name">RabbitMQ</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="RabbitMQ系列-1-–认识消息队列中间件"><a href="#RabbitMQ系列-1-–认识消息队列中间件" class="headerlink" title="RabbitMQ系列(1)–认识消息队列中间件"></a>RabbitMQ系列(1)–认识消息队列中间件</h1><hr>
-<h1 id="初识消息队列中间件"><a href="#初识消息队列中间件" class="headerlink" title="初识消息队列中间件"></a>初识消息队列中间件</h1><p>消息(Message)是指在应用之间传递的数据。</p>
-<p>消息队列中间件(Message Queue Middleware，MQ)是一种“中间件”，这个“中间”有两层含义：一种是<strong>上下层之间的中间(纵向的“中间”)</strong>，一种是<strong>左右之间的中间（横向的“中间”）</strong>。</p>
-<p>上下层之间的中间是指，消息中间件被夹在“应用层”和“传输层”之间，它对传输层的协议进行了封装，为上层应用程序提供跨平台的数据交流。</p>
-<p>左右之间的中间是指，消息中间件常常被用于分布式环境中，它可以为两个分布式节点之间提供通信服务。</p>
-<h1 id="传递模式"><a href="#传递模式" class="headerlink" title="传递模式"></a>传递模式</h1><p>消息中间件一般有两种传递模式：<strong>点对点</strong>(P2P，Point to point)模式和<strong>发布/订阅</strong>(Pub/Sub)模式。</p>
-<h2 id="点对点模式"><a href="#点对点模式" class="headerlink" title="点对点模式"></a>点对点模式</h2><p>点对点模式是基于队列(queue)的，消息生产者生产消息发送到queue中，然后消息消费者从queue中取出并且消费消息。队列的存在使得消息的异步传输成为可能。消息被消费以后，queue中不再存储，所以消息消费者不可能消费到已经被消费的消息。</p>
-<p>Queue支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
-<p>示意图如下图所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-p2p.jpg"><br></center>
-
-<h2 id="发布-订阅模式"><a href="#发布-订阅模式" class="headerlink" title="发布/订阅模式"></a>发布/订阅模式</h2><p>Pub/Sub发布订阅（广播）：使用topic作为通信载体。消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。和点对点方式不同，发布到topic的消息会被所有订阅者消费。</p>
-<p>示意图如下：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/mq-pub-sub.jpg"><br></center>
-
-<h1 id="常用协议"><a href="#常用协议" class="headerlink" title="常用协议"></a>常用协议</h1><h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><p>AMQP即<strong>Advanced Message Queuing Protocol(高级队列消息协议)</strong>。AMQP协议定义了消息路由规则和方式。生产者将消息发送到Broker，Broker中的Exchange充当了路由器的角色，由它将消息路由到一个或者多个队列中。如果路由不到，或许会返回给生产者，获取会丢弃。</p>
-<p>多个消费者可以订阅同一个队列中的消息，这是队列中的消息会通过“轮询”的方式平均分配给每个消费者，而不是每个消费者都会消费所有消息。</p>
-<p>AMQP的模型如下所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/amqp.jpg"><br></center>
-
-<h2 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h2><p>Java消息服务（Java Message Service，JMS）应用程序接口是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。点对点与发布订阅最初是由JMS定义的。</p>
-<p>严格来说，JMS不是一种消息队列协议，它是一种跨平台的API，换句话说，可以使用JMS API来连接支持AMQP、STOMP等协议的消息中间件产品，它的作用更像JDBC，我们可以使用JDBC API来连接具体的数据库产品。</p>
-<h1 id="常见消息中间件对比"><a href="#常见消息中间件对比" class="headerlink" title="常见消息中间件对比"></a>常见消息中间件对比</h1><p>待续。</p>
-<hr>
-<h1 id="补丁：消息的消费模式"><a href="#补丁：消息的消费模式" class="headerlink" title="补丁：消息的消费模式"></a>补丁：消息的消费模式</h1><p>消息的消费模式有两种：<strong>推模式(push)</strong>和<strong>拉模式(pull)</strong>。</p>
-<p><strong>推(push)模式</strong>是一种基于客户器/服务器机制、由服务器主动将信息送到客户器的技术。在push模式应用中，服务器把信息送给客户器之前，并没有明显的客户请求。push事务由服务器发起。push模式可以让信息主动、快速地寻找用户/客户器，信息的主动性和实时性比较好。但精确性较差，可能推送的信息并不一定满足客户的需求。推送模式不能保证能把信息送到客户器，因为推模式采用了广播机制，如果客户器正好联网并且和服务器在同一个频道上，推送模式才是有效的。push模式无法跟踪状态，采用了开环控制模式，没有用户反馈信息。在实际应用中，由客户器向服务器发送一个申请，并把自己的地址（如IP、port）告知服务器，然后服务器就源源不断地把信息推送到指定地址。在多媒体信息广播中也采用了推模式。另外，如手机*、qq广播。</p>
-<p><strong>拉（pull）模式</strong>与推模式相反，是由客户器主动发起的事务。服务器把自己所拥有的信息放在指定地址（如IP、port），客户器向指定地址发送请求，把自己需要的资源“拉”回来。不仅可以准确获取自己需要的资源，还可以及时把客户端的状态反馈给服务器。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>《RabbitMQ实战指南》<br>《分布式消息中间件实战》<br><a href="https://blog.csdn.net/lizhitao/article/details/47723105" target="_blank" rel="noopener">消息队列中点对点与发布订阅区别</a><br><a href="https://blog.csdn.net/wqc19920906/article/details/82193316" target="_blank" rel="noopener">消息中间件（一）MQ详解及四大MQ比较</a><br><a href="https://blog.csdn.net/btt2013/article/details/80211599" target="_blank" rel="noopener">Java消息中间件(入门篇)</a><br><a href="https://blog.csdn.net/zeng_z/article/details/77246368" target="_blank" rel="noopener">消息模式–推模式和拉模式</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2044,7 +2031,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
