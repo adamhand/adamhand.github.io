@@ -259,6 +259,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/LRU缓存Java实现/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/21/LRU缓存Java实现/" itemprop="url">LRU缓存Java实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-21T18:40:12+08:00">
+                2019-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>LRU（Least recently used，最近最少使用）算法根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。是一种缓存淘汰策略。<br>下面用Java的HashMap和LinkedHashMap来实现LRU算法。</p>
+<h1 id="使用HashMap实现"><a href="#使用HashMap实现" class="headerlink" title="使用HashMap实现"></a>使用HashMap实现</h1><p>使用HashMap+双链表来实现。使用一个双链表辅助存储元素。每当对元素进行了操作，会将元素移位到链表头部。如果超出链表的size要求，就从尾部删除。这样就做到了最近使用的元素在链表头部，而长时间没有使用的会被删除。</p>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Iterable</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Node head;         <span class="comment">//双链表的头结点，不存储值</span></span><br><span class="line">    <span class="keyword">private</span> Node tail;         <span class="comment">//双链表的尾结点，不存储值</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;          <span class="comment">//链表的最大容量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> loadFactor = <span class="number">0.75f</span>;  <span class="comment">//HashMap中的容量为size * loadFactor</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;K, Node&gt; map;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">        Node pre;</span><br><span class="line">        Node next;</span><br><span class="line">        K k;</span><br><span class="line">        V v;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(K k, V v)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.k = k;</span><br><span class="line">            <span class="keyword">this</span>.v = v;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> size)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.size = size;</span><br><span class="line">        map = <span class="keyword">new</span> HashMap&lt;K, Node&gt;((<span class="keyword">int</span>)(size * loadFactor));</span><br><span class="line"></span><br><span class="line">        head = <span class="keyword">new</span> Node(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        tail = <span class="keyword">new</span> Node(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//构建一个空的双链表</span></span><br><span class="line">        head.next = tail;</span><br><span class="line">        tail.next = head;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(K key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(! map.containsKey(key))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node node = map.get(key);</span><br><span class="line">        unlink(node);</span><br><span class="line">        appendHead(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node.v;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(K key, V value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(map.containsKey(key))&#123;</span><br><span class="line">            Node node = map.get(key);</span><br><span class="line">            unlink(node);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Node node = <span class="keyword">new</span> Node(key, value);</span><br><span class="line">        map.put(key, node);</span><br><span class="line">        appendHead(node);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(map.size() &gt; size)&#123;</span><br><span class="line">            Node toRemove = removeTail();</span><br><span class="line">            map.remove(toRemove.k);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将当前元素在双链表中断开</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">unlink</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line">        Node pre = node.pre;</span><br><span class="line">        Node next = node.next;</span><br><span class="line"></span><br><span class="line">        pre.next = next;</span><br><span class="line">        next.pre = pre;</span><br><span class="line"></span><br><span class="line">        node.pre = <span class="keyword">null</span>;</span><br><span class="line">        node.next = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将当前节点加入链表头</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">appendHead</span><span class="params">(Node node)</span></span>&#123;</span><br><span class="line"><span class="comment">//        unlink(node);</span></span><br><span class="line"></span><br><span class="line">        Node headNext = head.next;</span><br><span class="line">        head.next = node;</span><br><span class="line">        node.next = headNext;</span><br><span class="line"></span><br><span class="line">        headNext.pre = node;</span><br><span class="line">        node.pre = head;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除链表尾部的节点</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">removeTail</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Node node = tail.pre;</span><br><span class="line">        Node pre = node.pre;</span><br><span class="line"></span><br><span class="line">        tail.pre = pre;</span><br><span class="line">        pre.next = tail;</span><br><span class="line"></span><br><span class="line">        node.pre = <span class="keyword">null</span>;</span><br><span class="line">        node.next = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterator&lt;K&gt; <span class="title">iterator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Iterator&lt;K&gt;() &#123;</span><br><span class="line">            <span class="keyword">private</span> Node cur = head.next;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> cur != tail;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> K <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                Node node = cur;</span><br><span class="line">                cur = cur.next;</span><br><span class="line">                <span class="keyword">return</span> node.k;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试程序如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        LRUCache&lt;String, Integer&gt; cache = <span class="keyword">new</span> LRUCache&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        cache.put(<span class="string">"0"</span>, <span class="number">0</span>);</span><br><span class="line">        cache.put(<span class="string">"1"</span>, <span class="number">1</span>);</span><br><span class="line">        cache.put(<span class="string">"2"</span>, <span class="number">2</span>);</span><br><span class="line">        cache.put(<span class="string">"3"</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        Iterator&lt;String&gt; integerIterator = cache.iterator();</span><br><span class="line">        <span class="keyword">while</span> (integerIterator.hasNext())&#123;</span><br><span class="line">            System.out.println(cache.get(integerIterator.next()) + <span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span> </span><br><span class="line"><span class="number">2</span> </span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="使用LinkedHashMap实现"><a href="#使用LinkedHashMap实现" class="headerlink" title="使用LinkedHashMap实现"></a>使用LinkedHashMap实现</h1><p>LinkedHashMap支持的遍历顺序有两个：插入顺序和访问顺序。其中访问顺序就是最近访问的最先输出。LinkedHashMap中有一个accessOrder参数，accessOrder为true则表示按照基于访问的顺序来排列，所以accessOrder参数就是实现LUR的关键。</p>
+<p>实现时需要在构造函数中调用LinkedHashMap的构造函数，将accessOrder参数置为true。同时覆盖removeEldestEntry方法，当存储的数据大于允许的最大值时，删除旧数据。</p>
+<p>代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">LinkedHashMap</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> loadFactor = <span class="number">0.75f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> size)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(size, loadFactor, <span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">this</span>.size = size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry&lt;K, V&gt; eldest)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> size() &gt; size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">containsKey</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.containsKey(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.get(key);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.put(key, value);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.size();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">            <span class="keyword">super</span>.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试程序如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        LRUCache&lt;String, Integer&gt; cache = <span class="keyword">new</span> LRUCache(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        cache.put(<span class="string">"0"</span>, <span class="number">0</span>);</span><br><span class="line">        cache.put(<span class="string">"1"</span>, <span class="number">1</span>);</span><br><span class="line">        cache.put(<span class="string">"2"</span>, <span class="number">2</span>);</span><br><span class="line">        cache.put(<span class="string">"3"</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        Set&lt;Map.Entry&lt;String, Integer&gt;&gt; entries = cache.entrySet();</span><br><span class="line">        Iterator&lt;Map.Entry&lt;String, Integer&gt;&gt; iterator = entries.iterator();</span><br><span class="line">        <span class="keyword">while</span> (iterator.hasNext())&#123;</span><br><span class="line">            Map.Entry&lt;String, Integer&gt; me = iterator.next();</span><br><span class="line">            System.out.println(me.getKey() + <span class="string">" "</span> + me.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印结果如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="number">1</span></span><br><span class="line"><span class="number">2</span> <span class="number">2</span></span><br><span class="line"><span class="number">3</span> <span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E7%BC%93%E5%AD%98.md" target="_blank" rel="noopener">缓存</a><br><a href="https://blog.csdn.net/wangxilong1991/article/details/70172302" target="_blank" rel="noopener">缓存淘汰算法–LRU算法(java代码实现)</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/19/Synchronized和Lock性能比较/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1950,223 +2102,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/04/《剑指offer》题目小结-5/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/04/《剑指offer》题目小结-5/" itemprop="url">《剑指off》题目小结(5)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-04T21:25:16+08:00">
-                2019-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="21-正则表达式匹配"><a href="#21-正则表达式匹配" class="headerlink" title="21. 正则表达式匹配"></a>21. 正则表达式匹配</h1><p>题目描述：<br>&emsp; 请实现一个函数用来匹配包含<code>&#39;.&#39;</code>和<code>&#39;*&#39;</code>的正则表达式。模式中的字符‘.’表示任意一个字符，而<code>&#39;*&#39;</code>表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串<code>&quot;aaa&quot;</code>与模式<code>&quot;a.a&quot;</code>和<code>&quot;ab*ac*a&quot;</code>匹配，但与<code>&quot;aa.a&quot;</code>及<code>&quot;ab*a&quot;</code>均不匹配。</p>
-<hr>
-<blockquote>
-<p>分析：这道题的核心其实在于分析<code>&#39;*&#39;</code>,对于<code>&#39;.&#39;</code>来说，它和任意字符都匹配，可把其当做普通字符。对于<code>&#39;*&#39;</code>的分析，我们要进行分情况讨论，当所有的情况都搞清楚了以后，就可以写代码了。</p>
-</blockquote>
-<ul>
-<li>在每轮匹配中，Patttern第二个字符是’*’时：<ul>
-<li>第一个字符不匹配（’.’与任意字符视作匹配），那么’<em>‘只能代表匹配0次，比如’ba’与’a</em>ba’，字符串不变，模式向后移动两个字符，然后匹配剩余字符串和模式</li>
-<li>第一个字符匹配，那么’<em>‘可能代表匹配0次，1次，多次，比如’aaa’与’a</em>aaa’、’aba’与’a<em>ba’、’aaaba’与’a</em>ba’。匹配0次时，字符串不变，模式向后移动两个字符，然后匹配剩余字符串和模式；匹配1次时，字符串往后移动一个字符，模式向后移动2个字符；匹配多次时，字符串往后移动一个字符，模式不变；</li>
-</ul>
-</li>
-<li>而当Patttern第二个字符不是’*’时，情况就简单多了：<ul>
-<li>如果字符串的第一个字符和模式中的第一个字符匹配，那么在字符串和模式上都向后移动一个字符，然后匹配剩余字符串和模式。</li>
-<li>如果字符串的第一个字符和模式中的第一个字符不匹配，那么直接返回false。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正则表达式匹配</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Regex</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">match</span><span class="params">(String input,String pattern)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(input==<span class="keyword">null</span>||pattern==<span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">return</span> matchCore(input,<span class="number">0</span>,pattern,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">matchCore</span><span class="params">(String input,<span class="keyword">int</span> i,String pattern,<span class="keyword">int</span> p)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>((input.length()==i)&amp;&amp;(pattern.length()==p))&#123;</span><br><span class="line">            <span class="comment">//出口1，input和pattern都到了字符串末尾</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((i!=input.length())&amp;&amp;(pattern.length()==p))&#123;</span><br><span class="line">            <span class="comment">//出口2，字符串input没有到末尾，pattern到了末尾</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>((input.length()==i)&amp;&amp;(pattern.length()!=p))&#123;</span><br><span class="line">            <span class="comment">//出口3，字符串input到末尾，pattern还没有到末尾</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((p+<span class="number">1</span>&lt;pattern.length())&amp;&amp;(pattern.charAt(p+<span class="number">1</span>)==<span class="string">'*'</span>))&#123;<span class="comment">//pattern第二个字符为*</span></span><br><span class="line">            <span class="keyword">if</span>((input.charAt(i)==pattern.charAt(p))||(pattern.charAt(p)==<span class="string">'.'</span>))&#123;</span><br><span class="line">                <span class="comment">//首字母相匹配</span></span><br><span class="line">                <span class="keyword">return</span> matchCore(input,i+<span class="number">1</span>,pattern,p+<span class="number">2</span>) <span class="comment">//*表示出现1次</span></span><br><span class="line">                        ||matchCore(input,i+<span class="number">1</span>,pattern,p)    <span class="comment">//*表示出现多次</span></span><br><span class="line">                        ||matchCore(input,i,pattern,p+<span class="number">2</span>);   <span class="comment">//*表示出现0次 ， a ...  p* ...</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">//首字母不匹配</span></span><br><span class="line">                <span class="keyword">return</span> matchCore(input,i,pattern,p+<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="comment">//end pattern.charAt(p+1)=='*'</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>((input.charAt(i)==pattern.charAt(p))||(pattern.charAt(p)==<span class="string">'.'</span>))&#123;</span><br><span class="line">            <span class="comment">//pattern第二个字母不是*，且首字母匹配</span></span><br><span class="line">            <span class="keyword">return</span> matchCore(input,i+<span class="number">1</span>,pattern,p+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;  <span class="comment">//其余情况全部不匹配</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);                       <span class="comment">//扫描键盘输入</span></span><br><span class="line">        System.out.println(<span class="string">" 请输入第一个字符串："</span>);</span><br><span class="line">        String str1 = scanner.nextLine();</span><br><span class="line">        System.out.println(<span class="string">" 请输入第二个字符串："</span>);</span><br><span class="line">        String str2 = scanner.nextLine();</span><br><span class="line">        scanner.close();</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">"匹配的结果为："</span>);</span><br><span class="line">        System.out.println(match(str1, str2));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="22-表示数值的字符串"><a href="#22-表示数值的字符串" class="headerlink" title="22. 表示数值的字符串"></a>22. 表示数值的字符串</h1><p>题目描述：<br>&emsp; 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串”+100”,”5e2”,”-123”,”3.1416”和”-1E-16”都表示数值。 但是”12e”,”1a3.14”,”1.2.3”,”+-5”和”12e+4.3”都不是。</p>
-<hr>
-<blockquote>
-<p>思路一：从头到尾比较。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> inx;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    test(<span class="string">"Test1"</span>, <span class="string">"100"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test2"</span>, <span class="string">"123.45e+6"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test3"</span>, <span class="string">"+500"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test4"</span>, <span class="string">"5e2"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test5"</span>, <span class="string">"3.1416"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test6"</span>, <span class="string">"600."</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test7"</span>, <span class="string">"-.123"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test8"</span>, <span class="string">"-1E-16"</span>, <span class="keyword">true</span>);</span><br><span class="line">    test(<span class="string">"Test9"</span>, <span class="string">"1.79769313486232E+308"</span>, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println();</span><br><span class="line"></span><br><span class="line">    test(<span class="string">"Test10"</span>, <span class="string">"12e"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test11"</span>, <span class="string">"1a3.14"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test12"</span>, <span class="string">"1+23"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test13"</span>, <span class="string">"1.2.3"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test14"</span>, <span class="string">"+-5"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test15"</span>, <span class="string">"12e+5.4"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test16"</span>, <span class="string">"."</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test17"</span>, <span class="string">".e1"</span>, <span class="keyword">false</span>);</span><br><span class="line">    test(<span class="string">"Test18"</span>, <span class="string">"+."</span>, <span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(String testName, String str, <span class="keyword">boolean</span> expected)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(isNumeric(str.toCharArray()) == expected)</span><br><span class="line">        System.out.println(testName+<span class="string">"+Passed."</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        System.out.println(testName+<span class="string">"+Failed."</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNumeric</span><span class="params">(<span class="keyword">char</span>[] str)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(str==<span class="keyword">null</span> || str.length==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    inx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">boolean</span> flag = scanInteger(str);</span><br><span class="line">    <span class="comment">//判断小数部分</span></span><br><span class="line">    <span class="keyword">if</span>(inx&lt;str.length &amp;&amp; str[inx]==<span class="string">'.'</span>)&#123;</span><br><span class="line">        inx = inx+<span class="number">1</span>;</span><br><span class="line">        flag = scanUInteger(str)||flag;     <span class="comment">//解释a,见代码下方</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//判断指数部分</span></span><br><span class="line">    <span class="keyword">if</span>(inx&lt;str.length &amp;&amp; (str[inx]==<span class="string">'e'</span> || str[inx]==<span class="string">'E'</span>))&#123;</span><br><span class="line">        inx = inx+<span class="number">1</span>;</span><br><span class="line">        flag = flag &amp;&amp; scanInteger(str);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flag &amp;&amp; inx&gt;=str.length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//判断是否是整数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">scanInteger</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(inx&lt;str.length &amp;&amp;(str[inx]==<span class="string">'+'</span> || str[inx]==<span class="string">'-'</span>))&#123;</span><br><span class="line">        inx = inx+<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> scanUInteger(str);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//判断是否是无符号整数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">scanUInteger</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> inx1=inx;</span><br><span class="line">    <span class="keyword">while</span>(inx&lt;str.length &amp;&amp; str[inx]&gt;=<span class="string">'0'</span> &amp;&amp; str[inx]&lt;=<span class="string">'9'</span>)&#123;</span><br><span class="line">        inx = inx + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> inx&gt;inx1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>思路二：使用库函数</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNumeric_1</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Double number = Double.parseDouble(<span class="keyword">new</span> String(str));</span><br><span class="line">    &#125;<span class="keyword">catch</span> (NumberFormatException e)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>思路三：使用正则表达式。<br><code>[]</code>  ： 字符集合<br><code>()</code>  ： 分组<br><code>?</code>   ： 重复 0 ~ 1<br><code>+</code>   ： 重复 1 ~ n<br><code>*</code>   ： 重复 0 ~ n<br><code>.</code>   ： 任意字符<br><code>\\.</code> ： 转义后的 .<br><code>\\d</code> ： 数字</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNumeric_2</span><span class="params">(<span class="keyword">char</span>[] str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(str).matches(<span class="string">"[+-]?\\d*(\\.\\d+)?([eE][+-]?\\d+)?"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="23-字符流中第一个不重复的字符"><a href="#23-字符流中第一个不重复的字符" class="headerlink" title="23. 字符流中第一个不重复的字符"></a>23. 字符流中第一个不重复的字符</h1><p>题目描述：<br>&emsp; 请实现一个函数用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符”go”时，第一个只出现一次的字符是”g”。当从该字符流中读出前六个字符“google”时，第一个只出现一次的字符是”l”。 </p>
-<hr>
-<blockquote>
-<p>解题思路：可以使用HashMap存储字符和其出现的次数，但是因为HashMap遍历是无序的，还需要用用ArrayList来确定字符输入的顺序，从而得到第一个只初夏一次的字符。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> HashMap&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="keyword">static</span> ArrayList&lt;Character&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span>[] chars = <span class="string">"google"</span>.toCharArray();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; chars.length; i++)</span><br><span class="line">        insert(chars[i]);</span><br><span class="line">    System.out.println(firstAppearOnce());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">char</span> <span class="title">firstAppearOnce</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">char</span> key : list)&#123;</span><br><span class="line">        <span class="keyword">if</span>(map.get(key) == <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> key;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'#'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">char</span> ch)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(map.containsKey(ch))</span><br><span class="line">        map.put(ch, map.get(ch)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        map.put(ch, <span class="number">1</span>);</span><br><span class="line">    list.add(ch);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-</blockquote>
-<h1 id="24-调整数组顺序是奇数位于偶数前面"><a href="#24-调整数组顺序是奇数位于偶数前面" class="headerlink" title="24. 调整数组顺序是奇数位于偶数前面"></a>24. 调整数组顺序是奇数位于偶数前面</h1><p>题目描述：<br>&emsp; 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分(两种情况的代码：不考虑调整后奇数的之间和偶数之间的相对位置；考虑调整后奇数之间和偶数之间的相对位置不变)。</p>
-<hr>
-<blockquote>
-<p>思路一：使用双指针法。这种情况没有考虑调整后奇数之间和偶数之间的行对位置。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reOrderArray</span><span class="params">(<span class="keyword">int</span>[] arr)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">int</span> head = <span class="number">0</span>, tail = arr.length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(head &lt; tail)&#123;</span><br><span class="line">        <span class="keyword">while</span>(head &lt; tail &amp;&amp; (arr[head] &amp; <span class="number">0x01</span>) != <span class="number">0</span>)</span><br><span class="line">            head++;</span><br><span class="line">        <span class="keyword">while</span>(head &lt; tail &amp;&amp; (arr[tail] &amp; <span class="number">0x01</span>) == <span class="number">0</span>)</span><br><span class="line">            tail--;</span><br><span class="line">        <span class="keyword">if</span>(head &lt; tail)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp = arr[head];</span><br><span class="line">            arr[head] = arr[tail];</span><br><span class="line">            arr[tail] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>思路二：要求保证调整后奇数之间和偶数之间的相对位置不变。需要一个辅助数组。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reOrderArray_1</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 奇数个数</span></span><br><span class="line">    <span class="keyword">int</span> oddCnt = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> val : nums)</span><br><span class="line">        <span class="keyword">if</span> ((val &amp; <span class="number">0x01</span>) != <span class="number">0</span>)</span><br><span class="line">            oddCnt++;</span><br><span class="line">    <span class="keyword">int</span>[] copy = nums.clone();</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, j = oddCnt;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> num : copy) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((num &amp; <span class="number">0x01</span>) != <span class="number">0</span>)</span><br><span class="line">            nums[i++] = num;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            nums[j++] = num;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="25-链表中倒数第k个节点"><a href="#25-链表中倒数第k个节点" class="headerlink" title="25. 链表中倒数第k个节点"></a>25. 链表中倒数第k个节点</h1><p>题目描述：<br>&emsp; 输入一个链表，输出该链表中倒数第K个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第一个节点。</p>
-<hr>
-<blockquote>
-<p>思路：常规的方法是先遍历一次链表，得到链表的长度，然后再从头到尾遍历到n-k+1的地方就行了。但是这个方法显然不是最简单的方法，因为它遍历了两次。<br>当用一个指针遍历两次才能够完成工作的情况下，往往用两个指针遍历一次就能实现，这就是<strong>“双指针法”</strong>。这里定义连个指针，第一个指针从头到尾走k-1步，第二个指针保持不动。从第k步开始，第二个指针也从头指针开始遍历，它们之间的距离适中为k-1，当第一个指针走到链表尾部的时候，第二个指针指向的就是倒数第k个节点。<br>这里需要注意几个问题，保证代码的健壮性：</p>
-</blockquote>
-<ul>
-<li>输入的链表为空。</li>
-<li>输入的链表总的节点数小于k。</li>
-<li>输入的参数k为0</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ListNode <span class="title">Solution</span><span class="params">(ListNode head, <span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(head == <span class="keyword">null</span> || k == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    ListNode ahead = head;</span><br><span class="line">    ListNode behind = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; k - <span class="number">1</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(ahead.next != <span class="keyword">null</span>)</span><br><span class="line">            ahead = ahead.next;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    behind = head;</span><br><span class="line">    <span class="keyword">while</span>(ahead.next != <span class="keyword">null</span>)&#123;</span><br><span class="line">        ahead = ahead.next;</span><br><span class="line">        behind = behind.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> behind;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="25-1-相关题目1"><a href="#25-1-相关题目1" class="headerlink" title="25.1 相关题目1"></a>25.1 相关题目1</h2><p>题目描述：<br>&emsp; 求链表的中间节点。如果链表中节点的总数为奇数，返回中间节点；如果为偶数，返回中间两个节点的任意一个。</p>
-<hr>
-<blockquote>
-<p>思路：参考双指针法，定义两个指针，同时从头结点开始遍历，一个指针一次走一步，一个指针一次走两步。当快指针走到链表末尾的时候，走得慢的指针正好在链表的中间。注意程序的健壮性。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ListNode <span class="title">findCenterNode</span><span class="params">(ListNode head)</span></span>&#123;</span><br><span class="line">    <span class="comment">//链表为空或只有头结点</span></span><br><span class="line">    <span class="keyword">if</span>(head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//链表只存在一个节点</span></span><br><span class="line">    <span class="keyword">if</span>(head.next.next == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> head.next;</span><br><span class="line">    ListNode fast = head;</span><br><span class="line">    ListNode slow = head;</span><br><span class="line">    <span class="keyword">while</span>(fast.next != <span class="keyword">null</span>)&#123;</span><br><span class="line">        fast = fast.next.next;</span><br><span class="line">        slow = slow.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> slow;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="25-2-相关题目2"><a href="#25-2-相关题目2" class="headerlink" title="25.2 相关题目2"></a>25.2 相关题目2</h2><p>题目描述：<br>&emsp; 判断一个单向链表是否形成了环形结构。</p>
-<hr>
-<blockquote>
-<p>方法1：使用HashSet。设置一个Hashset，顺序读取链表中的节点，判断Hashset中是否有该节点的唯一标识（ID)。如果在Hashset中，说明有环；如果不在Hashset中，将节点的ID存入Hashset。<br>这种方法时间复杂度已经最优，但是因为额外申请了Hashset，所以空间复杂度不算最优。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//返回true说明没有环，否则说明有环。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hsCycleOrNot</span><span class="params">(ListNode head)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(head == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    HashSet&lt;Integer&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    ListNode cur = head;</span><br><span class="line">    <span class="keyword">while</span>(cur.next != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(set.contains(cur.next.value))</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            set.add(cur.next.value);</span><br><span class="line">        cur = cur.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>方法2：使用双指针。定义一个快指针和一个慢指针同时从链表的头结点出发，快指针一次走两步，慢指针一次走一步。如果快指针能够追上慢指针，那么链表就是有环的；如果<strong>快指针</strong>走到链表末尾都没有追上慢指针，说明没有环。</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">hasCycleOrNot</span><span class="params">(ListNode head)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(head == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    ListNode fast = head;</span><br><span class="line">    ListNode slow = head;</span><br><span class="line">    <span class="keyword">while</span>(fast.next != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(fast.next.next != <span class="keyword">null</span>)</span><br><span class="line">            fast = fast.next.next;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(fast == slow)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        slow = slow.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2217,7 +2152,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2227,7 +2162,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-1.html">
+                <a href="/categories/index-4.html">
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
