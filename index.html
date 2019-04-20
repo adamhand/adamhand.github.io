@@ -259,6 +259,152 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/20/python获取各种时间戳-md/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/20/python获取各种时间戳-md/" itemprop="url">python获取各种时间戳.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-20T11:13:44+08:00">
+                2019-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>python中的关于时间的类库主要有两种：time和timedate，下面分别说明使用这两种类库获取时间戳的方法。</p>
+<h1 id="使用timedate"><a href="#使用timedate" class="headerlink" title="使用timedate"></a>使用timedate</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func_timer</span><span class="params">()</span>:</span></span><br><span class="line">    now = datetime.datetime.now()</span><br><span class="line">    print(<span class="string">"当前时间："</span>, now)</span><br><span class="line">    print(<span class="string">"明天的这个时间："</span>, now + datetime.timedelta(days=<span class="number">1</span>))</span><br><span class="line">    print(<span class="string">"当前时间："</span>, datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second))</span><br><span class="line">    print(<span class="string">"当前时间："</span>, datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second, microseconds=now.microsecond))</span><br><span class="line"></span><br><span class="line">    zero_today = now - datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second,</span><br><span class="line">                                           microseconds=now.microsecond)</span><br><span class="line">    zero_tomorrow = zero_today + datetime.timedelta(hours=<span class="number">24</span>)</span><br><span class="line"></span><br><span class="line">    time_gap = datetime.timedelta(hours=<span class="number">24</span>) - datetime.timedelta(hours=now.hour,</span><br><span class="line">                                                                 minutes=now.minute, seconds=now.second)</span><br><span class="line">    h,m,s = str(time_gap).strip().split(<span class="string">":"</span>)</span><br><span class="line">    time_gap_second = int(h) * <span class="number">3600</span> + int(m) * <span class="number">60</span> + int(s)</span><br><span class="line">    print(<span class="string">"今天零点: "</span>, zero_today)</span><br><span class="line">    print(<span class="string">"明天零点: "</span>, zero_tomorrow)</span><br><span class="line">    print(<span class="string">"现在时间距离明天零点的时间差: "</span>, time_gap)</span><br><span class="line">    print(<span class="string">"现在时间距离明天零点的时间差，单位为秒: "</span>, time_gap_second)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    func_timer()</span><br></pre></td></tr></table></figure>
+<p>运行结果为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">当前时间： <span class="number">2019</span><span class="number">-04</span><span class="number">-20</span> <span class="number">11</span>:<span class="number">32</span>:<span class="number">48.284744</span></span><br><span class="line">明天的这个时间： <span class="number">2019</span><span class="number">-04</span><span class="number">-21</span> <span class="number">11</span>:<span class="number">32</span>:<span class="number">48.284744</span></span><br><span class="line">当前时间： <span class="number">2019</span><span class="number">-04</span><span class="number">-20</span> <span class="number">11</span>:<span class="number">32</span>:<span class="number">48</span></span><br><span class="line">当前时间： <span class="number">11</span>:<span class="number">32</span>:<span class="number">48.284744</span></span><br><span class="line">今天零点:  <span class="number">2019</span><span class="number">-04</span><span class="number">-20</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">明天零点:  <span class="number">2019</span><span class="number">-04</span><span class="number">-21</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">现在时间距离明天零点的时间差:  <span class="number">12</span>:<span class="number">27</span>:<span class="number">12</span></span><br><span class="line">现在时间距离明天零点的时间差，单位为秒:  <span class="number">44832</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="使用time"><a href="#使用time" class="headerlink" title="使用time"></a>使用time</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># The time difference between the current time and tomorrow's zero, in s</span></span><br><span class="line"><span class="keyword">print</span> (<span class="string">"今天到明天凌晨的时间差，单位为秒："</span>, <span class="number">86400</span> - int(time.time()-time.timezone) % <span class="number">86400</span>)</span><br><span class="line"></span><br><span class="line">zeroPoint = int(time.time()) - int(time.time()-time.timezone) % <span class="number">86400</span></span><br><span class="line"></span><br><span class="line">yesterdayZeroPoint = zeroPoint - <span class="number">86400</span></span><br><span class="line"></span><br><span class="line">tomorrowZeroPoint = zeroPoint + <span class="number">86400</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> (<span class="string">"今天零点，单位为秒："</span>, zeroPoint)</span><br><span class="line"><span class="keyword">print</span> (<span class="string">"昨天零点，单位为秒："</span>, yesterdayZeroPoint)</span><br><span class="line"><span class="keyword">print</span> (<span class="string">"明天的零点，单位为秒："</span>, tomorrowZeroPoint)</span><br></pre></td></tr></table></figure>
+<p>运行结果为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">今天到明天凌晨的时间差，单位为秒： <span class="number">44529</span></span><br><span class="line">今天零点，单位为秒： <span class="number">1555689600</span></span><br><span class="line">昨天零点，单位为秒： <span class="number">1555603200</span></span><br><span class="line">明天的零点，单位为秒： <span class="number">1555776000</span></span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/05/丰收/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1725,158 +1871,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/Java-I-O-3-对象操作/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/05/Java-I-O-3-对象操作/" itemprop="url">Java I/O(3)--对象操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-05T21:54:11+08:00">
-                2019-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="四、对象操作"><a href="#四、对象操作" class="headerlink" title="四、对象操作"></a>四、对象操作</h1><h2 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h2><p>序列化就是将一个对象转换成字节序列，方便存储和传输。</p>
-<blockquote>
-<ul>
-<li>序列化：ObjectOutputStream.writeObject()</li>
-<li>反序列化：ObjectInputStream.readObject()</li>
-</ul>
-</blockquote>
-<p>不会对静态变量进行序列化，因为序列化只是保存对象的状态，静态变量属于类的状态。</p>
-<h2 id="Serializable"><a href="#Serializable" class="headerlink" title="Serializable"></a>Serializable</h2><p>序列化的类需要实现 Serializable 接口，它只是一个标准，没有任何方法需要实现，但是如果不去实现它的话而进行序列化，会抛出异常。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line"></span><br><span class="line">    A a1 = <span class="keyword">new</span> A(<span class="number">123</span>, <span class="string">"abc"</span>);</span><br><span class="line">    String objectFile = <span class="string">"file/a1"</span>;</span><br><span class="line"></span><br><span class="line">    ObjectOutputStream objectOutputStream = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(objectFile));</span><br><span class="line">    objectOutputStream.writeObject(a1);</span><br><span class="line">    objectOutputStream.close();</span><br><span class="line"></span><br><span class="line">    ObjectInputStream objectInputStream = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(objectFile));</span><br><span class="line">    A a2 = (A) objectInputStream.readObject();</span><br><span class="line">    objectInputStream.close();</span><br><span class="line">    System.out.println(a2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">private</span> String y;</span><br><span class="line"></span><br><span class="line">    A(<span class="keyword">int</span> x, String y) &#123;</span><br><span class="line">        <span class="keyword">this</span>.x = x;</span><br><span class="line">        <span class="keyword">this</span>.y = y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"x = "</span> + x + <span class="string">"  "</span> + <span class="string">"y = "</span> + y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="transient"><a href="#transient" class="headerlink" title="transient"></a>transient</h2><p>transient 关键字可以使一些属性不会被序列化。</p>
-<p>ArrayList 中存储数据的数组 elementData 是用 transient 修饰的，因为这个数组是动态扩展的，并不是所有的空间都被使用，因此就不需要所有的内容都被序列化。通过重写序列化和反序列化方法，使得可以只序列化数组中有内容的那部分数据。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> Object[] elementData;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1927,7 +1921,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1937,8 +1931,8 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-1.html">
-                  <span class="site-state-item-count">9</span>
+                <a href="/categories/index-2.html">
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
