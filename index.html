@@ -259,6 +259,197 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/27/python静态爬虫/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/27/python静态爬虫/" itemprop="url">python静态爬虫</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-27T15:26:19+08:00">
+                2019-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="爬取目标"><a href="#爬取目标" class="headerlink" title="爬取目标"></a>爬取目标</h2><p>此次爬取的目标是豆瓣读书页面的“最受关注图书榜”中的图书名称。url为”<a href="https://book.douban.com/&quot;，要爬取的信息的截图如下：" target="_blank" rel="noopener">https://book.douban.com/&quot;，要爬取的信息的截图如下：</a></p>
+<div align="center"><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/douban2.PNG"><br></div>
+
+<h2 id="使用工具"><a href="#使用工具" class="headerlink" title="使用工具"></a>使用工具</h2><ul>
+<li>python 2.7</li>
+<li>beautifulsoup</li>
+<li>requests</li>
+<li>谷歌浏览器</li>
+</ul>
+<p>爬取工具可以选择使用urllib或者requests，它们最主要的区别是在爬取数据的时候连接方式的不同。urllb爬取完数据是直接断开连接的，而requests爬取数据之后可以继续复用socket，并没有断开连接。这里选择的是requets。beaurtifulsoup可以从HTML或XML文件中提取数据的Python库，简单来说，它能将HTML的标签文件解析成树形结构，然后方便地获取到指定标签的对应属性。</p>
+<p>爬取的过程主要分为一下几部分：获得headers和cookies；使用requests爬取页面；使用beautifulsoup解析页面，得到数据。</p>
+<h2 id="获得headers和cookies"><a href="#获得headers和cookies" class="headerlink" title="获得headers和cookies"></a>获得headers和cookies</h2><p>因为需要模拟http请求，所以需要时用headers和cookies。如何获得headers和cookies呢？首先使用浏览器转到豆瓣的登录页面<a href="https://accounts.douban.com/passport/login，之后按F12打开谷歌浏览器的开发者界面，选择network，xhr，如下图所示。然后输入自己的用户名和密码，点击登录，就会看到生成了一系列的报文。点击报文，寻找headers和cookies。这里在review_recommend?user_id=195568288中找到了。headers和cookies可能不止存在一处，比如这里的ebooks?user_id=195568288中也存在，如下图所示。" target="_blank" rel="noopener">https://accounts.douban.com/passport/login，之后按F12打开谷歌浏览器的开发者界面，选择network，xhr，如下图所示。然后输入自己的用户名和密码，点击登录，就会看到生成了一系列的报文。点击报文，寻找headers和cookies。这里在review_recommend?user_id=195568288中找到了。headers和cookies可能不止存在一处，比如这里的ebooks?user_id=195568288中也存在，如下图所示。</a></p>
+<div align="center"><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/douban1.PNG"><br></div>
+
+<p>然后，将headers和cookies复制出来，格式化成两个dict(可以使用sublime的格式化功能)，如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">cookie = &#123; </span><br><span class="line">    <span class="string">'ll'</span>:<span class="string">'108288'</span>,</span><br><span class="line">    <span class="string">'bid'</span>:<span class="string">'a-gD3wCQcAQ'</span>,</span><br><span class="line">    <span class="string">'_vwo_uuid_v2'</span>:<span class="string">'D5B091F82965EE6FFD2537B7CB67F0E84|626ebc56cf82e7c7c7687f0c1e2f3f43'</span>,</span><br><span class="line">    <span class="string">'douban-fav-remind'</span>:<span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'gr_user_id'</span>:<span class="string">'537f64ef-083c-4d59-9b10-07a87e69e043'</span>,</span><br><span class="line">    <span class="string">'gr_cs1_4934a955-25db-4912-8020-fd66f755cc20'</span>:<span class="string">'user_id%3A0'</span>,</span><br><span class="line">    <span class="string">'_pk_ref.100001.3ac3'</span>:<span class="string">'%5B%22%22%2C%22%22%2C1556274990%2C%22https%3A%2F%2Fwww.google.com.hk%2F%22%5D'</span>,</span><br><span class="line">    <span class="string">'_pk_ses.100001.3ac3'</span>:<span class="string">'*'</span>,</span><br><span class="line">    <span class="string">'ap_v'</span>:<span class="string">'0,6.0'</span>,</span><br><span class="line">    <span class="string">'__yadk_uid'</span>:<span class="string">'iIm0UPM11HIatvnmyKOuUVGXFF5Ggsfw'</span>,</span><br><span class="line">    <span class="string">'__utma'</span>:<span class="string">'30149280.493188498.1554890669.1555656459.1556274991.4'</span>,</span><br><span class="line">    <span class="string">'__utmc'</span>:<span class="string">'30149280'</span>,</span><br><span class="line">    <span class="string">'__utmz'</span>:<span class="string">'30149280.1556274991.4.4.utmcsr: google|utmccn: (organic)|utmcmd: organic|utmctr: (not%20provided)'</span>,</span><br><span class="line">    <span class="string">'__utma'</span>:<span class="string">'81379588.1914928062.1556274991.1556274991.1556274991.1'</span>,</span><br><span class="line">    <span class="string">'__utmc'</span>:<span class="string">'81379588'</span>,</span><br><span class="line">    <span class="string">'__utmz'</span>:<span class="string">'81379588.1556274991.1.1.utmcsr: google|utmccn: (organic)|utmcmd: organic|utmctr: (not%20provided)'</span>,</span><br><span class="line">    <span class="string">'__utmb'</span>:<span class="string">'81379588.1.10.1556274991'</span>,</span><br><span class="line">    <span class="string">'__utmt'</span>:<span class="string">'1'</span>,</span><br><span class="line">    <span class="string">'dbcl2'</span>:<span class="string">'195568288:z2TVs+Biu8c'</span>,</span><br><span class="line">    <span class="string">'ck'</span>:<span class="string">'xiFq'</span>,</span><br><span class="line">    <span class="string">'push_noty_num'</span>:<span class="string">'0'</span>,</span><br><span class="line">    <span class="string">'push_doumail_num'</span>:<span class="string">'0'</span>,</span><br><span class="line">    <span class="string">'__utmv'</span>:<span class="string">'30149280.19556'</span>,</span><br><span class="line">    <span class="string">'__utmb'</span>:<span class="string">'30149280.4.10.1556274991'</span>,</span><br><span class="line">    <span class="string">'gr_session_id_22c937bbd8ebd703f2d8e9445f7dfd03'</span>:<span class="string">'d4bcf8e5-ab26-43ab-8253-9c9d69a4d0a6'</span>,</span><br><span class="line">    <span class="string">'gr_cs1_d4bcf8e5-ab26-43ab-8253-9c9d69a4d0a6'</span>:<span class="string">'user_id%3A1'</span>,</span><br><span class="line">    <span class="string">'_pk_id.100001.3ac3'</span>:<span class="string">'11062d4fd097d946.1556274990.1.1556275814.1556274990.'</span>,</span><br><span class="line">    <span class="string">'gr_session_id_22c937bbd8ebd703f2d8e9445f7dfd03_d4bcf8e5-ab26-43ab-8253-9c9d69a4d0a6'</span>:<span class="string">'true'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">header = &#123; </span><br><span class="line">    <span class="string">'Accept'</span>:<span class="string">'*/*'</span>,</span><br><span class="line">    <span class="string">'Accept-Encoding'</span>:<span class="string">'gzip, deflate, br'</span>,</span><br><span class="line">    <span class="string">'Accept-Language'</span>:<span class="string">'zh-CN,zh;q=0.9,en;q=0.8'</span>,</span><br><span class="line">    <span class="string">'Cache-Control'</span>:<span class="string">'no-cache'</span>,</span><br><span class="line">    <span class="string">'Connection'</span>:<span class="string">'keep-alive'</span>,</span><br><span class="line">    <span class="string">'Host'</span>:<span class="string">'book.douban.com'</span>,</span><br><span class="line">    <span class="string">'Pragma'</span>:<span class="string">'no-cache'</span>,</span><br><span class="line">    <span class="string">'Referer'</span>:<span class="string">'https://book.douban.com/'</span>,</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'</span>,</span><br><span class="line">    <span class="string">'X-Requested-With'</span>:<span class="string">'XMLHttpRequest'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="爬取和转换"><a href="#爬取和转换" class="headerlink" title="爬取和转换"></a>爬取和转换</h2><p>首先是爬取，之后将爬取的网页代码写入文件中。代码如下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">"https://book.douban.com/"</span></span><br><span class="line">response = requests.get(url, headers=header, cookies=cookie)</span><br><span class="line">soup = BeautifulSoup(response.content, <span class="string">"html.parser"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"/home/my-scripts/douban_spider.html"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> out:</span><br><span class="line">    out.write(bytes(soup))</span><br></pre></td></tr></table></figure></p>
+<p>这里将爬取的网页代码写入douban_spider.html文件中。一般来说，爬取的文网页格式会比较混乱，可以通过在线html转换工具进行格式化， 地址为<a href="https://www.freeformatter.com/html-formatter.html#ad-output" target="_blank" rel="noopener">在线html格式化</a>。最后生成的html文件在<a href="https://github.com/adamhand/LeetCode-images/blob/master/douban_spider.html" target="_blank" rel="noopener">这里</a>。</p>
+<p>之后就是分析代码并提取自己需要的信息。打开下载的html文件，，可以看到它是由一个一个的标签组成的，标签就是形如<code>&lt;li&gt;</code>、<code>&lt;div&gt;</code>的标志，标签之间往往还有多层嵌套。提取关键字的一般原则是从里往外，即如果最里面的标签能够定位到关键字，就直接取里面的标签，之后再从标签里提取关键字。否则就提取外层标签，即父标签，知道能够比较准确地定位到关键字位置。</p>
+<p>经过分析，要提取的关键字是由一个个<code>&lt;li&gt;</code>标签包裹的，如下图所示：</p>
+<div align="center"><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/douban3.PNG"><br></div>
+
+<p>因为只需要提取书的名字，所以定位标签选择的是<code>&lt;h4&gt;</code>。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">soup_h4 = soup.find_all(<span class="string">'h4'</span>, class_=<span class="string">'title'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"/home/my-scripts/douban_h4.html"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> out:</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> soup_h4:</span><br><span class="line">        out.write(_.encode(<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+<p>将提取结果写入douban_h4.html文件中，格式化后的文件在<a href="https://github.com/adamhand/LeetCode-images/blob/master/douban_h4.html" target="_blank" rel="noopener">这里</a>。</p>
+<p>接着就是提取关键字，这里用了一个比较笨的方法，使用str的split方法，将提取的结果写入h4_1.txt中。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> h4 <span class="keyword">in</span> soup_h4:</span><br><span class="line">    h4_1 = h4.find(<span class="string">'a'</span>, class_=<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">if</span> h4_1 <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        h4_1 = h4_1.encode(<span class="string">'utf-8'</span>)</span><br><span class="line">        h4_1 = h4_1.split(<span class="string">'\'&#125;)\"&gt;'</span>)[<span class="number">1</span>]</span><br><span class="line">        h4_1 = h4_1.split(<span class="string">'&lt;/'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">print</span> h4_1</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">"/home/my-scripts/h4_1.txt"</span>, <span class="string">"a+"</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.write(h4_1+<span class="string">"\n"</span>)</span><br></pre></td></tr></table></figure>
+<p>总的代码如下所示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">douban_spider</span><span class="params">()</span>:</span></span><br><span class="line">    url = <span class="string">"https://book.douban.com/"</span></span><br><span class="line">    response = requests.get(url, headers=header, cookies=cookie)</span><br><span class="line">    soup = BeautifulSoup(response.content, <span class="string">"html.parser"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"/home/my-scripts/douban_spider.html"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> out:</span><br><span class="line">        out.write(bytes(soup))</span><br><span class="line">    </span><br><span class="line">    soup_h4 = soup.find_all(<span class="string">'h4'</span>, class_=<span class="string">'title'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"/home/my-scripts/douban_h4.html"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> out:</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> soup_h4:</span><br><span class="line">            out.write(_.encode(<span class="string">'utf-8'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> h4 <span class="keyword">in</span> soup_h4:</span><br><span class="line">        h4_1 = h4.find(<span class="string">'a'</span>, class_=<span class="string">''</span>)</span><br><span class="line">        <span class="keyword">if</span> h4_1 <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            h4_1 = h4_1.encode(<span class="string">'utf-8'</span>)</span><br><span class="line">            h4_1 = h4_1.split(<span class="string">'\'&#125;)\"&gt;'</span>)[<span class="number">1</span>]</span><br><span class="line">            h4_1 = h4_1.split(<span class="string">'&lt;/'</span>)[<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">print</span> h4_1</span><br><span class="line"></span><br><span class="line">            <span class="keyword">with</span> open(<span class="string">"/home/my-scripts/h4_1.txt"</span>, <span class="string">"a+"</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(h4_1+<span class="string">"\n"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    douban_spider()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>爬取的结果存在了h4_1.txt里，内容为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">世间万物</span><br><span class="line">一个人生活</span><br><span class="line">六里庄遗事</span><br><span class="line">皮肤的秘密</span><br><span class="line">守夜</span><br><span class="line">观看王维的十九种方式</span><br><span class="line">奥丽芙·基特里奇</span><br><span class="line">写作的禅机</span><br><span class="line">推理竞技场</span><br><span class="line">这世界如露水般短暂</span><br></pre></td></tr></table></figure></p>
+<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>一开始存储soup_h4的时候遇到了中文编码的问题，但是soup中的中文却正常显示。也就是说，使用BeautifulSoup()方法之后，显示没问题，使用find_all()方法之后，中文显示的是unicode码，而不是汉字。一开始存储soup_h4的代码如下所示，存储的文件在<a href="https://github.com/adamhand/LeetCode-images/blob/master/douban_h4_fault.html" target="_blank" rel="noopener">这里</a>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">"/home/my-scripts/douban_h4.html"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> out:</span><br><span class="line">     out.write(bytes(soup_h4))</span><br></pre></td></tr></table></figure>
+<p>找了很多资料，大部分人遇到的是中文乱码的问题，但是这里不是乱码，编码是正确的。最后找到的原因是，find_all()函数返回的是一个list，而python列表中不能输出汉字，只能单独输出。所以，改为如下的代码，就可以了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">"/home/my-scripts/douban_h4.html"</span>, <span class="string">"w+"</span>) <span class="keyword">as</span> out:</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> soup_h4:</span><br><span class="line">        out.write(_.encode(<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+<p>另外，在取soup_h4中的内容，即最终想要的书名的时候，也遇到了问题，一开始的写法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> h4 <span class="keyword">in</span> soup_h4:</span><br><span class="line">     h4_1 = h4.find(<span class="string">'a'</span>, class_=<span class="string">''</span>)</span><br><span class="line">     <span class="keyword">if</span> h4_1 <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         <span class="keyword">print</span> h4_1.contents</span><br></pre></td></tr></table></figure>
+<p>这种写法也是输出一堆unicode码，后来试着改为<code>str(h4_1.contents).encode(&#39;utf-8&#39;)</code>，想对contents进行编码，输出的还是unicode码。最后使用了一个笨方法，使用字符串的split()方法对关键字进行提取。</p>
+<p>另外，关于BeautifulSoup的编码，这里小记一下。requests和beautifulsoup都会自行猜测原文的编码方式，然后用猜测出来的编码方式进行解码转换成unicode。大多数时候猜测出来的编码都是正确的，但也有猜错的情况，如果猜错了可以指定原文的编码。查看requests和BeautifulSoup使用的编码方法为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">response = requests.get(url, headers=header, cookies=cookie)</span><br><span class="line"><span class="keyword">print</span> response.apparent_encoding  <span class="comment"># 查看requests使用的编码格式，两种方法都可以</span></span><br><span class="line"><span class="keyword">print</span> response.encoding</span><br><span class="line"></span><br><span class="line">soup = BeautifulSoup(response.content, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="keyword">print</span> soup.original_encoding   <span class="comment"># 查看BeautifulSoup使用的编码格式</span></span><br></pre></td></tr></table></figure>
+<p>得到requests和BeautifulSoup的编码方式后，查看要爬取的原网站(这里是豆瓣)，查看它的<code>charset</code>属性，如果和requests和BeautifulSoup的编码方式相同，说明是正确的，否则就要指定requests和BeautifulSoup的编码方式。指定方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">response = requests.get(url, headers=header, cookies=cookie)</span><br><span class="line">response.encoding=<span class="string">'gb18030'</span>  <span class="comment"># requests的结果使用gb18030编码，和原网站的编码相同</span></span><br><span class="line">soup = BeautifulSoup(response.content, <span class="string">"lxml"</span>, from_encoding=<span class="string">'gb18030'</span>)  <span class="comment"># BeautifulSoup指定使用gb18030编码</span></span><br></pre></td></tr></table></figure>
+<p>另外，BeautifulSoup输出的时候会默认使用<code>utf-8</code>对<code>unicode</code>进行编码，如果原文不是以<code>utf-8</code>进行编码的话，输出还是会乱码。这时候，可以用prettify（）或则encode（）方式来指定编码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">soup = BeautifulSoup(response.content, &quot;html.parser&quot;)</span><br><span class="line">print soup.title.prettify(&apos;gb18030&apos;)</span><br><span class="line">print soup.title.encode(&apos;gb18030&apos;)</span><br></pre></td></tr></table></figure>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>另外需要注意一点，爬取的时候浏览器这边要保持登录，否则可能会出现”requests.exceptions.TooManyRedirects: Exceeded 30 redirects”，网页重定向的问题。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.gtwang.org/programming/python-beautiful-soup-module-scrape-web-pages-tutorial/" target="_blank" rel="noopener">Python 使用 Beautiful Soup 抓取與解析網頁資料，開發網路爬蟲教學</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/35354532" target="_blank" rel="noopener">BeautifulSoup全面总结</a></p>
+<p><a href="https://segmentfault.com/q/1010000004998311/a-1020000004998595" target="_blank" rel="noopener">python使用beautifulsoup乱码问题</a></p>
+<p><a href="http://zangbo.me/2017/06/15/Crawler_3/" target="_blank" rel="noopener">爬虫笔记（三）：BeautifulSoup基础</a></p>
+<p><a href="https://www.jianshu.com/p/69401b84419e" target="_blank" rel="noopener">requests和BeautifulSoup中文编码转换心得</a></p>
+<p><a href="https://www.jianshu.com/p/f8516eb9913f" target="_blank" rel="noopener">Python爬虫之爬取静态网页</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/20/python获取各种时间戳-md/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1681,196 +1872,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/Java-I-O-4-网络操作/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/05/Java-I-O-4-网络操作/" itemprop="url">Java I/O(4)--网络操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-05T22:00:31+08:00">
-                2019-01-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="五、网络操作"><a href="#五、网络操作" class="headerlink" title="五、网络操作"></a>五、网络操作</h1><p>Java 中的网络支持：</p>
-<blockquote>
-<ul>
-<li>InetAddress：用于表示网络上的硬件资源，即 IP 地址；</li>
-<li>URL：统一资源定位符；</li>
-<li>Sockets：使用 TCP 协议实现网络通信；</li>
-<li>Datagram：使用 UDP 协议实现网络通信。</li>
-</ul>
-</blockquote>
-<h2 id="InetAddress"><a href="#InetAddress" class="headerlink" title="InetAddress"></a>InetAddress</h2><p>没有公有的构造函数，只能通过静态方法来创建实例。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">InetAddress.getByName(String host);</span><br><span class="line">InetAddress.getByAddress(<span class="keyword">byte</span>[] address);</span><br></pre></td></tr></table></figure></p>
-<h2 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h2><p>可以直接从 URL 中读取字节流数据。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 字节流 */</span></span><br><span class="line">    InputStream is = url.openStream();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 字符流 */</span></span><br><span class="line">    InputStreamReader isr = <span class="keyword">new</span> InputStreamReader(is, <span class="string">"utf-8"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 提供缓存功能 */</span></span><br><span class="line">    BufferedReader br = <span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line"></span><br><span class="line">    String line;</span><br><span class="line">    <span class="keyword">while</span> ((line = br.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(line);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    br.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>openConnection()方法会返回一个 URLConnection 对象，它表示到 URL 所引用的远程对象的连接。<br>每次调用此 URL 的协议处理程序的 openConnection 方法都打开一个新的连接。如果 URL 的协议（例如，HTTP 或 JAR）存在属于以下包或其子包之一的公共、专用 URLConnection 子类：java.lang、java.io、java.util、java.net，返回的连接将为该子类的类型。例如，对于 HTTP，将返回 HttpURLConnection，对于 JAR，将返回 JarURLConnection。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLConnDemo</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">      <span class="keyword">try</span></span><br><span class="line">      &#123;</span><br><span class="line">         URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line">         URLConnection urlConnection = url.openConnection();</span><br><span class="line">         HttpURLConnection connection = <span class="keyword">null</span>;</span><br><span class="line">         <span class="keyword">if</span>(urlConnection <span class="keyword">instanceof</span> HttpURLConnection)</span><br><span class="line">         &#123;</span><br><span class="line">            connection = (HttpURLConnection) urlConnection;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">else</span></span><br><span class="line">         &#123;</span><br><span class="line">            System.out.println(<span class="string">"请输入 URL 地址"</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         BufferedReader in = <span class="keyword">new</span> BufferedReader(</span><br><span class="line">         <span class="keyword">new</span> InputStreamReader(connection.getInputStream()));</span><br><span class="line">         String urlString = <span class="string">""</span>;</span><br><span class="line">         String current;</span><br><span class="line">         <span class="keyword">while</span>((current = in.readLine()) != <span class="keyword">null</span>)</span><br><span class="line">         &#123;</span><br><span class="line">            urlString += current;</span><br><span class="line">         &#125;</span><br><span class="line">         System.out.println(urlString);</span><br><span class="line">      &#125;<span class="keyword">catch</span>(IOException e)</span><br><span class="line">      &#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="TCP——Sockets"><a href="#TCP——Sockets" class="headerlink" title="TCP——Sockets"></a>TCP——Sockets</h2><blockquote>
-<ul>
-<li>ServerSocket：服务器端类</li>
-<li>Socket：客户端类</li>
-<li>服务器和客户端通过 InputStream 和 OutputStream 进行输入输出。</li>
-</ul>
-</blockquote>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/java%20io%20socket.jpg"><br></center>
-
-<p>下面是一个上传图片的案例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 上传任务</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UploadTask</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> _2MB = <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">private</span> Socket s;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">UploadTask</span><span class="params">(Socket s)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.s = s;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">		String ip = s.getInetAddress().getHostAddress();</span><br><span class="line">		System.out.println(ip + <span class="string">"connected"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			<span class="comment">// 读取客户端发来的数据。</span></span><br><span class="line">			InputStream in = s.getInputStream();</span><br><span class="line">			<span class="comment">// 将读取到数据存储到一个文件中。</span></span><br><span class="line">			File dir = <span class="keyword">new</span> File(<span class="string">"/usr/Prom/eclipse/testAll/src/TCP/pic"</span>);</span><br><span class="line">			<span class="keyword">if</span> (!dir.exists()) &#123;</span><br><span class="line">				dir.mkdirs();</span><br><span class="line">			&#125;</span><br><span class="line">			File file = <span class="keyword">new</span> File(dir, ip + <span class="string">".jpeg"</span>);</span><br><span class="line">			<span class="comment">//如果文件已经存在于服务端</span></span><br><span class="line">			<span class="keyword">while</span>(file.exists())&#123;</span><br><span class="line">				file = <span class="keyword">new</span> File(dir,ip+<span class="string">"("</span>+(++count)+<span class="string">").jpeg"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">			<span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">while</span> ((len = in.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">				fos.write(buf, <span class="number">0</span>, len);</span><br><span class="line">				<span class="keyword">if</span>(file.length() &gt; _2MB)&#123;</span><br><span class="line">					System.out.println(ip+<span class="string">"文件体积过大"</span>);</span><br><span class="line">					fos.close();</span><br><span class="line">					s.close();</span><br><span class="line">					System.out.println(ip+<span class="string">"...."</span>+file.delete());</span><br><span class="line">					<span class="keyword">return</span> ;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 获取socket输出流， 将上传成功字样发给客户端。</span></span><br><span class="line">			OutputStream out = s.getOutputStream();</span><br><span class="line">			out.write(<span class="string">"上传成功"</span>.getBytes());</span><br><span class="line">			fos.close();</span><br><span class="line">			s.close();</span><br><span class="line">			&#125;<span class="keyword">catch</span>(IOException e)&#123;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 上传客户端</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UploadPicClient</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">		<span class="comment">//1,创建客户端socket。</span></span><br><span class="line">		Socket s = <span class="keyword">new</span> Socket(<span class="string">"192.168.10.128"</span>,<span class="number">10006</span>);</span><br><span class="line">		<span class="comment">//2,读取客户端要上传的图片文件。</span></span><br><span class="line">		FileInputStream fis = <span class="keyword">new</span> FileInputStream(<span class="string">"/usr/Prom/eclipse/testAll/src/TCP/naruto.jpeg"</span>);</span><br><span class="line">		<span class="comment">//3,获取socket输出流，将读到图片数据发送给服务端。</span></span><br><span class="line">		OutputStream out = s.getOutputStream();</span><br><span class="line">		<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		<span class="keyword">int</span> len = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span>((len=fis.read(buf))!=-<span class="number">1</span>)&#123;</span><br><span class="line">			out.write(buf,<span class="number">0</span>,len);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//告诉服务端说：这边的数据发送完毕。让服务端停止读取。</span></span><br><span class="line">		s.shutdownOutput();</span><br><span class="line">		<span class="comment">//读取服务端发回的内容。</span></span><br><span class="line">		InputStream in = s.getInputStream();</span><br><span class="line">		<span class="keyword">byte</span>[] bufIn = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		<span class="keyword">int</span> lenIn = in.read(buf);</span><br><span class="line">		String text = <span class="keyword">new</span> String(buf,<span class="number">0</span>,lenIn);</span><br><span class="line">		System.out.println(text);</span><br><span class="line">		</span><br><span class="line">		fis.close();</span><br><span class="line">		s.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 上传服务端</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UploadPicServer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		<span class="comment">//创建tcp的socket服务端。</span></span><br><span class="line">		ServerSocket ss = <span class="keyword">new</span> ServerSocket(<span class="number">10006</span>);</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			Socket s = ss.accept();</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">new</span> Thread(<span class="keyword">new</span> UploadTask(s)).start();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="UDP——Datagram"><a href="#UDP——Datagram" class="headerlink" title="UDP——Datagram"></a>UDP——Datagram</h2><blockquote>
-<ul>
-<li>DatagramSocket：通信类</li>
-<li>DatagramPacket：数据包类<br>使用UDP实现发送和接受端：</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Send</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"send starts"</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//1.建立udpsocket服务。使用DatagramSocket对象</span></span><br><span class="line">		DatagramSocket ds = <span class="keyword">new</span> DatagramSocket();</span><br><span class="line">		<span class="comment">//2.建立流从键盘读取数据</span></span><br><span class="line">		BufferedReader bufr = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">		</span><br><span class="line">		String line = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">while</span>((line = bufr.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">byte</span>[] buf = line.getBytes();</span><br><span class="line">			<span class="comment">//3.将要发送的数据封装到数据包中。1000是绑定的本地端口。</span></span><br><span class="line">			DatagramPacket dp = <span class="keyword">new</span> DatagramPacket(buf, buf.length, InetAddress.getByName(<span class="string">"192.168.10.128"</span>), <span class="number">10000</span>);</span><br><span class="line">			<span class="comment">//4.发送数据包</span></span><br><span class="line">			ds.send(dp);</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>(line.equals(<span class="string">"886"</span>))</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//5.关闭服务</span></span><br><span class="line">		ds.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Receive</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"receive starts"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//1,建立udp socket服务。注意绑定端口</span></span><br><span class="line">		DatagramSocket ds = <span class="keyword">new</span> DatagramSocket(<span class="number">10000</span>);</span><br><span class="line">		<span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">			<span class="comment">//2,创建数据包。</span></span><br><span class="line">			<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">			DatagramPacket dp = <span class="keyword">new</span> DatagramPacket(buf,buf.length);</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//3,使用接收方法将数据存储到数据包中。</span></span><br><span class="line">			ds.receive(dp);<span class="comment">//阻塞式的。</span></span><br><span class="line">			<span class="comment">//4，通过数据包对象的方法，解析其中的数据,比如，地址，端口，数据内容。</span></span><br><span class="line">			</span><br><span class="line">			String ip = dp.getAddress().getHostAddress();</span><br><span class="line">			<span class="keyword">int</span> port = dp.getPort();</span><br><span class="line">			String text = <span class="keyword">new</span> String(dp.getData(),<span class="number">0</span>,dp.getLength());</span><br><span class="line">			System.out.println(ip+<span class="string">":"</span>+port+<span class="string">":"</span>+text);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//5,关闭资源。</span></span><br><span class="line">		<span class="comment">// ds.close();</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="练习：模拟浏览器-客户端-和Tomcat服务器-服务端"><a href="#练习：模拟浏览器-客户端-和Tomcat服务器-服务端" class="headerlink" title="练习：模拟浏览器(客户端)和Tomcat服务器(服务端)"></a>练习：模拟浏览器(客户端)和Tomcat服务器(服务端)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyBrowser</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">		Socket s = <span class="keyword">new</span> Socket(<span class="string">"192.168.10.128"</span>,<span class="number">8080</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//模拟浏览器，给tomcat服务端发送符合http协议的请求消息。</span></span><br><span class="line">		PrintWriter out = <span class="keyword">new</span> PrintWriter(s.getOutputStream(),<span class="keyword">true</span>);</span><br><span class="line">		out.println(<span class="string">"GET /myweb/1.html HTTP/1.1"</span>);</span><br><span class="line">		out.println(<span class="string">"Accept: */*"</span>);</span><br><span class="line">		out.println(<span class="string">"Host: 192.168.10.128:8080"</span>);</span><br><span class="line">		out.println(<span class="string">"Connection: close"</span>);</span><br><span class="line">		out.println();</span><br><span class="line">		out.println();</span><br><span class="line">		</span><br><span class="line">		InputStream in = s.getInputStream();</span><br><span class="line">		<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		<span class="keyword">int</span> len = in.read(buf);</span><br><span class="line">		String str =<span class="keyword">new</span> String(buf,<span class="number">0</span>,len);</span><br><span class="line">		System.out.println(str);</span><br><span class="line">		s.close();</span><br><span class="line">		<span class="comment">//http://192.168.10.128:8080/myweb/1.html</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTomcat</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		ServerSocket ss = <span class="keyword">new</span> ServerSocket(<span class="number">8080</span>);</span><br><span class="line">		Socket s = ss.accept();</span><br><span class="line">		</span><br><span class="line">		System.out.println(s.getInetAddress().getHostAddress()+<span class="string">".....connected"</span>);</span><br><span class="line">		</span><br><span class="line">		InputStream in = s.getInputStream();</span><br><span class="line">		<span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">		<span class="keyword">int</span> len = in.read(buf);</span><br><span class="line">		String text = <span class="keyword">new</span> String(buf,<span class="number">0</span>,len);</span><br><span class="line">		System.out.println(text);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//给客户端一个反馈信息。</span></span><br><span class="line">		PrintWriter out = <span class="keyword">new</span> PrintWriter(s.getOutputStream(),<span class="keyword">true</span>);</span><br><span class="line">		out.println(<span class="string">"&lt;font color='red' size='7'&gt;欢迎光临&lt;/font&gt;"</span>);</span><br><span class="line">		s.close();</span><br><span class="line">		ss.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>网络结构：</p>
-<blockquote>
-<ul>
-<li>C/S client/server<ul>
-<li>特点：<br>  该结构的软件，客户端和服务端都需要编写。<br>  可发成本较高，维护较为麻烦。</li>
-<li>好处：<br>  客户端在本地可以分担一部分运算。</li>
-</ul>
-</li>
-<li>B/S browser/server<ul>
-<li>特点：<br>  该结构的软件，只开发服务器端，不开发客户端，因为客户端直接由浏览器取代。<br>  开发成本相对低，维护更为简单。</li>
-<li>缺点：所有运算都要在服务端完成。</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1921,7 +1922,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1931,7 +1932,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index-2.html">
+                <a href="/categories/index-1.html">
                   <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
