@@ -259,6 +259,305 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/《剑指offer》题目小结-4/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="adamhand">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dethnote">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/02/《剑指offer》题目小结-4/" itemprop="url">《剑指offer》题目小结(4)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-02T19:08:05+08:00">
+                2019-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="16-二进制中1的个数"><a href="#16-二进制中1的个数" class="headerlink" title="16. 二进制中1的个数"></a>16. 二进制中1的个数</h1><p><strong>题目描述</strong></p>
+<p>输入一个整数，输出该数二进制表示中 1 的个数(符号位不算)。</p>
+<hr>
+<ul>
+<li>解法1，可能引起死循环的解法：首先判断该数二进制表示中最右一位是不是1，接着把输入的整数右移一位，再次判断最右一位是不是1，直到该整数变为0位置。<br>这个方法对输入整数为整数的情况是有效的，但是如果输入一个负数，右移一位就会在最左侧补1，这样该数永远不为0，就会陷入死循环。<br>但是Java中有一个逻辑右移的概念，使用逻辑右移而不是算数右移，可以避免死循环。代码如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numberOf1_1</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">0</span>)      <span class="comment">//去掉符号位</span></span><br><span class="line">        count = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(n != <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>((n &amp; <span class="number">0x01</span>) != <span class="number">0</span>)&#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">        n &gt;&gt;&gt;= <span class="number">1</span>;  <span class="comment">//使用逻辑右移，可以避免死循环</span></span><br><span class="line">        <span class="comment">//n &gt;&gt;= 1;  //使用算数右移，输入为负数时会产生死循环</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法2，常规解法：设置一个标志flag=1，每次将flag和给定的整数做与运算后，将flag左移一位，直到flag变为0，这样就能够判断输入数的每一位是不是为1。<br>这个算法循环的次数等于flag二进制的位数，如果flag是一个整数，则要循环32次。代码如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numberOf1_2</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> flag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(flag &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>((n &amp; flag) != <span class="number">0</span>)&#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">        flag &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法3，惊喜解法：这个解法运用了一个性质，把一个整数减去1，再和原整数做与运算，会把该整数最右边一个1变为0。那么一个整数的二进制表示中有多少个1，就能够进行多少次这样的操作。代码如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numberOf1_3</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">0</span>)               <span class="comment">//如果n小于0的话，要剪掉符号位的1</span></span><br><span class="line">        count -= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n != <span class="number">0</span>)&#123;</span><br><span class="line">        ++count;</span><br><span class="line">        n &amp;= (n - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法4，用Integer.bitCount()函数。代码如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numberOf1_4</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">0</span>)      <span class="comment">//去掉符号位</span></span><br><span class="line">        <span class="keyword">return</span> Integer.bitCount(n) - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> Integer.bitCount(n);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>小结：Java中的左移和右移</strong><br>在计算机中，移位操作可以被总结如下：</p>
+<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/leftandrightshift.PNG"><br></center>
+
+<p>对于其他语言比如C/C++，右移时选择逻辑右移还是算数右移是由编译器自己确定的，有符号数进行算数右移，无符号数进行逻辑右移。但是Java提供了一个逻辑右移运算符 &gt;&gt;&gt;，可以人为指定右移方式。Java中的移位运算可以被总结为如下：</p>
+<ul>
+<li><code>&lt;&lt;</code>：左移运算符，右边补0，num &lt;&lt; 1,相当于num乘以2；</li>
+<li><code>&gt;&gt;</code>：算数右移运算符，左边补符号位，num &gt;&gt; 1,相当于num除以2；</li>
+<li><code>&gt;&gt;&gt;</code>：逻辑右移运算符，左边补0；</li>
+</ul>
+<p><em>补充1：Java中的左移</em></p>
+<ul>
+<li>java的左右移操作的对象是补码；</li>
+<li>byte、char会转成int再操作；</li>
+<li>long类型不转换；</li>
+<li>double、float不可进行移动操作；</li>
+</ul>
+<p>看下列操作：</p>
+<blockquote>
+<ul>
+<li>System.out.println(1&lt;&lt;3);结果为8（1*2^3）</li>
+<li>System.out.println(1&lt;&lt;31);结果为-2147483648（符号位变为1，为什么变为1呢？因为这是个<strong>临界值</strong>）</li>
+<li>System.out.println(1&lt;&lt;32);结果为1（不是0，<code>&lt;&lt;n</code>实际是<code>&lt;&lt;(n%32)</code>，对于<code>long&lt;&lt;n</code>实际是<code>&lt;&lt;n%64)</code>)</li>
+</ul>
+</blockquote>
+<p><em>补充2：源码、反码和补码</em></p>
+<ul>
+<li>原码就是符号位加上真值的绝对值， 即用第一位表示符号， 其余位表示值。</li>
+<li>反码的表示方法是:正数的反码是其本身；负数的反码是在其原码的基础上， 符号位不变，其余各个位取反。</li>
+<li>补码的表示方法是:正数的补码就是其本身；负数的补码是在其原码的基础上， 符号位不变， 其余各位取反， 最后+1。 (即在反码的基础上+1)</li>
+</ul>
+<p>举例：<br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/threecode.PNG"></p>
+<p>那么计算机为什么要使用补码呢？</p>
+<p>首先，根据运算法则减去一个正数等于加上一个负数， 即: 1-1 = 1+(-1)， 所以计算机被设计成只有加法而没有减法， 而让计算机辨别”符号位”会让计算机的基础电路设计变得十分复杂，于是就让符号位也参与运算，从而产生了反码。 </p>
+<p>用反码计算， 出现了”0”这个特殊的数值， 0带符号是没有任何意义的。 而且会有[0000 0000]和[1000 0000]两个编码表示0。于是设计了补码， 负数的补码就是反码+1，正数的补码就是正数本身，从而解决了0的符号以及两个编码的问题: 用[0000 0000]表示0，用[1000 0000]表示-128。 </p>
+<p>注意：-128实际上是使用以前的-0的补码来表示的， 所以-128并没有原码和反码。使用补码， 不仅仅修复了0的符号以及存在两个编码的问题， 而且还能够多表示一个最低数。 这就是为什么8位二进制， 使用补码表示的范围为[-128， 127]。</p>
+<p>求补码的两种方式：</p>
+<ul>
+<li>先写出对应的原码，然后符号位不变，除符号位外逐位取反，最后再加1；</li>
+<li>先写出对应的原码，然后根据原码从右往左找出第一个1，这个1不变，符号位不变，1左边的全部去反，右边的也不变。；</li>
+</ul>
+<p><em>补充3：循环左移</em><br><strong>整数的循环移位：</strong></p>
+<ul>
+<li>确定要操作数据类型的位数L；（如<code>byte b</code>的L=8）</li>
+<li>确定要循环左移的位数<code>n(n&lt;L)</code>；（如循环左移3位）</li>
+<li>原数数据左移n   取或   原数据<strong>逻辑右移</strong><code>L-n</code>;   <code>(b=(byte)(b&lt;&lt;3|b&gt;&gt;&gt;5))</code>   （循环右移的话就：<code>&gt;&gt;&gt;n</code>|<code>&lt;&lt;L-n</code>）</li>
+</ul>
+<p>代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoopLeftShift</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a=<span class="number">0xD6485F0F</span>;<span class="comment">//转为2进制是32位</span></span><br><span class="line">        <span class="comment">//循环左移7位</span></span><br><span class="line">        <span class="keyword">int</span> temp=a&lt;&lt;<span class="number">7</span>|a&gt;&gt;&gt;(<span class="number">32</span>-<span class="number">7</span>);<span class="comment">//这里注意右移用的是无符号右移</span></span><br><span class="line">        System.out.println(Integer.toHexString(temp));<span class="comment">//正确答案是0x242F87EB</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//循环右移7位</span></span><br><span class="line">        temp=a&gt;&gt;&gt;<span class="number">7</span>|a&lt;&lt;(<span class="number">32</span>-<span class="number">7</span>);<span class="comment">//这里注意右移用的是无符号右移</span></span><br><span class="line">        System.out.println(Integer.toHexString(temp));<span class="comment">//正确答案是0x1fac90be</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>字符串的循环移位：</strong><br>核心思想：<strong>三次翻转</strong>。</p>
+<p><strong>循环左移n位</strong>:</p>
+<ul>
+<li>先整体反转：首先将原字符串进行反转；</li>
+<li>再部分反转：把整个字符串分成 原字符串的长度-n和后n个字符并分别进行反转；</li>
+<li>最后合并：合并两个字符串；</li>
+</ul>
+<p><strong>循环右移n位</strong>:</p>
+<ul>
+<li>先部分反转：把原字符串分成 原字符串的长度-n和后n个字符并分别进行反转；</li>
+<li>合并：合并两个字符串；</li>
+<li>整体反转：再次进行反转；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//字符串翻转</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">reverse</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>[] strs = str.toCharArray();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length() / <span class="number">2</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">char</span> temp = strs[i];</span><br><span class="line">        strs[i] = strs[str.length() - i - <span class="number">1</span>];</span><br><span class="line">        strs[str.length() - i - <span class="number">1</span>] = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> String.valueOf(strs);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//循环左移</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">loopLeftShift</span><span class="params">(String str, <span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">    str = reverse(str);</span><br><span class="line">    String left = reverse(str.substring(<span class="number">0</span>, str.length() - index));  <span class="comment">//substring(int beginIndex, int endIndex)</span></span><br><span class="line">    String right = reverse(str.substring(str.length() - index));  <span class="comment">//substring(int beginIndex)</span></span><br><span class="line">    str = left + right;</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//循环右移</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">loopRightShift</span><span class="params">(String str, <span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">    String left = reverse(str.substring(<span class="number">0</span>, str.length() - index));</span><br><span class="line">    String right = reverse(str.substring(str.length() - index));</span><br><span class="line">    str = left + right;</span><br><span class="line">    str = reverse(str);</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="16-1-相关题目1"><a href="#16-1-相关题目1" class="headerlink" title="16.1 相关题目1"></a>16.1 相关题目1</h2><p>题目描述：用一条语句判断一个整数是不是2的整数次方。</p>
+<p>分析：一个整数如果是2的整数次方，那么它的二进制表示中有且只有一位是1，其它位都是0；那么将这个数减去1之后和自身做与运算，这个整数就会变为0。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isIntegerMultipleOf2</span><span class="params">(<span class="keyword">int</span> num)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>((num &amp; (num - <span class="number">1</span>)) == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="16-2-相关题目2"><a href="#16-2-相关题目2" class="headerlink" title="16.2 相关题目2"></a>16.2 相关题目2</h2><p>题目描述：输入两个整数m和n，计算需要改变m的二进制表示中的多少位才能得到n。比如10的二进制表示为1010,13的二进制表示为1101，需要改变1010中的3位才能得到1101。</p>
+<p>分析：可以分两步解决这个问题，第一步求这两个数的异或，第二步统计异或结果中1的位数。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">changeNumber</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>; <span class="comment">//需要改变的次数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> xor = m ^ n;</span><br><span class="line">    System.out.println(xor);</span><br><span class="line">    <span class="keyword">while</span>(xor != <span class="number">0</span>)&#123;</span><br><span class="line">        count++;</span><br><span class="line">        xor &amp;= (xor - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：由于负数在计算机中是以补码的形式存储的，所以如果输入m=-1，n=10，输入结果为30。-7在计算机中的表示为<code>1111 1111 1111 1111 1111 1111 1111 1001</code>,10表示为<code>0000 0000 0000 0000 0000 0000 0000 1010</code>。</p>
+</blockquote>
+<h1 id="17-数值的整数次方"><a href="#17-数值的整数次方" class="headerlink" title="17. 数值的整数次方"></a>17. 数值的整数次方</h1><p><strong>题目描述</strong><br>实现函数double Power(double base, int exponent)，求base的exponent次方。不得使用库函数，同时不要考虑大数问题。</p>
+<hr>
+<p>思路：本体需要注意以下四点：</p>
+<ul>
+<li>0的0次方在数学上是没有意义的，因此无论是输出1还是0都是可以接受的，本题选择输出1</li>
+<li>0的负数次方相当于0作为除数，也是无意义的，非法输入</li>
+<li>base如果非0，如果指数exponent小于0，可以先求base的|exponent|次方，然后再求倒数</li>
+<li>判断double类型的base是否等于0不能使用==号。因为计算机表述小树(包括float和double型小数)都有误差，不能直接使用等号(==)判断两个小数是否相等。如果两个数的差的绝对值很小，那么可以认为两个double类型的数相等。</li>
+</ul>
+<p>根据以上的思考，可以写出如下程序：</p>
+<ul>
+<li>解法1，普通解法：代码如下</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">powerWithUnsignedExponent</span><span class="params">(<span class="keyword">double</span> base, <span class="keyword">int</span> exponent)</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> result = <span class="number">1.0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= exponent; i++)</span><br><span class="line">        result *= base;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base, <span class="keyword">int</span> exponent)</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> isNegtive = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">//底数为0且指数为负数，为了避免对0求导数出现的错误，直接返回0.0</span></span><br><span class="line">    <span class="keyword">if</span>(Math.abs(base - <span class="number">0.0</span>) &lt; Double.MIN_VALUE &amp;&amp; exponent &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(exponent &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        exponent = -exponent;</span><br><span class="line">        isNegtive = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">double</span> result = powerWithUnsignedExponent(base, exponent);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> isNegtive ? <span class="number">1.0</span> / result : result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法2，高效解法：有这样一种思路，如果输入的指数为32，那么可以先求16次方，要求16次方可以先求8次方，同理，可以先求4次方，2次方，1次方。可以用如下公示表示：<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/latex11111.PNG"><br></center>
+
+</li>
+</ul>
+<p>上述公式中，a相当于base，n相当于exponent。这个公式很容易就能用递归来实现。代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">powerWithUnsignedExponent</span><span class="params">(<span class="keyword">double</span> base, <span class="keyword">int</span> exponent)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//0的0次方也输出1</span></span><br><span class="line">    <span class="keyword">if</span>(exponent == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(exponent == <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> base;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//result相当于base^n/2</span></span><br><span class="line">    <span class="comment">//用移位运算代替除以2，效率高</span></span><br><span class="line">    <span class="keyword">double</span> result = powerWithUnsignedExponent(base, exponent &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    result *= result;</span><br><span class="line">    <span class="comment">//如果exponent为奇数，还要乘以base</span></span><br><span class="line">    <span class="comment">//用位运算代替求余操作(%)来判断一个数是奇数还是偶数</span></span><br><span class="line">    <span class="keyword">if</span>((exponent &amp; <span class="number">0x01</span>) == <span class="number">1</span>)</span><br><span class="line">        result *= base;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">power</span><span class="params">(<span class="keyword">double</span> base, <span class="keyword">int</span> exponent)</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> isNegtive = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">//底数为0且指数为负数，为了避免对0求导数出现的错误，直接返回0.0</span></span><br><span class="line">    <span class="keyword">if</span>(Math.abs(base - <span class="number">0.0</span>) &lt; Double.MIN_VALUE &amp;&amp; exponent &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(exponent &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        exponent = -exponent;</span><br><span class="line">        isNegtive = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">double</span> result = powerWithUnsignedExponent(base, exponent);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> isNegtive ? <span class="number">1.0</span> / result : result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="18-打印从-1-到最大的-n-位数"><a href="#18-打印从-1-到最大的-n-位数" class="headerlink" title="18. 打印从 1 到最大的 n 位数"></a>18. 打印从 1 到最大的 n 位数</h1><p><strong>题目描述</strong><br>输入数字 n，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数即 999。</p>
+<hr>
+<p>本题需要注意的是“大数问题”，如果n非常大，用int或long型变量存储会产生溢出。</p>
+<ul>
+<li>解法1，没考虑大数问题：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Print1ToMaxOfNDigit</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> number = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i++ &lt; n)&#123;</span><br><span class="line">        number *= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//number-1是最大的n位数</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; number; j++)&#123;</span><br><span class="line">        System.out.println(j);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法2，用字符串模拟加法，解决大数问题。首先把字符串中的每一个数字都初始化为’0’，然后每一次为字符串表示的数字加1,。因此只需要做两件事：一是在字符串上模拟加法，二是吧字符串表达的数字打印出来。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印1到最大的n位数</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OneToN</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        print1ToMaxOfN(<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print1ToMaxOfN</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        StringBuilder number = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        System.out.println(number.length());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">            number.append(<span class="string">'0'</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(!increment(number))&#123;</span><br><span class="line">            printNumber(number);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">increment</span><span class="params">(StringBuilder sb)</span></span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> isOverflow = <span class="keyword">false</span>;        <span class="comment">//是否最高位溢出</span></span><br><span class="line">        <span class="keyword">int</span> nTakeOver = <span class="number">0</span>;                 <span class="comment">//进位</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = sb.length() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">            <span class="keyword">int</span> nSum = sb.charAt(i) - <span class="string">'0'</span> + nTakeOver; <span class="comment">//某位上的数加上进位</span></span><br><span class="line">            <span class="keyword">if</span>(i == sb.length() - <span class="number">1</span>)  <span class="comment">//如果当前位为最低位，最低位加一</span></span><br><span class="line">                nSum++;</span><br><span class="line">            <span class="keyword">if</span>(nSum &gt;= <span class="number">10</span>)&#123;          <span class="comment">//要产生进位</span></span><br><span class="line">                <span class="keyword">if</span>(i == <span class="number">0</span>)</span><br><span class="line">                    isOverflow = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    nSum -= <span class="number">10</span>;</span><br><span class="line">                    nTakeOver = <span class="number">1</span>; <span class="comment">//进位</span></span><br><span class="line">                    sb.setCharAt(i, (<span class="keyword">char</span>)(<span class="string">'0'</span>+nSum));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                sb.setCharAt(i, (<span class="keyword">char</span>)(<span class="string">'0'</span>+ nSum));  <span class="comment">//不产生进位，也就不需要运算高位，直接跳出</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> isOverflow;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printNumber</span><span class="params">(StringBuilder sb)</span></span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> isBegin0 = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">//因为字符串前面补得是'0'，打印时要跳过这些0</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; sb.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(isBegin0 &amp;&amp; sb.charAt(i) != <span class="string">'0'</span>)</span><br><span class="line">                isBegin0 = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">if</span>(!isBegin0)</span><br><span class="line">                System.out.print(sb.charAt(i));</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.print(<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>解法3，转化成排列问题，使用递归让代码更简洁。因为n位所有十进制数其实就是n个从0到9的全排列。也就是说，把数字的每一位都从0到9排列一遍，就得到了所有的十进制数。而全排列很容易用递归来表达。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Print1ToMaxOfNDigits_3</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    StringBuffer s = <span class="keyword">new</span> StringBuffer(n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123;</span><br><span class="line">        s.append(<span class="string">'0'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">        s.setCharAt(<span class="number">0</span>, (<span class="keyword">char</span>) (i+<span class="string">'0'</span>));</span><br><span class="line">        Print1ToMaxOfNDigits_3_Recursely(s, n, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Print1ToMaxOfNDigits_3_Recursely</span><span class="params">(StringBuffer s, <span class="keyword">int</span> n , <span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(index == n - <span class="number">1</span>)&#123;</span><br><span class="line">        PrintNumber(s);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</span><br><span class="line">        <span class="comment">//设置某一位的数</span></span><br><span class="line">        s.setCharAt(index+<span class="number">1</span>, (<span class="keyword">char</span>) (i+<span class="string">'0'</span>));</span><br><span class="line">        <span class="comment">//第一次递归设置十位数，第二次设置百位数......</span></span><br><span class="line">        Print1ToMaxOfNDigits_3_Recursely(s, n, index+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">PrintNumber</span><span class="params">(StringBuffer s)</span></span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> isBeginning0 = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(isBeginning0 &amp;&amp; s.charAt(i) != <span class="string">'0'</span>)&#123;</span><br><span class="line">            isBeginning0 = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!isBeginning0)&#123;</span><br><span class="line">            System.out.print(s.charAt(i));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>补充：排列组合的递归实现</strong></p>
+<ul>
+<li>排列问题：输入一个字符串，打印出该字符串中字符的所有排列。例如输入字符串abc，则输出由字符a、b、c所能排列出来的所有字符串abc、acb、bac、bca、cab和cba。<br>可以这样想：固定第一个字符a，求后面两个字符bc的排列。当两个字符bc的排列求好之后，我们把第一个字符a和后面的b交换，得到bac，接着我们固定第一个字符b，求后面两个字符ac的排列。现在是把c放到第一位置的时候了。记住前面我们已经把原先的第一个字符a和后面的b做了交换，为了保证这次c仍然是和原先处在第一位置的a交换，我们在拿c和第一个字符交换之前，先要把b和a交换回来。在交换b和a之后，再拿c和处在第一位置的a进行交换，得到cba。我们再次固定第一个字符c，求后面两个字符b、a的排列。这样写成递归程序如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">permutation</span><span class="params">(<span class="keyword">char</span>[] array, <span class="keyword">int</span> index)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(index==array.length)&#123;</span><br><span class="line">        System.out.println(array);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(array.length==<span class="number">0</span>||index&lt;<span class="number">0</span>||index&gt;array.length)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j=index;j&lt;array.length;j++)&#123;</span><br><span class="line">        <span class="keyword">char</span> temp=array[j];</span><br><span class="line">        array[j]=array[index];</span><br><span class="line">        array[index]=temp;</span><br><span class="line">        permutation(array, index+<span class="number">1</span>);</span><br><span class="line">        temp=array[j];</span><br><span class="line">        array[j]=array[index];</span><br><span class="line">        array[index]=temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">调用：permutation(chars, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>组合问题：输入一个字符串，输出该字符串中字符的所有组合。举个例子，如果输入abc，它的组合有a、b、c、ab、ac、bc、abc。<br>假设我们想在长度为n的字符串中求m个字符的组合。我们先从头扫描字符串的第一个字符。针对第一个字符，我们有两种选择：一是把这个字符放到组合中去，接下来我们需要在剩下的n-1个字符中选取m-1个字符；二是不把这个字符放到组合中去，接下来我们需要在剩下的n-1个字符中选择m个字符。这两种选择都很容易用递归实现。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">combiantion</span><span class="params">(<span class="keyword">char</span> chs[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(chs==<span class="keyword">null</span>||chs.length==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    List&lt;Character&gt; list=<span class="keyword">new</span> ArrayList();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=chs.length;i++)&#123;</span><br><span class="line">        combine(chs,<span class="number">0</span>,i,list);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//从字符数组中第begin个字符开始挑选number个字符加入list中</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">combine</span><span class="params">(<span class="keyword">char</span> []cs,<span class="keyword">int</span> begin,<span class="keyword">int</span> number,List&lt;Character&gt; list)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(number==<span class="number">0</span>)&#123;</span><br><span class="line">        System.out.println(list.toString());</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(begin==cs.length)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    list.add(cs[begin]);</span><br><span class="line">    combine(cs,begin+<span class="number">1</span>,number-<span class="number">1</span>,list);</span><br><span class="line">    list.remove((Character)cs[begin]);</span><br><span class="line">    combine(cs,begin+<span class="number">1</span>,number,list);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="19-在O-1-的时间内删除链表节点"><a href="#19-在O-1-的时间内删除链表节点" class="headerlink" title="19. 在O(1)的时间内删除链表节点"></a>19. 在O(1)的时间内删除链表节点</h1><p>题目描述：<br>给定单向链表的头指针和一个结点指针，定义一个函数在O(1)时间删除该结点。</p>
+<hr>
+<p>思路：</p>
+<ul>
+<li>如果该节点不是尾节点，那么可以直接将下一个节点的值赋给该节点，然后令该节点指向下下个节点，再删除下一个节点，时间复杂度为 O(1)。<br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/deletenode1.png" alt=""></li>
+<li>否则，就需要先遍历链表，找到节点的前一个节点，然后让前一个节点指向 null，时间复杂度为 O(N)。<br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/deletenode2.png" alt=""><br>综上，如果进行 N 次操作，那么大约需要操作节点的次数为 N-1+N=2N-1，其中 N-1 表示 N-1 个不是尾节点的每个节点以 O(1) 的时间复杂度操作节点的总次数，N 表示 1 个尾节点以 O(N) 的时间复杂度操作节点的总次数。(2N-1)/N ~ 2，因此该算法的平均时间复杂度为 O(1)。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListNode</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    ListNode nextNode;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">deleteNode</span><span class="params">(ListNode head, ListNode tobeDelete)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span> || head.next == <span class="keyword">null</span> || tobeDelete == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (tobeDelete.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 要删除的节点不是尾节点</span></span><br><span class="line">        ListNode next = tobeDelete.next;</span><br><span class="line">        tobeDelete.val = next.val;</span><br><span class="line">        tobeDelete.next = next.next;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ListNode cur = head;</span><br><span class="line">        <span class="keyword">while</span> (cur.next != tobeDelete)</span><br><span class="line">            cur = cur.next;</span><br><span class="line">        cur.next = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="20-删除链表中的重复元素"><a href="#20-删除链表中的重复元素" class="headerlink" title="20. 删除链表中的重复元素"></a>20. 删除链表中的重复元素</h1><p><strong>题目描述</strong><br>给定排序的链表，删除重复元素，只保留重复元素第一次出现的结点； </p>
+<hr>
+<ul>
+<li>思路一：两个指针分别指向链表的第一个结点及第二个结点，即 pre 指向第一个结点、cur 指向第二个结点；若 pre.value == cur.value，则 pre 的 next 指向 cur 的 next ，cur 指向 cur 的 next ；若不等，则 pre 指向 cur，cur 指向 cur 的 next；直到循环结束；</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除链表中重复的结点值，只保留第一个重复结点的值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> head 链表的头结点</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteRepeteNode</span><span class="params">(Node head)</span> </span>&#123;</span><br><span class="line">    Node pre = head.next;</span><br><span class="line">    Node cur;</span><br><span class="line">    <span class="keyword">while</span> (pre != <span class="keyword">null</span>) &#123;</span><br><span class="line">        cur = pre.next;</span><br><span class="line">        <span class="keyword">if</span> (cur != <span class="keyword">null</span> &amp;&amp; (pre.value == cur.value)) &#123;</span><br><span class="line">            pre.next = cur.next;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            pre = cur;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>思路二：采用递归。注意，这种方法将所有的重复元素全部删除了，没有保留一个，所以严格来说不符合题目要求。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">deleteDuplication</span><span class="params">(Node pHead)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(pHead == <span class="keyword">null</span>||pHead.next == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> pHead;</span><br><span class="line">    <span class="keyword">if</span>(pHead.value == pHead.next.value)&#123;<span class="comment">//第一个节点是重复节点，则跳过重复节点</span></span><br><span class="line">        Node node = pHead.next;</span><br><span class="line">        <span class="keyword">while</span>(node != <span class="keyword">null</span>&amp;&amp;node.value == pHead.value)</span><br><span class="line">            node = node.next;</span><br><span class="line">        <span class="keyword">return</span> deleteDuplication(node);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//第一个节点不是重复节点</span></span><br><span class="line">        pHead.next = deleteDuplication(pHead.next);</span><br><span class="line">        <span class="keyword">return</span> pHead;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>思路三：采用指针。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deleteDuplication</span><span class="params">(Node head)</span></span>&#123;</span><br><span class="line">    Node pre = head.next;</span><br><span class="line">    Node cur = pre.next;</span><br><span class="line">    <span class="keyword">while</span>(pre != <span class="keyword">null</span> &amp;&amp; cur != <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(pre.value == cur.value)&#123;</span><br><span class="line">            <span class="keyword">while</span>(cur.value == cur.next.value)</span><br><span class="line">                cur = cur.next;</span><br><span class="line">            pre.next = cur.next;</span><br><span class="line">            cur = pre.next;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            pre = pre.next;</span><br><span class="line">            cur = cur.next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试函数和Node结构。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] num = &#123; <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">9</span>, <span class="number">10</span> &#125;;</span><br><span class="line">    Node head = <span class="keyword">new</span> Node();</span><br><span class="line">    Node pre = head;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num.length; i++) &#123;</span><br><span class="line">        Node node = <span class="keyword">new</span> Node(num[i]);</span><br><span class="line">        pre.next = node;</span><br><span class="line">        pre = node;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.print(<span class="string">"删除重复结点前的链表："</span>);</span><br><span class="line">    print(head.next);</span><br><span class="line">    deleteRepeteNode(head);</span><br><span class="line"><span class="comment">//        Node delete = deleteDuplication(head);</span></span><br><span class="line">    System.out.print(<span class="string">"删除重复结点后的链表："</span>);</span><br><span class="line">    print(head.next);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">    <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/%E5%89%91%E6%8C%87%20offer%20%E9%A2%98%E8%A7%A3.md" target="_blank" rel="noopener">《剑指offer》题解</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/《剑指offer》题目小结-3/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2069,162 +2368,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/01/Java之变量/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="adamhand">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Dethnote">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/01/Java之变量/" itemprop="url">Java之变量</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-01T10:54:12+08:00">
-                2019-01-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="成员变量和局部变量"><a href="#成员变量和局部变量" class="headerlink" title="成员变量和局部变量"></a>成员变量和局部变量</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>&emsp; 可以将Java中的变量分为<strong>成员变量</strong>、<strong>静态变量</strong>和<strong>局部变量</strong>，成员变量和静态变量是在类范围内定义的变量，其中成员变量又叫实例变量，不用static关键字修饰，静态变量又叫类变量，需要用static关键字修饰。局部变量是在一个方法内定义的变量。<br>&emsp; 局部变量可分为：形参（形式参数）、方法局部变量、代码块局部变量。<br>&emsp; 如下图所示：</p>
-<center><br><img src="https://raw.githubusercontent.com/adamhand/LeetCode-images/master/javaviriable1.png"><br></center>
-
-<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><h3 id="成员变量和局部变量的区别"><a href="#成员变量和局部变量的区别" class="headerlink" title="成员变量和局部变量的区别"></a>成员变量和局部变量的区别</h3><ul>
-<li>在类中的位置不同<br>成员变量：在类中方法外<br>局部变量：在方法定义中或者方法声明上</li>
-<li><strong>在内存中的位置不同<br>成员变量：在堆内存<br>局部变量：如果是基本类型，会把值直接存储在栈；如果是引用类型，比如<code>String s = new String(&quot;william&quot;);</code>会把其对象存储在堆，而把这个对象的引用（指针）存储在栈。</strong></li>
-<li>生命周期不同<br>成员变量：随着对象的创建而存在，随着对象的消失而消失<br>局部变量：随着方法的调用而存在，随着方法的调用完毕而消失</li>
-<li>初始化值不同<br>成员变量：有默认初始化值<br>局部变量：没有默认初始化值，必须定义，赋值，然后才能使用。</li>
-</ul>
-<h3 id="成员变量和静态变量的区别"><a href="#成员变量和静态变量的区别" class="headerlink" title="成员变量和静态变量的区别"></a>成员变量和静态变量的区别</h3><ul>
-<li>成员变量所属于对象。所以也称为实例变量。<br>静态变量所属于类。所以也称为类变量。</li>
-<li><strong>成员变量，基本类型和引用类型的成员变量都在这个对象的空间中，作为一个整体存储在堆。<br>静态变量存在于方法区中，只有被调用的时候才会被压栈，放入栈中。</strong></li>
-<li>成员变量随着对象创建而存在。随着对象被回收而消失。<br>静态变量随着类的加载而存在。随着类的消失而消失。</li>
-<li>成员变量只能被对象所调用。<br>静态变量可以被对象调用，也可以被类名调用。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2275,7 +2418,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">55</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
