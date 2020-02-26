@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="问题描述开发时遇到了这样一个问题：存在两个项：admin和server，其中admin中发布的jar包需要在server端进行调用，两个项目都是使用maven管理的。但是在admin中新建类之后，使用mvn compile package install命令将jar包部署到本地仓库，在server端却import不进来。 最后发现maven安装jar包的仓库地址和import的地址是不同的。 通过">
+<meta name="description" content="问题描述开发时遇到了这样一个问题：存在两个项：admin和thrit，其中thrit中发布的jar包需要在admin端进行调用，两个项目都是使用maven管理的。但是在thrit中新建类之后，使用mvn compile package install命令将jar包部署到本地仓库，在admin端却import不进来。 最后发现maven安装jar包的仓库地址和import的地址是不同的。 通过查看m">
 <meta property="og:type" content="article">
 <meta property="og:title" content="maven repository 配置">
 <meta property="og:url" content="http://yoursite.com/2020/02/26/maven-repository-配置/index.html">
 <meta property="og:site_name" content="Dethnote">
-<meta property="og:description" content="问题描述开发时遇到了这样一个问题：存在两个项：admin和server，其中admin中发布的jar包需要在server端进行调用，两个项目都是使用maven管理的。但是在admin中新建类之后，使用mvn compile package install命令将jar包部署到本地仓库，在server端却import不进来。 最后发现maven安装jar包的仓库地址和import的地址是不同的。 通过">
+<meta property="og:description" content="问题描述开发时遇到了这样一个问题：存在两个项：admin和thrit，其中thrit中发布的jar包需要在admin端进行调用，两个项目都是使用maven管理的。但是在thrit中新建类之后，使用mvn compile package install命令将jar包部署到本地仓库，在admin端却import不进来。 最后发现maven安装jar包的仓库地址和import的地址是不同的。 通过查看m">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-26T12:26:56.014Z">
+<meta property="og:updated_time" content="2020-02-26T12:42:38.286Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="maven repository 配置">
-<meta name="twitter:description" content="问题描述开发时遇到了这样一个问题：存在两个项：admin和server，其中admin中发布的jar包需要在server端进行调用，两个项目都是使用maven管理的。但是在admin中新建类之后，使用mvn compile package install命令将jar包部署到本地仓库，在server端却import不进来。 最后发现maven安装jar包的仓库地址和import的地址是不同的。 通过">
+<meta name="twitter:description" content="问题描述开发时遇到了这样一个问题：存在两个项：admin和thrit，其中thrit中发布的jar包需要在admin端进行调用，两个项目都是使用maven管理的。但是在thrit中新建类之后，使用mvn compile package install命令将jar包部署到本地仓库，在admin端却import不进来。 最后发现maven安装jar包的仓库地址和import的地址是不同的。 通过查看m">
 
 
 
@@ -351,11 +351,12 @@
       
 
       
-        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>开发时遇到了这样一个问题：存在两个项：<code>admin</code>和<code>server</code>，其中<code>admin</code>中发布的<code>jar</code>包需要在<code>server</code>端进行调用，两个项目都是使用<code>maven</code>管理的。但是在<code>admin</code>中新建类之后，使用<code>mvn compile package install</code>命令将<code>jar</code>包部署到本地仓库，在<code>server</code>端却<code>import</code>不进来。</p>
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>开发时遇到了这样一个问题：存在两个项：<code>admin</code>和<code>thrit</code>，其中<code>thrit</code>中发布的<code>jar</code>包需要在<code>admin</code>端进行调用，两个项目都是使用<code>maven</code>管理的。但是在<code>thrit</code>中新建类之后，使用<code>mvn compile package install</code>命令将<code>jar</code>包部署到本地仓库，在<code>admin</code>端却<code>import</code>不进来。</p>
 <p>最后发现<code>maven</code>安装<code>jar</code>包的仓库地址和<code>import</code>的地址是不同的。</p>
 <p>通过查看<code>maven</code>安装<code>jar</code>包的记录如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[INFO] Installing D:\Prom...\xx.jar</span><br></pre></td></tr></table></figure>
-<p>但是在<code>idea</code>的<code>File | Settings | Build, Execution, Deployment | Build Tools | Maven</code>中查看的<code>Local Repository</code>路径却是另一个，导致安装的<code>jar</code>包找不到。原来是因为使用了两个<code>setting.xml</code>的原因。</p>
+<p><code>jar</code>包安装到了<code>D</code>盘。</p>
+<p>但是在<code>idea</code>的<code>File | Settings | Build, Execution, Deployment | Build Tools | Maven</code>中查看的<code>Local Repository</code>路径却是另一个，在<code>C</code>盘，导致安装的<code>jar</code>包找不到。原来是因为使用了两个<code>setting.xml</code>的原因。</p>
 <p><code>maven</code>有<code>2</code>个位置可以选择配置<code>M2_HOME/conf/setting.xml</code>和<code>~/.m2/setting.xml</code>，前者位于安装目录，是全局性的，后者只针对用户的。我在<code>M2_HOME/conf/setting.xml</code>配置了<code>&lt;local repository&gt;</code>的路径为<code>D:</code>盘，在<code>~/.m2/setting.xml</code>中没有配置，所以<code>jar</code>包会安装在<code>D</code>盘，但是在<code>idea</code>中配置的<code>Local Repository</code>路径却在<code>C</code>盘，这就导致了找不到安装的<code>jar</code>包。</p>
 <p>如果在<code>~/.m2/setting.xml</code>也配置了<code>repository</code>地址，会将<code>M2_HOME/conf/setting.xml</code>中的配置覆盖带掉。</p>
 <p>总结就是，在<code>idea</code>中配置的仓库地址和在配置文件中配置的地址一定要相同。</p>
